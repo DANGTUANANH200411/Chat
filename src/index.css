@@ -1,0 +1,63 @@
+html {
+  --gray: #0e0e18;
+  --white: #ffffff;
+  --primary-color: #130a3b;
+  --text-color: #000000;
+  --shadow-color: #e7e7e7;
+}
+body:is(.dark-theme) {
+  --text-color: #ffffff
+}
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--white);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.ant-btn-primary,
+.ant-badge .ant-badge-count {
+  background-color: var(--primary-color);
+}
+.text-primary {
+  color: var(--text-color)
+}
+.text-secondary {
+  color: #989898;
+}
+
+.text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text-small {
+  font-size: .8rem;
+}
+.hoverable-icon {
+  padding: .2rem;
+  border-radius: 15px;
+}
+.hoverable-icon:hover {
+  background-color: rgb(210, 210, 210);
+}
+
+.hover-change-color:hover {
+  color: var(--primary-color);
+}
+
+.max-width {
+  width: 100%;
+}
+.max-height {
+  height: 100%;
+}

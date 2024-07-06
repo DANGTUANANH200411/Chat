@@ -1,0 +1,53 @@
+.top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    max-width: 100%;
+    background: #ffffff;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    height: 8vh;
+}
+.ant-badge .ant-badge-count-sm {
+    font-size: 0.6rem !important;
+    width: 1rem;
+}
+.top-bar-control {
+    font-size: 1.4rem;
+}
+.lang-img {
+    display: flex;
+    height: 1.2rem;
+}
+.top-bar-icon {
+    font-size: 1.2rem;
+}
+.main,
+.main > * {
+    height: 92vh;
+}
+
+.left-menu {
+    height: -webkit-fill-available;
+    border-right: 1px solid gray;
+    padding: .8rem .8rem 0 .8rem;
+}
+.preview-chat-wrapper {
+    overflow-y: scroll;
+}
+.preview-chat-item {
+    padding: .4rem 0;
+}
+.preview-chat-item-more {
+    display: none;
+}
+.preview-chat-item:hover .preview-chat-item-more {
+    display: inline-block;
+}
+.preview-chat-item-time {
+    display: inline-block;
+}
+.preview-chat-item:hover .preview-chat-item-time {
+    display: none;
+}

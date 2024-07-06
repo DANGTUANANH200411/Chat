@@ -1,0 +1,92 @@
+.chat-header {
+    height: 60px;
+    border-bottom: 1px solid gray;
+}
+.chat-view {
+    display: flex;
+    height: calc(92vh - 60px);
+    width: 100%;
+    flex-direction: column;
+}
+.chat-body {
+    flex: 1 0 auto;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+}
+
+.chat-header * {
+    font-size: 1.2rem;
+}
+.chat-header-group-avt {
+    color: aqua;
+}
+.chat-header-group-avt :nth-child(1) {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.chat-header-group-avt :nth-child(2) {
+    position: absolute;
+    top: 0;
+    left: 20px;
+}
+.chat-header-group-avt :nth-child(3) {
+    position: absolute;
+    top: 20px;
+    left: 0;
+}
+.chat-header-group-avt :last-child(4) {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.chat-footer {
+    min-height: 10vh;
+    height: auto;
+    position: relative;
+    border: 1px solid gray;
+    width: 100%;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+.chat-footer-bar {
+    height: 4vh;
+}
+.chat-footer-bar > * {
+    padding: 0 4px;
+    cursor: pointer;
+}
+.chat-footer-bar :first-child {
+    height: 25px;
+}
+.chat-footer-bar :nth-child(2) {
+    height: 20px;
+}
+.chat-footer-bar :nth-child(3) {
+    height: 17px;
+}
+.chat-footer-bar :nth-child(4) {
+    font-size: 17px;
+}
+.chat-footer-bar :nth-child(5) {
+    height: 17px;
+}
+.chat-footer-input-wrapper {
+    height: 6vh;
+}
+.chat-footer-input {
+    height: 100%;
+    /* border-top: 1px solid var(--border); */
+    border-radius: unset;
+    border: 1px solid gray;
+}
+.chat-footer-input-action {
+    position: absolute;
+    bottom: 2vh;
+    right: 1vh;
+}
