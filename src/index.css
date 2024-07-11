@@ -1,12 +1,16 @@
 html {
   --gray: #0e0e18;
   --white: #ffffff;
-  --primary-color: #130a3b;
+  --primary-color: rgb(35, 56, 240);
   --text-color: #000000;
+  --text-secondary: #989898;
   --shadow-color: #e7e7e7;
+  --color-white: #e1e1e1;
+  --background-color: #ffffff
 }
 body:is(.dark-theme) {
-  --text-color: #ffffff
+  --text-color: #ffffff;
+  --background-color: var(--gray);
 }
 body {
   margin: 0;
@@ -15,7 +19,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--white);
+  background-color: var(--background-color);
 }
 
 code {
@@ -31,7 +35,7 @@ code {
   color: var(--text-color)
 }
 .text-secondary {
-  color: #989898;
+  color: var(--text-secondary) !important;
 }
 
 .text-ellipsis {
@@ -40,8 +44,17 @@ code {
   text-overflow: ellipsis;
 }
 
-.text-small {
-  font-size: .8rem;
+.text-small,
+.text-small strong {
+  font-size: .8rem !important;
+}
+.text-medium,
+.text-medium strong {
+  font-size: 1rem !important;
+}
+.text-large,
+.text-large strong {
+  font-size: 1.2rem !important;
 }
 .hoverable-icon {
   padding: .2rem;
@@ -52,7 +65,7 @@ code {
 }
 
 .hover-change-color:hover {
-  color: var(--primary-color);
+  color: var(--primary-color) !important;
 }
 
 .max-width {
@@ -60,4 +73,7 @@ code {
 }
 .max-height {
   height: 100%;
+}
+.anticon {
+  color: var(--text-color)
 }

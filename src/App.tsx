@@ -27,7 +27,6 @@ function App() {
     }, [lang]);
     return (
         <ConfigProvider locale={locale}>
-            <TopBar />
             <Main />
         </ConfigProvider>
     );

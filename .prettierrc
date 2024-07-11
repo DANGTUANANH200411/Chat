@@ -2,5 +2,7 @@
     "jsxSingleQuote": true,
     "singleQuote": true,
     "tabWidth": 4,
-    "printWidth": 160
+    "printWidth": 120,
+    "useTabs": true,
+    "singleAttributePerLine": true
 }

@@ -1,9 +1,10 @@
 import { Locale } from 'antd/es/locale';
 import { makeAutoObservable } from 'mobx';
-import { I18n, LangType } from '../utils/type';
+import { I18n, LangType, User } from '../utils/type';
 import { initI18n } from '../utils/i18n';
 import Mustache from 'mustache';
 import * as locale from '../locales';
+import { USERS } from '../utils/constants';
 interface Setting {
     darkTheme: boolean;
 }
@@ -13,6 +14,8 @@ export default class AppStore {
         darkTheme: false,
     };
     i18n!: I18n;
+
+    user: User = USERS[0];
     get DarkTheme() {
         return this.setting.darkTheme;
     }

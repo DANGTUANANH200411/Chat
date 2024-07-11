@@ -1,12 +1,9 @@
-body:is(.dark-theme),
-body:is(.dark-theme) .top-bar {
-    background-color: var(--gray);
-}
-body:is(.dark-theme) .top-bar {
-    background-color: var(--gray) ;
-    box-shadow: 0 1px 2px 0 rgba(202, 202, 202, 0.03), 0 1px 6px -1px rgba(202, 202, 202, 0.02), 0 2px 4px 0 rgba(202, 202, 202, 0.02);
+body:is(.dark-theme) .top-bar .top-bar-icon,
+body:is(.dark-theme) .ant-typography{
     color: white
 }
-body:is(.dark-theme) .top-bar .top-bar-icon {
-    color: white
+
+.ant-typography.ant-typography-secondary {
+    color: var(--text-secondary) !important;
 }
+
