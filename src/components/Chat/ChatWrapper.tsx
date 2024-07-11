@@ -5,6 +5,7 @@ import ChatHeader from './header/ChatHeader';
 import './style.css';
 import ChatBody from './body/ChatBody';
 import ChatFooter from './footer/ChatFooter';
+import React from 'react';
 function ChatWrapper() {
     const {
         chatStore: { activeRoom },
@@ -22,4 +23,4 @@ function ChatWrapper() {
     );
 }
 
-export default observer(ChatWrapper);
+export default React.memo(observer(ChatWrapper));

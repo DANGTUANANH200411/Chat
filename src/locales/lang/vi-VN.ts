@@ -28,5 +28,9 @@ const vi: ILocale = {
     'search-message': 'Tìm kiếm tin nhắn',
     'video-call': 'Cuộc gọi video',
     'room-info': 'Thông tin hội thoại',
+    //Side bar
+    'action-close-menu': 'Nhấp để đóng',
+    'action-expand-menu': 'Nhấp để mở',
+    setting: 'Cài đặt',
 };
 export { vi };

@@ -1,4 +1,4 @@
-body:is(.dark-theme) .top-bar .top-bar-icon,
+body:is(.dark-theme) .side-bar .side-bar-icon,
 body:is(.dark-theme) .ant-typography{
     color: white
 }

@@ -2,13 +2,14 @@ import { SettingOutlined } from '@ant-design/icons';
 import { ColorPicker, Drawer, Row } from 'antd';
 import { useState } from 'react';
 import '../style.css';
+import React from 'react';
 
 function Setting() {
     const [open, setOpen] = useState<boolean>(false);
     const toggleOpen = () => setOpen(!open);
     return (
         <>
-            <SettingOutlined className='top-bar-icon' onClick={toggleOpen} />
+            <SettingOutlined className='side-bar-icon' onClick={toggleOpen} />
             <Drawer title='Setting' open={open} onClose={toggleOpen}>
                 <Row justify='space-between'>{/* <Typography.Text>Theme</Typography.Text> */}</Row>
                 <ColorPicker
@@ -23,4 +24,4 @@ function Setting() {
     );
 }
 
-export default Setting;
+export default React.memo(Setting);

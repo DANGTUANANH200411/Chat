@@ -1,16 +1,17 @@
 html {
-  --gray: #0e0e18;
+  --bg-dark: #000;
   --white: #ffffff;
-  --primary-color: rgb(35, 56, 240);
+  --primary-color: rgb(35, 117, 240);
   --text-color: #000000;
   --text-secondary: #989898;
   --shadow-color: #e7e7e7;
-  --color-white: #e1e1e1;
-  --background-color: #ffffff
+  --color-white: #ffffff;
+  --background-color: #ebf0ff;
+  --border-color: rgb(199 199 199);
 }
 body:is(.dark-theme) {
   --text-color: #ffffff;
-  --background-color: var(--gray);
+  --background-color: var(--bg-dark);
 }
 body {
   margin: 0;
@@ -31,6 +32,7 @@ code {
 .ant-badge .ant-badge-count {
   background-color: var(--primary-color);
 }
+
 .text-primary {
   color: var(--text-color)
 }
@@ -61,7 +63,8 @@ code {
   border-radius: 15px;
 }
 .hoverable-icon:hover {
-  background-color: rgb(210, 210, 210);
+  /* background-color: rgb(210, 210, 210); */
+  color: var(--primary-color);
 }
 
 .hover-change-color:hover {

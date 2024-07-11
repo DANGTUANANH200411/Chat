@@ -26,6 +26,10 @@ const en = {
     'search-message': 'Search message',
     'video-call': 'Video call',
     'room-info': 'Conservation Info',
+    //Side bar
+    'action-close-menu': 'Click to close menu',
+    'action-expand-menu': 'Click to expand menu',
+    setting: 'Setting',
 };
 
 export type ILocale = typeof en;

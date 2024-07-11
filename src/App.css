@@ -1,4 +1,4 @@
-.top-bar {
+.side-bar {
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -9,6 +9,6 @@
   backdrop-filter: blur(8px);
   height: 3rem;
 }
-.top-bar-control * {
+.side-bar-control * {
   font-size: 16px;
 }

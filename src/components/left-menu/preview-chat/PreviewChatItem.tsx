@@ -7,6 +7,7 @@ import { observer } from 'mobx-react';
 import { useStores } from '../../../stores/stores';
 import ChatRoomMenu from './ChatRoomMenu';
 import GroupAvatar from '../../common/GroupAvatar';
+import UserAvatar from '../../common/UserAvatar';
 
 interface Props {
 	onClick?: React.MouseEventHandler<HTMLDivElement>;
@@ -21,18 +22,29 @@ function PreviewChatItem(props: ChatRoom & Props) {
 			className='preview-chat-item'
 			onClick={onClick}
 		>
-			<Col span={5}>
+			<Col span={4}>
 				<Row
 					justify='center'
 					align='middle'
-					className='max-height'
+					className='max-height text-ellipsis'
 				>
-					{isGroup ? <GroupAvatar members={members} /> : <Avatar></Avatar>}
+					{isGroup ? (
+						<GroupAvatar members={members} />
+					) : (
+						<UserAvatar
+							id={id}
+							size={40}
+						/>
+					)}
 				</Row>
 			</Col>
-			<Col span={19}>
+			<Col span={20}>
 				<Row>
-					<Col span={18}>
+					<Col
+						lg={18}
+						md={17}
+						sm={16}
+					>
 						<Typography.Text
 							strong
 							ellipsis
@@ -40,11 +52,17 @@ function PreviewChatItem(props: ChatRoom & Props) {
 							{name}
 						</Typography.Text>
 					</Col>
-					<Col span={6}>
-						<ChatRoomMenu />
-						<span className='preview-chat-item-time text-secondary text-small'>
-							{timeFromNow('20240706113102')}
-						</span>
+					<Col
+						lg={6}
+						md={7}
+						sm={10}
+					>
+						<Row justify='end'>
+							<ChatRoomMenu />
+							<span className='preview-chat-item-time text-secondary text-small text-ellipsis'>
+								{previewMsg && timeFromNow(previewMsg.createDate)}
+							</span>
+						</Row>
 					</Col>
 				</Row>
 				{previewMsg && (

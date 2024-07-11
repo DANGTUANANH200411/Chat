@@ -10,8 +10,10 @@
     padding: 1.6rem 0;
 }
 .side-bar * {
+    user-select: none;
     color: var(--color-white)
 }
+
 .ant-badge .ant-badge-count-sm {
     font-size: 0.6rem !important;
     width: 1rem;
@@ -20,24 +22,33 @@
     display: flex;
     height: 1.2rem;
 }
-.top-bar-icon {
+.side-bar-icon {
     font-size: 1.8rem;
 }
-.top-bar-avt,
-.top-bar-avt img{
+.side-bar-avt,
+.side-bar-avt img{
     height: 2.6rem;
     width: 2.6rem;
 }
 .main,
 .main > * {
     height: 100vh;
+    flex-wrap: nowrap;
 }
 
 .left-menu {
+    overflow: hidden;
     height: -webkit-fill-available;
-    border-right: 1px solid gray;
+    border-right: 1px solid var(--border-color);
+    width: 25vw;
     padding: .8rem .8rem 0 .8rem;
+    transition: width .5s ease-in-out, padding .5s ease-in-out;
 }
+.left-menu.closed {
+    width: 0px;
+    padding: .8rem 0 0 0;
+}
+
 .preview-chat-wrapper {
     overflow-y: auto;
 }
@@ -51,8 +62,18 @@
     display: inline-block;
 }
 .preview-chat-item-time {
-    display: inline-block;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
 }
 .preview-chat-item:hover .preview-chat-item-time {
     display: none;
+}
+
+.search-bar {
+    flex-wrap: nowrap;
+    overflow: hidden;
+}
+.chat-wrapper {
+    width: -webkit-fill-available;
 }

@@ -23,14 +23,20 @@ dayjs.updateLocale('en', {
 		yy: '%d years',
 	},
 });
-
-export const SYSTEM_NOW = new dayjs().format('YYYYMMDDHHmmss');
-export function toSystemDate(date: Date | Dayjs | string) {
+export const NOW = (): Dayjs => dayjs(new Date());
+export const SYSTEM_NOW = () => dayjs(new Date()).format('YYYYMMDDHHmmss');
+export function toSystemDate(date: Date | Dayjs | string): string {
 	if (date instanceof Date || typeof date === 'string') {
 		return dayjs(date).format('YYYYMMDDHHmmss');
-	} else return date.format('YYYYMMDDHHmmss');
+	}
+	return date.format('YYYYMMDDHHmmss');
 }
-
+export function displayChatDate (date: string) {
+	return dayjs(date).format('DD/MM/YYYY');
+}
+export function displayChatTime (date: string) {
+	return dayjs(date).format('HH:mm');
+}
 export function timeFromNow(date: string) {
 	return dayjs(date).fromNow(true);
 }

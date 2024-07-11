@@ -31,8 +31,7 @@ export interface Message {
 	logs: MessageLog[];
 }
 export interface MessageLog {
-	userName: string;
-	readDate: string;
+	userId: string;
 	reaction: keyof typeof Reaction;
 	reactionDate: string;
 }
@@ -45,6 +44,7 @@ export enum Reaction {
 	SAD = 'SAD',
 }
 
+export type ReactionType = keyof typeof Reaction;
 export interface ChatRoom {
 	id: string;
 	name: string;

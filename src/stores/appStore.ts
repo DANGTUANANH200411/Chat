@@ -16,6 +16,7 @@ export default class AppStore {
     i18n!: I18n;
 
     user: User = USERS[0];
+	menuOpen: boolean = true;
     get DarkTheme() {
         return this.setting.darkTheme;
     }
@@ -45,4 +46,5 @@ export default class AppStore {
         this.setting.darkTheme = !this.setting.darkTheme;
     };
     setSetting = (props: any) => (this.setting = { ...this.setting, ...props });
+	toggleLeftMenu = () => this.menuOpen = !this.menuOpen;
 }
