@@ -32,5 +32,13 @@ const vi: ILocale = {
     'action-close-menu': 'Nhấp để đóng',
     'action-expand-menu': 'Nhấp để mở',
     setting: 'Cài đặt',
+    //Modal
+    'create-group': 'Tạo nhóm',
+    'group-name-placeholder': 'Nhập tên nhóm...',
+    'search-place-holder': 'Nhập tên, số điện thoại hoặc danh sách số điện thoại',
+    'invalid-group-name': 'Vui lòng nhập tên nhóm',
+    'invalid-group-members': 'Vui lòng chọn ít nhất 2 thành viên nhóm',
+    'create-success': 'Tạo thành công',
+    'create-failed': 'Tạo thất bại!',
 };
 export { vi };

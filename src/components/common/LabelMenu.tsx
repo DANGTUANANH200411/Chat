@@ -4,8 +4,14 @@ import { MenuProps } from 'antd';
 
 export const LabelMenu = (): MenuProps['items'] => {
     const {
-        appStore: { $$ },
+        appStore: { $$, labels },
     } = useStores();
+    return labels.map(label => ({
+        key: label.id,
+        label: label.name,
+        icon: <TagFilled style={{ color: label.color }} />,
+        onClick: () => {},
+    }))
     return [
         {
             key: 'label-customer',
@@ -22,7 +28,7 @@ export const LabelMenu = (): MenuProps['items'] => {
         {
             key: 'label-work',
             label: $$('label-work'),
-            icon: <TagFilled style={{ color: 'rgb(rgb(255, 105, 5))' }} />,
+            icon: <TagFilled style={{ color: 'rgb(255, 105, 5)' }} />,
             onClick: () => {},
         },
         {

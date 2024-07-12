@@ -1,10 +1,9 @@
-import { Avatar, Col, Dropdown, Row, Tooltip, Typography } from 'antd';
+import { Avatar, Col, Dropdown, Row, Typography } from 'antd';
 import { observer } from 'mobx-react';
 import { useStores } from '../../../stores/stores';
 import {
 	SearchOutlined,
 	TagFilled,
-	TagTwoTone,
 	UnorderedListOutlined,
 	UsergroupAddOutlined,
 	UserOutlined,
@@ -12,6 +11,7 @@ import {
 } from '@ant-design/icons';
 import { LabelMenu } from '../../common/LabelMenu';
 import GroupAvatar from '../../common/GroupAvatar';
+import UserAvatar from '../../common/UserAvatar';
 
 function ChatHeader() {
 	const {
@@ -20,49 +20,28 @@ function ChatHeader() {
 	} = useStores();
 	const { Room } = chatStore;
 	if (!Room) return <></>;
-	const { name, isGroup, members } = Room;
+	const { id, name, isGroup, members, image } = Room;
 	return (
-		<Row
-			className='chat-header'
-			align='middle'
-		>
-			<Col
-				span={2}
-				className='max-height'
-			>
-				<Row
-					justify='center'
-					align='middle'
-					className='max-height'
-				>
-					{isGroup ? <GroupAvatar members={members} /> : <Avatar></Avatar>}
+		<Row className='header chat-header' align='middle'>
+			<Col span={2} className='max-height'>
+				<Row justify='center' align='middle' className='max-height'>
+					{isGroup ? <GroupAvatar image={image} members={members} /> : <UserAvatar id={id} size={40} />}
 				</Row>
 			</Col>
 			<Col span={19}>
 				<Row>
-					<Typography.Text
-						ellipsis
-						strong
-					>
+					<Typography.Text ellipsis strong>
 						{name}
 					</Typography.Text>
 				</Row>
 				<Row align='bottom'>
 					<UserOutlined className='text-secondary' />
-					<Typography.Text
-						type='secondary'
-						className='text-small'
-					>{`${Room.members.length} ${$$('members')}`}</Typography.Text>
+					<Typography.Text type='secondary' className='text-small'>{`${Room.members.length} ${$$(
+						'members'
+					)}`}</Typography.Text>
 					{/* <span style={{ fontSize: '1rem', borderRight: '1px solid black', padding: '0 .4rem' }}></span> */}
-					<Dropdown
-						trigger={['click']}
-						menu={{ items: LabelMenu() }}
-						destroyPopupOnHide
-					>
-						<TagFilled
-							rotate={45}
-							className='hover-change-color text-secondary'
-						/>
+					<Dropdown trigger={['click']} menu={{ items: LabelMenu() }} destroyPopupOnHide>
+						<TagFilled rotate={45} className='hover-change-color text-secondary' />
 					</Dropdown>
 				</Row>
 			</Col>

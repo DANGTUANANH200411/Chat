@@ -30,6 +30,15 @@ const en = {
     'action-close-menu': 'Click to close menu',
     'action-expand-menu': 'Click to expand menu',
     setting: 'Setting',
+    //Modal
+    'create-group': 'Create group',
+    'group-name-placeholder': 'Enter group name...',
+    'search-place-holder': 'Enter name, phone number, or list of phone number here',
+    'invalid-group-name': 'Please input group name',
+    'invalid-group-members': 'Please select at least 2 members',
+    //Message
+    'create-success': 'Successfully created!',
+    'create-failed': 'Create failed!',
 };
 
 export type ILocale = typeof en;

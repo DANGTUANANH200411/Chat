@@ -1,0 +1,41 @@
+.ant-upload.ant-upload-select {
+    width: 4rem !important;
+    height: 4rem !important;
+}
+.select-user {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.list-label {
+    cursor: pointer;
+}
+.list-selected-wapper {
+    height: 90%;
+    border: 1px solid var(--text-secondary);
+    /* position: absolute; */
+    top: 0;
+    right: 0;
+    border-radius: 4px;
+    /* overflow-x: auto; */
+    padding: 1rem .4rem;
+}
+.list-selected-wapper > :first-child {
+    height: 25px;
+}
+.list-selected {
+    padding: 5px .2rem;
+    height: calc(100% - 20px);
+    overflow-y: auto;
+}
+
+.user-row {
+    cursor: pointer;
+    user-select: none;
+    /* background-color: var(--background-color); */
+    padding: .2rem .4rem;
+    border-radius: 30px;
+}
+.list-selected .user-row {
+    background-color: var(--background-color);
+}

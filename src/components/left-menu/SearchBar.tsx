@@ -5,7 +5,8 @@ import { useStores } from '../../stores/stores';
 
 function SearchBar() {
     const {
-        appStore: { $$ },
+        appStore: { $$},
+        chatStore: {toggleCreateGroup}
     } = useStores();
     return (
         <Row align='middle' justify='space-around' className='search-bar' gutter={12}>
@@ -14,7 +15,7 @@ function SearchBar() {
                 <UserAddOutlined style={{ fontSize: '1.2rem' }} className='hoverable-icon' onClick={() => console.log('djasdklasjkl')} />
             </Tooltip>
             <Tooltip title={$$('create-group-chat')} placement='bottom'>
-                <UsergroupAddOutlined style={{ fontSize: '1.2rem' }} className='hoverable-icon' onClick={() => console.log('djasdklasjkl')} />
+                <UsergroupAddOutlined style={{ fontSize: '1.2rem' }} className='hoverable-icon' onClick={toggleCreateGroup} />
             </Tooltip>
         </Row>
     );

@@ -103,4 +103,6 @@ export function template(str: string, args: Record<string, any> = {}) {
         return args[name] || '';
     });
 }
+export const toNormalize = (str: string) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase();
+
 export const newGuid = () => crypto.randomUUID();

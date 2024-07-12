@@ -3,6 +3,5 @@
     "singleQuote": true,
     "tabWidth": 4,
     "printWidth": 120,
-    "useTabs": true,
-    "singleAttributePerLine": true
+    "useTabs": true
 }
