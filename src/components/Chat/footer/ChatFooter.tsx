@@ -9,16 +9,14 @@ import {
 } from '@ant-design/icons';
 import { Input, Row } from 'antd';
 import { observer } from 'mobx-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { useStores } from '../../../stores/stores';
 function ChatFooter() {
-    const {chatStore} = useStores();
+	const { chatStore } = useStores();
+	const [text, setText] = useState<string>('');
 	return (
 		<Row className='chat-footer'>
-			<Row
-				className='chat-footer-bar max-width'
-				align='middle'
-			>
+			<Row className='chat-footer-bar max-width' align='middle'>
 				<SmileOutlined />
 				<FileImageOutlined />
 				<LinkOutlined />
@@ -29,19 +27,18 @@ function ChatFooter() {
 				className='chat-footer-input max-width max-height'
 				autoSize={{ minRows: 1, maxRows: 8 }}
 				size='large'
+				value={text}
+				onChange={(e) => setText(e.target.value)}
 				onKeyDown={(e) => {
-					if(!e.shiftKey && e.key === 'Enter'){
-                        e.preventDefault();
-                        chatStore.onSendMessage((e.target as HTMLTextAreaElement).value);
-						(e.target as HTMLTextAreaElement).value = '';
-                    }
+					if (!e.shiftKey && e.key === 'Enter') {
+						e.preventDefault();
+						chatStore.onSendMessage(text);
+						setText('');
+					}
 				}}
 			/>
 			<div className='chat-footer-input-action'>
-				<LikeFilled
-					className='hoverable-icon'
-					style={{ color: 'var(--primary-color)' }}
-				/>
+				<LikeFilled className='hoverable-icon' style={{ color: 'var(--primary-color)' }} />
 				<SendOutlined className='hoverable-icon' />
 			</div>
 		</Row>

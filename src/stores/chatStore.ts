@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
-import { ChatRoom, Message, TabItemType, User } from '../utils/type';
-import { CHAT_ROOMS, MESSAGES, USERS } from '../utils/constants';
+import { ChatRoom, Message, ReactionPopupProps, TabItemType, User } from '../utils/type';
+import { CHAT_ROOMS, IS_FIREFOX, MESSAGES, USERS } from '../utils/constants';
 import { newGuid } from '../utils/helper';
 import { stores } from './stores';
 import { SYSTEM_NOW } from '../utils/dateHelper';
@@ -17,12 +17,18 @@ export default class ChatStore {
 	activeRoom: string | undefined = undefined;
 
 	openCreateGroup: boolean = false;
+	reactionPopup: ReactionPopupProps = {
+		visible: false,
+		x: 0,
+		y: 0,
+		id: undefined,
+	}
 	get Room() {
 		return this.chatRooms.find((e) => e.id === this.activeRoom);
 	}
 	get Users() {
-		const {user} = stores.appStore;
-		return Array.from(this.users.values()).filter(e=> e.id !== user.id);
+		const { user } = stores.appStore;
+		return Array.from(this.users.values()).filter((e) => e.id !== user.id);
 	}
 	get RoomMessages() {
 		if (!this.activeRoom) return [];
@@ -64,11 +70,14 @@ export default class ChatStore {
 		return this.users.get(id);
 	};
 
-	getUserName = (id: string) => {
+	getUserName = (id: string | undefined) => {
+		if (!id) return 'Unknown';
 		return this.users.get(id)?.userName ?? 'Unknown';
 	};
 	setTabItem = (tab: TabItemType) => (this.tabItem = tab);
 	setActiveRoom = (room: string) => (this.activeRoom = room);
+
+	setReactionPopup = (state: ReactionPopupProps) => this.reactionPopup = state;
 
 	onSendMessage = (content: string) => {
 		if (!this.activeRoom) return;
@@ -100,4 +109,24 @@ export default class ChatStore {
 			notify($$('create-failed'), 'error');
 		}
 	};
+
+	onPinMessage = (message: Message) => {
+		const room = this.chatRooms.find((e) => e.id === this.activeRoom);
+		if (!room) return;
+		if (room.pinMessages.find((e) => e.id === message.id)) {
+			//Unpin
+			room.pinMessages = room.pinMessages.filter((e) => e.id !== message.id);
+		} else {
+			//Pin
+			room.pinMessages = [...(room.pinMessages ?? []), message];
+		}
+	};
+	scrollToMessage = (id: string) => {
+		const msg = document.getElementById(id);
+		document.querySelector('.forcus')?.classList.remove('forcus');
+		if (msg) {
+			IS_FIREFOX ? (msg as any).scrollIntoView() : (msg as any).scrollIntoViewIfNeeded();
+			msg.classList.add('forcus')
+		}
+	}
 }

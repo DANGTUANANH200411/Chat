@@ -39,7 +39,7 @@ const LABELS: Label[] = [
 		name: 'label-coworker',
 		color: 'rgb(0, 104, 255)',
 	},
-]
+];
 
 const USERS: User[] = [
 	{
@@ -53,7 +53,8 @@ const USERS: User[] = [
 		userName: 'Iron man',
 		gender: 'Male',
 		label: LABELS[1].id,
-		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRv29RTQSTxtUkPMJ5NS3gxA1gYtf1Issran7buj8_kufO4BLZB9qGYdTlgoGxR6hSXuc&usqp=CAU',
+		imageSrc:
+			'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRv29RTQSTxtUkPMJ5NS3gxA1gYtf1Issran7buj8_kufO4BLZB9qGYdTlgoGxR6hSXuc&usqp=CAU',
 	},
 	{
 		id: newGuid(),
@@ -88,7 +89,7 @@ const USERS: User[] = [
 		userName: 'Hawkeye',
 		gender: 'Male',
 		label: LABELS[5].id,
-		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4b0k_ypO8_xyo-c046qL6gvRJ5rpf2WNwog&s'
+		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4b0k_ypO8_xyo-c046qL6gvRJ5rpf2WNwog&s',
 	},
 	{
 		id: newGuid(),
@@ -165,7 +166,8 @@ const USERS: User[] = [
 		userName: 'Nebula',
 		gender: 'Female',
 		label: LABELS[0].id,
-		imageSrc: 'https://i.redd.it/concept-arts-for-nebula-in-guardians-of-the-galaxy-vol-3-v0-5w79bpjc0f1b1.jpg?width=1000&format=pjpg&auto=webp&s=a287a48579dcc9b0d698b4764bf33037870793ea',
+		imageSrc:
+			'https://i.redd.it/concept-arts-for-nebula-in-guardians-of-the-galaxy-vol-3-v0-5w79bpjc0f1b1.jpg?width=1000&format=pjpg&auto=webp&s=a287a48579dcc9b0d698b4764bf33037870793ea',
 	},
 	{
 		id: newGuid(),
@@ -188,7 +190,7 @@ const USERS: User[] = [
 		label: LABELS[0].id,
 		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB1mmWDMbTKVKS-IOe0R8Jqkz73VxVvJkmfQ&s',
 	},
-	
+
 	{
 		id: newGuid(),
 		userName: 'Aunt May',
@@ -402,8 +404,35 @@ const MESSAGES: Message[] = [
 		sender: USERS[0].id,
 		content: 'Please stay away from lottery',
 		isFile: false,
-		createDate: SYSTEM_NOW(),
-		lastUpdateDate: SYSTEM_NOW(),
+		createDate: toSystemDate(addMinutes(new Date(), -21)),
+		lastUpdateDate: toSystemDate(addMinutes(new Date(), -21)),
+		edited: false,
+		deleted: false,
+		relateId: undefined,
+		logs: [],
+	},
+	{
+		id: newGuid(),
+		groupId: GROUP_ID[0],
+		sender: USERS[10].id,
+		content: 'https://th.bing.com/th/id/R.2a5ac658be9ff439f978ac8cc3b58e10?rik=Dn%2fyKYfre9RpPQ&pid=ImgRaw&r=0',
+		isFile: false,
+		createDate: toSystemDate(addMinutes(new Date(), -20)),
+		lastUpdateDate: toSystemDate(addMinutes(new Date(), -20)),
+		edited: false,
+		deleted: false,
+		relateId: undefined,
+		logs: [],
+	},
+	{
+		id: newGuid(),
+		groupId: GROUP_ID[0],
+		sender: USERS[10].id,
+		content: 'fileName.xlsx',
+		isFile: true,
+		fileSize: 2120,
+		createDate: toSystemDate(addMinutes(new Date(), -19)),
+		lastUpdateDate: toSystemDate(addMinutes(new Date(), -19)),
 		edited: false,
 		deleted: false,
 		relateId: undefined,
@@ -418,6 +447,7 @@ const CHAT_ROOMS: ChatRoom[] = [
 		isGroup: true,
 		members: USERS.map((e) => e.id),
 		previewMsg: MESSAGES.at(-1),
+		pinMessages: [],
 	},
 	{
 		id: GROUP_ID[1],
@@ -425,6 +455,7 @@ const CHAT_ROOMS: ChatRoom[] = [
 		isGroup: true,
 		members: USERS.slice(15, 20).map((e) => e.id),
 		previewMsg: MESSAGES.at(-1),
+		pinMessages: [],
 	},
 	{
 		id: USERS[3].id,
@@ -432,6 +463,27 @@ const CHAT_ROOMS: ChatRoom[] = [
 		isGroup: false,
 		members: [],
 		previewMsg: undefined,
+		pinMessages: [],
 	},
 ];
-export { USERS, CHAT_ROOMS, MESSAGES, IMG_LIKE, IMG_HAHA, IMG_HEART, IMG_WOW, IMG_SAD, IMG_ANGRY, LABELS };
+
+const BROWSER_VERSION = (function () {
+	var ua = navigator.userAgent;
+	var tem;
+	var M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+	if (/trident/i.test(M[1])) {
+		tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
+		return 'IE ' + (tem[1] || '');
+	}
+	if (M[1] === 'Chrome') {
+		tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
+		if (tem != null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
+	}
+	M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+	if ((tem = ua.match(/version\/(\d+)/i)) != null) M.splice(1, 1, tem[1]);
+	return M.join(' ');
+})();
+
+const IS_FIREFOX = navigator.userAgent.toLowerCase().includes('firefox');
+
+export { USERS, CHAT_ROOMS, MESSAGES, IMG_LIKE, IMG_HAHA, IMG_HEART, IMG_WOW, IMG_SAD, IMG_ANGRY, LABELS, BROWSER_VERSION, IS_FIREFOX };

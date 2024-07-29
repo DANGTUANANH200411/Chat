@@ -45,6 +45,7 @@ function CreateGroup() {
 			isGroup: true,
 			members: [user.id, ...ref.current?.getSelected() ?? []],
 			image: uploadRef.current?.file?.thumbUrl,
+			pinMessages: [],
 		};
 		if (isEmpty(params.name)) {
 			notify($$('invalid-group-name'), 'warning');

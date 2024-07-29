@@ -40,5 +40,19 @@ const vi: ILocale = {
     'invalid-group-members': 'Vui lòng chọn ít nhất 2 thành viên nhóm',
     'create-success': 'Tạo thành công',
     'create-failed': 'Tạo thất bại!',
+	copied: 'Đã sao chép',
+
+    //Msg action
+    reply: 'Trả lời',
+    forwarding: 'Chuyển tiếp',
+    more: 'Xem thêm',
+    'copy-text': 'Sao chép nội dung',
+    'start-msg': 'Star this mesage',
+    'pin-msg': 'Ghim tin nhắn',
+    'unpin-msg': 'Bỏ ghim tin nhắn',
+    'select-msg': 'Chọn nhiều',
+    'view-details': 'Chi tiết',
+    'other-options': 'Lựa chọn khác',
+    'delete-for-me': 'Xóa ở phía tôi',
 };
 export { vi };

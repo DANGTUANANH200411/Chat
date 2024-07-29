@@ -67,7 +67,7 @@ code {
 }
 .hoverable-icon:hover {
 	/* background-color: rgb(210, 210, 210); */
-	color: var(--primary-color);
+	color: var(--primary-color) !important;
 }
 
 .hover-change-color:hover,
