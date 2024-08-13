@@ -4,25 +4,19 @@ import { useStores } from '../../../stores/stores';
 import { SearchOutlined } from '@ant-design/icons';
 import SelectUsers from './SelectUsers';
 import CustomUpload, { UploadRef } from './CustomUpload';
-import { useMemo, useRef, useState } from 'react';
-import { notify } from '../../../utils/notify';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ChatRoom } from '../../../utils/type';
-import { isEmpty, newGuid } from '../../../utils/helper';
+import { newGuid } from '../../../utils/helper';
 import '../style.css';
-
-interface CustomRef {
-	getSelected: () => string[];
-}
 
 function CreateGroup() {
 	const {
 		appStore: { $$, labels, user },
 		chatStore: { openCreateGroup, toggleCreateGroup, onCreateGroup },
 	} = useStores();
+	const [groupName, setGroupName] = useState<string>('');
 	const [searchText, setSearchText] = useState<string>('');
 	const [selectedLabel, setSelectedLabel] = useState<string>('all');
-	const inputRef = useRef<InputRef>(null);
-	const ref = useRef<CustomRef>(null);
 	const uploadRef = useRef<UploadRef>(null);
 	const listLabel = useMemo(
 		() =>
@@ -37,32 +31,31 @@ function CreateGroup() {
 			)),
 		[labels, selectedLabel]
 	);
-
+	useEffect(() => {
+		if (!openCreateGroup) {
+			setGroupName('');
+			setSearchText('');
+			setSelectedLabel('all');
+		}
+	}, [openCreateGroup]);
 	const handleCreateGroup = () => {
 		const params: ChatRoom = {
 			id: newGuid(),
-			name: inputRef.current?.input?.value.trim() ?? '',
+			name: groupName.trim() ?? '',
 			isGroup: true,
-			members: [user.id, ...ref.current?.getSelected() ?? []],
+			members: [],
 			image: uploadRef.current?.file?.thumbUrl,
 		};
-		if (isEmpty(params.name)) {
-			notify($$('invalid-group-name'), 'warning');
-			return;
-		} else if (params.members.length < 2) {
-			notify($$('invalid-group-members'), 'warning');
-			return;
-		} else {
-			onCreateGroup(params);
-		}
+		onCreateGroup(params);
 	};
 	return (
 		<Modal
+			key='modal-create-group'
 			open={openCreateGroup}
 			title={$$('create-group')}
 			width='30vw'
 			okText='Create group'
-			style={{ top: 20 }}
+			style={{ top: 10 }}
 			onOk={handleCreateGroup}
 			onCancel={toggleCreateGroup}
 		>
@@ -71,18 +64,26 @@ function CreateGroup() {
 					<Col>
 						<CustomUpload ref={uploadRef} />
 					</Col>
-					<Input ref={inputRef} className='max-width' placeholder={$$('group-name-placeholder')} />
+					<Input
+						className='max-width'
+						value={groupName}
+						onChange={(e) => setGroupName(e.target.value)}
+						placeholder={$$('group-name-placeholder')}
+					/>
 				</Row>
 				<Row>
 					<Input
+						value={searchText}
 						placeholder={$$('search-place-holder')}
 						prefix={<SearchOutlined className='text-secondary' />}
 						onChange={(e) => setSearchText(e.target.value)}
 					/>
 				</Row>
-				<Row className='list-label'>{listLabel}</Row>
+				<Row className='list-label' wrap={false}>
+					{listLabel}
+				</Row>
 				<Row>
-					<SelectUsers ref={ref} searchText={searchText} searchLabel={selectedLabel} />
+					<SelectUsers searchText={searchText} searchLabel={selectedLabel} />
 				</Row>
 			</Space>
 		</Modal>

@@ -9,6 +9,7 @@ import { notify } from '../utils/notify';
 type DateMessage = {
 	[key: string]: Message[][];
 };
+
 export default class ChatStore {
 	tabItem: TabItemType = 'All';
 	chatRooms: ChatRoom[] = CHAT_ROOMS;
@@ -17,12 +18,14 @@ export default class ChatStore {
 	activeRoom: string | undefined = undefined;
 
 	openCreateGroup: boolean = false;
+
+	selectedUsers: Map<string, User> = new Map();
 	get Room() {
 		return this.chatRooms.find((e) => e.id === this.activeRoom);
 	}
 	get Users() {
-		const {user} = stores.appStore;
-		return Array.from(this.users.values()).filter(e=> e.id !== user.id);
+		const { user } = stores.appStore;
+		return Array.from(this.users.values()).filter((e) => e.id !== user.id);
 	}
 	get RoomMessages() {
 		if (!this.activeRoom) return [];
@@ -34,7 +37,7 @@ export default class ChatStore {
 		let group: Message[][] = [];
 		let messages: Message[] = [];
 		for (let i = 0; i < roomMessages.length; i++) {
-			if (i == 0) {
+			if (i === 0) {
 				messages.push(roomMessages[i]);
 			} else if (roomMessages[i].createDate.substring(0, 8) !== roomMessages[i - 1].createDate.substring(0, 8)) {
 				group.push(messages.reverse());
@@ -59,7 +62,15 @@ export default class ChatStore {
 		makeAutoObservable(this);
 		USERS.map((e) => this.users.set(e.id, e));
 	}
-	toggleCreateGroup = () => (this.openCreateGroup = !this.openCreateGroup);
+	setSelectedUsers = (state: Map<string, User>) => {
+		this.selectedUsers = state;
+	};
+	toggleCreateGroup = () => {
+		this.openCreateGroup = !this.openCreateGroup;
+		if (!this.openCreateGroup) {
+			this.selectedUsers = new Map();
+		}
+	};
 	getUserById = (id: string) => {
 		return this.users.get(id);
 	};
@@ -70,6 +81,13 @@ export default class ChatStore {
 	setTabItem = (tab: TabItemType) => (this.tabItem = tab);
 	setActiveRoom = (room: string) => (this.activeRoom = room);
 
+	onCopyGroup = () => {
+		if (!this.Room) return;
+		this.Room.members.forEach((user) => {
+			this.selectedUsers.set(user.id, user);
+		});
+		this.openCreateGroup = true;
+	};
 	onSendMessage = (content: string) => {
 		if (!this.activeRoom) return;
 		const message: Message = {
@@ -91,8 +109,17 @@ export default class ChatStore {
 	onCreateGroup = (group: ChatRoom) => {
 		const { $$ } = stores.appStore;
 		try {
+			if (!group.name) {
+				notify($$('invalid-group-name'), 'warning');
+				return;
+			} else if (this.selectedUsers.size < 2) {
+				notify($$('invalid-group-members'), 'warning');
+				return;
+			}
+			group.members = Array.from(this.selectedUsers.values());
 			// Call API
 			//then
+
 			this.chatRooms = [...this.chatRooms, group];
 			this.toggleCreateGroup();
 			notify($$('create-success'), 'success');

@@ -11,35 +11,35 @@ import IMG_ANGRY from '../resources/angry.png';
 const LABELS: Label[] = [
 	{
 		id: newGuid(),
-		name: 'label-customer',
+		name: 'Customer',
 		color: 'rgb(217, 27, 27)',
 	},
 	{
 		id: newGuid(),
-		name: 'label-family',
+		name: 'Family',
 		color: 'rgb(75, 195, 119)',
 	},
 	{
 		id: newGuid(),
-		name: 'label-work',
+		name: 'Work',
 		color: 'rgb(255, 105, 5)',
 	},
 	{
 		id: newGuid(),
-		name: 'label-friend',
+		name: 'Friend',
 		color: 'rgb(111, 63, 207)',
 	},
 	{
 		id: newGuid(),
-		name: 'label-rep',
+		name: 'Reply later',
 		color: 'rgb(250, 192, 0)',
 	},
 	{
 		id: newGuid(),
-		name: 'label-coworker',
+		name: 'Co-worker',
 		color: 'rgb(0, 104, 255)',
 	},
-]
+];
 
 const USERS: User[] = [
 	{
@@ -53,7 +53,8 @@ const USERS: User[] = [
 		userName: 'Iron man',
 		gender: 'Male',
 		label: LABELS[1].id,
-		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRv29RTQSTxtUkPMJ5NS3gxA1gYtf1Issran7buj8_kufO4BLZB9qGYdTlgoGxR6hSXuc&usqp=CAU',
+		imageSrc:
+			'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRv29RTQSTxtUkPMJ5NS3gxA1gYtf1Issran7buj8_kufO4BLZB9qGYdTlgoGxR6hSXuc&usqp=CAU',
 	},
 	{
 		id: newGuid(),
@@ -88,7 +89,7 @@ const USERS: User[] = [
 		userName: 'Hawkeye',
 		gender: 'Male',
 		label: LABELS[5].id,
-		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4b0k_ypO8_xyo-c046qL6gvRJ5rpf2WNwog&s'
+		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4b0k_ypO8_xyo-c046qL6gvRJ5rpf2WNwog&s',
 	},
 	{
 		id: newGuid(),
@@ -165,7 +166,8 @@ const USERS: User[] = [
 		userName: 'Nebula',
 		gender: 'Female',
 		label: LABELS[0].id,
-		imageSrc: 'https://i.redd.it/concept-arts-for-nebula-in-guardians-of-the-galaxy-vol-3-v0-5w79bpjc0f1b1.jpg?width=1000&format=pjpg&auto=webp&s=a287a48579dcc9b0d698b4764bf33037870793ea',
+		imageSrc:
+			'https://i.redd.it/concept-arts-for-nebula-in-guardians-of-the-galaxy-vol-3-v0-5w79bpjc0f1b1.jpg?width=1000&format=pjpg&auto=webp&s=a287a48579dcc9b0d698b4764bf33037870793ea',
 	},
 	{
 		id: newGuid(),
@@ -188,7 +190,7 @@ const USERS: User[] = [
 		label: LABELS[0].id,
 		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB1mmWDMbTKVKS-IOe0R8Jqkz73VxVvJkmfQ&s',
 	},
-	
+
 	{
 		id: newGuid(),
 		userName: 'Aunt May',
@@ -416,14 +418,14 @@ const CHAT_ROOMS: ChatRoom[] = [
 		id: GROUP_ID[0],
 		name: 'Marvel',
 		isGroup: true,
-		members: USERS.map((e) => e.id),
+		members: USERS,
 		previewMsg: MESSAGES.at(-1),
 	},
 	{
 		id: GROUP_ID[1],
 		name: 'Guardians of the Galaxy',
 		isGroup: true,
-		members: USERS.slice(15, 20).map((e) => e.id),
+		members: USERS.slice(15, 20),
 		previewMsg: MESSAGES.at(-1),
 	},
 	{

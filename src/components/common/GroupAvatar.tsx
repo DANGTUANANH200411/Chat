@@ -1,14 +1,15 @@
 import { Avatar, Row } from 'antd';
 import './style.css';
 import UserAvatar from './UserAvatar';
+import { User } from '../../utils/type';
 interface Props {
 	image?: string;
-	members: string[];
+	members: User[];
 }
 function GroupAvatar(props: Props) {
 	const { image, members } = props;
 	const generateGroupAvt = () =>
-		members.slice(0, 4).map((id, idx) =>
+		members.slice(0, 4).map((user, idx) =>
 			members.length > 4 && idx === 3 ? (
 				<Avatar
 					key={members.length}
@@ -18,9 +19,11 @@ function GroupAvatar(props: Props) {
 					{`+ ${members.length - 3}`}
 				</Avatar>
 			) : (
-				<UserAvatar key={id} id={id} className='child-avt' />
+				<UserAvatar user={user} className='child-avt' />
 			)
 		);
-	return <>{image ? <Avatar src={image} /> :<div className='max-height custom-group-avt'> {generateGroupAvt()}</div>}</>
+	return (
+		<>{image ? <Avatar src={image} /> : <div className='max-height custom-group-avt'> {generateGroupAvt()}</div>}</>
+	);
 }
 export default GroupAvatar;

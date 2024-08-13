@@ -1,5 +1,3 @@
-import { UploadFile } from "antd";
-
 export interface I18n {
 	messages: Record<string, Record<string, any>>;
 	lang: (module: string | Record<string, any>, name: string, args?: any[] | Record<string, any>) => string;
@@ -54,12 +52,12 @@ export interface ChatRoom {
 	isGroup: boolean;
 	label?: string;
 	image?: string;
-	members: string[];
+	members: User[];
 	previewMsg?: Message;
 }
 
 export interface Label {
-	id: string,
+	id: string;
 	name: string;
 	color?: string;
 }

@@ -16,31 +16,25 @@ function ChatItemContent(props: Props) {
 	const { sender, content, deleted, createDate, logs } = message;
 
 	const renderReaction = (e: ReactionType) => {
-		switch(e){
+		switch (e) {
 			case 'LOVE':
-				return <img src={IMG_HEART} />
+				return <img src={IMG_HEART} alt={IMG_HEART} />;
 			case 'SAD':
-				return <img src={IMG_SAD} />
+				return <img src={IMG_SAD} alt={IMG_SAD} />;
 			case 'ANGRY':
-				return <img src={IMG_ANGRY} />
+				return <img src={IMG_ANGRY} alt={IMG_ANGRY} />;
 			case 'WOW':
-				return <img src={IMG_WOW} />
+				return <img src={IMG_WOW} alt={IMG_WOW} />;
 			default:
-				return <img src={IMG_LIKE} />
+				return <img src={IMG_LIKE} alt={IMG_LIKE} />;
 		}
-	}
+	};
 	return (
 		<>
-			<Row
-				align='middle'
-				className='chat-item-content-wrapper'
-			>
+			<Row align='middle' className='chat-item-content-wrapper'>
 				<div className={`chat-item-content ${deleted && 'deleted'}`}>
 					{isFirst && (
-						<Typography.Link
-							className='chat-item-username small-text text-ellipsis'
-							onClick={() => {}}
-						>
+						<Typography.Link className='chat-item-username small-text text-ellipsis' onClick={() => {}}>
 							{getUserName(sender)}
 						</Typography.Link>
 					)}
@@ -48,19 +42,14 @@ function ChatItemContent(props: Props) {
 						<Typography.Text className='text-primary'>{content}</Typography.Text>
 					</Row>
 					{(isLast || showTime) && (
-						<Typography.Text
-							type='secondary'
-							className='small-text'
-						>
+						<Typography.Text type='secondary' className='small-text'>
 							{displayChatTime(createDate)}
 						</Typography.Text>
 					)}
-						{/* <HeartOutlined className='reaction-action' /> */}
-						{logs.length > 0 && (
-							<div className='list-reaction'>
-								{logs.map(e=> renderReaction(e.reaction))}
-							</div>
-						)}
+					{/* <HeartOutlined className='reaction-action' /> */}
+					{logs.length > 0 && (
+						<div className='list-reaction'>{logs.map((e) => renderReaction(e.reaction))}</div>
+					)}
 				</div>
 				<div className='chat-item-action'>Action</div>
 			</Row>

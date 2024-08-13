@@ -16,7 +16,7 @@ function Main() {
 				<Col className='chat-wrapper'>
 					<ChatWrapper />
 				</Col>
-				{/* <Members /> */}
+				<Members />
 			</Row>
 			<CreateGroup />
 		</>
