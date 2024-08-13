@@ -16,15 +16,15 @@ function PreviewChatItem(props: ChatRoom & Props) {
 	const {
 		chatStore: { users },
 	} = useStores();
-	const { id, name, members, isGroup, previewMsg,image, onClick } = props;
+	const { id, name, members, isGroup, previewMsg, image, onClick } = props;
 	return (
 		<Row className='preview-chat-item' onClick={onClick}>
-			<Col span={4}>
+			<Col span={5}>
 				<Row justify='center' align='middle' className='max-height text-ellipsis'>
 					{isGroup ? <GroupAvatar image={image} members={members} /> : <UserAvatar id={id} size={40} />}
 				</Row>
 			</Col>
-			<Col span={20}>
+			<Col span={19}>
 				<Row>
 					<Col lg={18} md={17} sm={16}>
 						<Typography.Text strong ellipsis>
@@ -35,7 +35,7 @@ function PreviewChatItem(props: ChatRoom & Props) {
 						<Row justify='end'>
 							<ChatRoomMenu />
 							<span className='preview-chat-item-time text-secondary text-small text-ellipsis'>
-								{previewMsg && <TimeFromNow date={previewMsg.createDate}/>}
+								{previewMsg && <TimeFromNow date={previewMsg.createDate} />}
 							</span>
 						</Row>
 					</Col>

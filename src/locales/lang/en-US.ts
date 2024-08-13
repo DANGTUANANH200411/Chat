@@ -53,6 +53,10 @@ const en = {
 	'view-details': 'View Details',
 	'other-options': 'Other options',
 	'delete-for-me': 'Delete for me only',
+	//#region Drawer
+	//Members
+	'copy-group': 'Copy group',
+	//#endregion
 };
 
 export type ILocale = typeof en;

@@ -21,42 +21,23 @@ function TopBar() {
 	} = useStores();
 	return (
 		<Row className='side-bar'>
-			<Space
-				direction='vertical'
-				size='large'
-				align='center'
-				className='max-width'
-			>
+			<Space direction='vertical' size='large' align='center' className='max-width'>
 				{menuOpen ? (
 					<Tooltip title={$$('action-close-menu')}>
-						<PicRightOutlined
-							className='side-bar-icon'
-							onClick={toggleLeftMenu}
-						/>
+						<PicRightOutlined className='side-bar-icon' onClick={toggleLeftMenu} />
 					</Tooltip>
 				) : (
 					<Tooltip title={$$('action-expand-menu')}>
-						<PicLeftOutlined
-							className='side-bar-icon'
-							onClick={toggleLeftMenu}
-						/>
+						<PicLeftOutlined className='side-bar-icon' onClick={toggleLeftMenu} />
 					</Tooltip>
 				)}
 
-				<UserAvatar
-					id={user.id}
-					className='side-bar-avt'
-				/>
+				<UserAvatar id={user.id} className='side-bar-avt' />
 				<Notify />
 				<ContactsOutlined className='side-bar-icon' />
 				<CarryOutOutlined className='side-bar-icon' />
 			</Space>
-			<Space
-				direction='vertical'
-				size='large'
-				align='center'
-				className='max-width'
-			>
+			<Space direction='vertical' size='large' align='center' className='max-width'>
 				<ControlFilled className='side-bar-icon' />
 				<SwitchTheme />
 				<Language />

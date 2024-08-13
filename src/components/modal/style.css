@@ -1,41 +1,71 @@
 .ant-upload.ant-upload-select {
-    width: 4rem !important;
-    height: 4rem !important;
+	width: 4rem !important;
+	height: 4rem !important;
 }
 .select-user {
-    height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
+	height: 100%;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 .list-label {
-    cursor: pointer;
+	cursor: pointer;
+	overflow-x: auto;
 }
+.list-label::-webkit-scrollbar {
+	display: block;
+	position: relative;
+}
+.list-label::-webkit-scrollbar-button:horizontal {
+	background-color: #ffffff;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	background-position: center;
+}
+
+.list-label::-webkit-scrollbar-button:horizontal:start:increment,
+.list-label::-webkit-scrollbar-button:horizontal:end:decrement {
+	display: none;
+}
+.list-label::-webkit-scrollbar-button:horizontal:decrement {
+	position: absolute;
+	top: 0;
+	background-image: url('../../resources/left.png');
+}
+.list-label::-webkit-scrollbar-button:horizontal:increment {
+	background-image: url('../../resources/right.png');
+}
+
+/* .list-label::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+} */
+
 .list-selected-wapper {
-    height: 90%;
-    border: 1px solid var(--text-secondary);
-    /* position: absolute; */
-    top: 0;
-    right: 0;
-    border-radius: 4px;
-    /* overflow-x: auto; */
-    padding: 1rem .4rem;
+	height: 90%;
+	border: 1px solid var(--text-secondary);
+	/* position: absolute; */
+	top: 0;
+	right: 0;
+	border-radius: 4px;
+	/* overflow-x: auto; */
+	padding: 1rem 0.4rem;
 }
 .list-selected-wapper > :first-child {
-    height: 25px;
+	height: 25px;
 }
 .list-selected {
-    padding: 5px .2rem;
-    height: calc(100% - 20px);
-    overflow-y: auto;
+	padding: 5px 0.2rem;
+	height: calc(100% - 20px);
+	overflow-y: auto;
 }
 
 .user-row {
-    cursor: pointer;
-    user-select: none;
-    /* background-color: var(--background-color); */
-    padding: .2rem .4rem;
-    border-radius: 30px;
+	cursor: pointer;
+	user-select: none;
+	/* background-color: var(--background-color); */
+	padding: 0.2rem 0.4rem;
+	border-radius: 30px;
 }
 .list-selected .user-row {
-    background-color: var(--background-color);
+	background-color: var(--background-color);
 }

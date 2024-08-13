@@ -13,10 +13,8 @@
     position: absolute;
     border-radius: 50%;
     border: 1px solid var(--WA100);
-    width: 26px;
-    height: 26px;
-    min-width: 26px;
-    min-height: 26px;
+    width: 55%;
+    height: 55%;
     box-sizing: border-box;
     overflow: hidden;
     font-size: .75rem;

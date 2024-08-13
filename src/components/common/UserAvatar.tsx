@@ -9,16 +9,11 @@ interface Props extends AvatarProps {
 }
 function UserAvatar(props: Props) {
 	const { chatStore } = useStores();
-	const { getUserById } = chatStore;
-	const { id, user: User } = props;
+	const { user, id } = props;
 
-	const user = User ?? getUserById(id);
 	if (!user) return <></>;
 	return (
-		<Avatar
-			src={user.imageSrc}
-			{...props}
-		>
+		<Avatar src={user.imageSrc} {...props}>
 			{user ? user.userName : 'Unknown'}
 		</Avatar>
 	);

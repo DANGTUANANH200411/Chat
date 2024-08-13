@@ -1,9 +1,3 @@
-html {
-    --side-bar-w: 3vw;
-	--left-menu-w: 17vw;
-	--drawer-w: 0vw;
-	--chat-w: calc(100vw - var(--side-bar-w) - var(--left-menu-w) - var(--drawer-w))
-}
 .side-bar { 
     height: 100%;
     width: var(--side-bar-w);
@@ -52,10 +46,12 @@ html {
 }
 .left-menu:is(.closed) {
     --left-menu-w: 0px;
-    --chat-w: calc(100vw - var(--side-bar-w) - var(--left-menu-w) - var(--drawer-w));
+    --chat-w: calc(100vw - var(--side-bar-w) - var(--drawer-w));
     padding: .8rem 0 0 0;
 }
-
+.left-menu:is(.closed) .chat-wrapper {
+    width: 100vw;
+}
 .preview-chat-wrapper {
     overflow-y: auto;
 }
@@ -83,9 +79,11 @@ html {
 }
 .chat-wrapper {
     width: var(--chat-w);
+    transition: width .5s ease-in-out
 }
 
 .drawer {
     width: var(--drawer-w);
     border-left: 1px solid var(--border-color);
+    transition: width .5s ease-in-out
 }

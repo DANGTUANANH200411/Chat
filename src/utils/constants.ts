@@ -11,32 +11,32 @@ import IMG_ANGRY from '../resources/angry.png';
 const LABELS: Label[] = [
 	{
 		id: newGuid(),
-		name: 'label-customer',
+		name: 'Customer',
 		color: 'rgb(217, 27, 27)',
 	},
 	{
 		id: newGuid(),
-		name: 'label-family',
+		name: 'Family',
 		color: 'rgb(75, 195, 119)',
 	},
 	{
 		id: newGuid(),
-		name: 'label-work',
+		name: 'Work',
 		color: 'rgb(255, 105, 5)',
 	},
 	{
 		id: newGuid(),
-		name: 'label-friend',
+		name: 'Friend',
 		color: 'rgb(111, 63, 207)',
 	},
 	{
 		id: newGuid(),
-		name: 'label-rep',
+		name: 'Reply later',
 		color: 'rgb(250, 192, 0)',
 	},
 	{
 		id: newGuid(),
-		name: 'label-coworker',
+		name: 'Co-worker',
 		color: 'rgb(0, 104, 255)',
 	},
 ];
@@ -445,7 +445,7 @@ const CHAT_ROOMS: ChatRoom[] = [
 		id: GROUP_ID[0],
 		name: 'Marvel',
 		isGroup: true,
-		members: USERS.map((e) => e.id),
+		members: USERS,
 		previewMsg: MESSAGES.at(-1),
 		pinMessages: [],
 	},
@@ -453,7 +453,7 @@ const CHAT_ROOMS: ChatRoom[] = [
 		id: GROUP_ID[1],
 		name: 'Guardians of the Galaxy',
 		isGroup: true,
-		members: USERS.slice(15, 20).map((e) => e.id),
+		members: USERS.slice(15, 20),
 		previewMsg: MESSAGES.at(-1),
 		pinMessages: [],
 	},

@@ -53,13 +53,13 @@ export interface ChatRoom {
 	isGroup: boolean;
 	label?: string;
 	image?: string;
-	members: string[];
+	members: User[];
 	previewMsg?: Message;
 	pinMessages: Message[];
 }
 
 export interface Label {
-	id: string,
+	id: string;
 	name: string;
 	color?: string;
 }

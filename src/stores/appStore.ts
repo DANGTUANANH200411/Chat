@@ -1,11 +1,9 @@
-import { Locale } from 'antd/es/locale';
 import { makeAutoObservable } from 'mobx';
 import { I18n, Label, LangType, User } from '../utils/type';
 import { initI18n } from '../utils/i18n';
 import Mustache from 'mustache';
 import * as locale from '../locales';
 import { LABELS, USERS } from '../utils/constants';
-import { newGuid } from '../utils/helper';
 interface Setting {
 	darkTheme: boolean;
 }
@@ -19,7 +17,8 @@ export default class AppStore {
 
 	user: User = USERS[0];
 	menuOpen: boolean = true;
-	labels: Label[] = LABELS.map(e=> ({...e, name: this.$$(e.name as any)}));
+	drawerOpen: boolean = false;
+	labels: Label[] = LABELS;
 	get DarkTheme() {
 		return this.setting.darkTheme;
 	}
@@ -53,4 +52,5 @@ export default class AppStore {
 	};
 	setSetting = (props: any) => (this.setting = { ...this.setting, ...props });
 	toggleLeftMenu = () => (this.menuOpen = !this.menuOpen);
+	setDrawerOpen = (open: boolean) => (this.drawerOpen = open);
 }

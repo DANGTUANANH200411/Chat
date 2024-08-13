@@ -16,7 +16,7 @@ import UserAvatar from '../../common/UserAvatar';
 function ChatHeader() {
 	const {
 		chatStore,
-		appStore: { $$ },
+		appStore: { $$, drawerOpen, setDrawerOpen },
 	} = useStores();
 	const { Room } = chatStore;
 	if (!Room) return <></>;
@@ -36,9 +36,10 @@ function ChatHeader() {
 				</Row>
 				<Row align='bottom'>
 					<UserOutlined className='text-secondary' />
-					<Typography.Text type='secondary' className='text-small'>{`${Room.members.length} ${$$(
-						'members'
-					)}`}</Typography.Text>
+					<Typography.Text
+						className='hover-change-color text-secondary text-small'
+						onClick={() => setDrawerOpen(true)}
+					>{`${Room.members.length} ${$$('members')}`}</Typography.Text>
 					{/* <span style={{ fontSize: '1rem', borderRight: '1px solid black', padding: '0 .4rem' }}></span> */}
 					<Dropdown trigger={['click']} menu={{ items: LabelMenu() }} destroyPopupOnHide>
 						<TagFilled rotate={45} className='hover-change-color text-secondary' />
@@ -65,7 +66,8 @@ function ChatHeader() {
 					<UnorderedListOutlined
 						className='hoverable-icon'
 						title={$$('room-info')}
-						onClick={() => console.log('djasdklasjkl')}
+						style={{ color: drawerOpen ? 'var(--primary-color)' : 'unset' }}
+						onClick={() => setDrawerOpen(!drawerOpen)}
 					/>
 				</Row>
 			</Col>

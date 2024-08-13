@@ -9,6 +9,10 @@ html {
 	--background-color: #ebf0ff;
 	--border-color: rgb(199 199 199);
 	--header-height: 4rem;
+	--side-bar-w: 3vw;
+	--left-menu-w: 17vw;
+	--drawer-w: 0vw;
+	--chat-w: calc(100vw - var(--side-bar-w) - var(--left-menu-w) - var(--drawer-w))
 }
 body:is(.dark-theme) {
 	--text-color: #ffffff;
@@ -73,6 +77,7 @@ code {
 .hover-change-color:hover,
 .hover-change-color:hover * {
 	color: var(--primary-color) !important;
+	cursor: pointer;
 }
 
 .max-width {
