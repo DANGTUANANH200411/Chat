@@ -12,7 +12,7 @@ interface Props {
 }
 function ChatItemWrapper(props: Props) {
 	const {
-		chatStore: { getUserName, setReactionPopup },
+		chatStore: { getUserName },
 		appStore: { user },
 	} = useStores();
 	return (
@@ -34,7 +34,6 @@ function ChatItemWrapper(props: Props) {
 							dayjs(arr[idx].createDate).diff(dayjs(arr[idx + 1].createDate)) < -60000
 						}
 						getUserName={getUserName}
-						setReactionPopup={setReactionPopup}
 					/>
 				))}
 			</Col>

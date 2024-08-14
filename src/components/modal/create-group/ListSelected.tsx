@@ -26,7 +26,7 @@ function ListSelected(props: Props) {
 						align='middle'
 					>
 						<Col span={4}>
-							<UserAvatar id={user.id} user={user} size='small' />
+							<UserAvatar id={user.id} size='small' />
 						</Col>
 						<Col span={18}>
 							<Typography.Text className='text-small' ellipsis strong>

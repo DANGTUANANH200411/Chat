@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { ChatRoom, Message, ReactionPopupProps, TabItemType, User } from '../utils/type';
+import { ChatRoom, Message, MessageLog, ReactionPopupProps, ReactionType, TabItemType, User } from '../utils/type';
 import { CHAT_ROOMS, IS_FIREFOX, MESSAGES, USERS } from '../utils/constants';
 import { newGuid } from '../utils/helper';
 import { stores } from './stores';
@@ -89,8 +89,6 @@ export default class ChatStore {
 	setTabItem = (tab: TabItemType) => (this.tabItem = tab);
 	setActiveRoom = (room: string) => (this.activeRoom = room);
 
-	setReactionPopup = (state: ReactionPopupProps) => (this.reactionPopup = state);
-
 	onCopyGroup = () => {
 		if (!this.Room) return;
 		this.Room.members.forEach((user) => {
@@ -115,6 +113,7 @@ export default class ChatStore {
 		this.messages = [...this.messages, message];
 		let room = this.chatRooms.find((e) => e.id === this.activeRoom);
 		if (room) room.previewMsg = message;
+		document.querySelector('.chat-body-view')?.scrollTo({top: 0})
 	};
 	onCreateGroup = (group: ChatRoom) => {
 		const { $$ } = stores.appStore;
@@ -157,4 +156,29 @@ export default class ChatStore {
 			msg.classList.add('forcus');
 		}
 	};
+
+	handleReaction = (id: string, reaction: ReactionType) => {
+		const userId = stores.appStore.user.id;
+		const log : MessageLog = {
+			userId,
+			reactionDate: SYSTEM_NOW(),
+			reaction,
+		} 
+		let message = this.messages.find(e=> e.id === id);
+		if(message) {
+			let oldLog = message.logs.find(e=> e.userId === userId);
+			if(oldLog) {
+				if(oldLog.reaction === log.reaction) {
+					//Remove
+					message.logs = message.logs.filter(e=> e.userId !== userId);
+				} else {
+					//Update
+					message.logs = message.logs.map(e=> e.userId === userId ? log : e);
+				}
+			} else {
+				// Add
+				message.logs = [...message.logs, log];
+			}
+		}
+	}
 }

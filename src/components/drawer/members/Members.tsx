@@ -4,7 +4,9 @@ import { useStores } from '../../../stores/stores';
 import { MoreOutlined, UserAddOutlined } from '@ant-design/icons';
 import { useEffect } from 'react';
 import UserAvatar from '../../common/UserAvatar';
-
+import Member from '../../common/Member';
+import '../style.css';
+import MembersAction from './MembersAction';
 function Members() {
 	const {
 		appStore: { $$, drawerOpen },
@@ -28,16 +30,15 @@ function Members() {
 							{$$('members')}
 						</Typography.Text>
 					</Row>
-					<Row style={{ padding: '.8rem' }}>
-						<Space className='max-width' direction='vertical'>
+					<Row className='body' style={{ padding: '.8rem' }}>
+						<Space className='max-width drawer-members-buttom' direction='vertical'>
 							<Button className='max-width text-primary' icon={<UserAddOutlined />}>
 								{$$('add-friends-to-group')}
 							</Button>
 							<Row justify='space-between'>
-								<Typography.Text
-									strong
-									ellipsis
-								>{`Listing members (${Room?.members.length})`}</Typography.Text>
+								<Typography.Text strong ellipsis>{`${$$('list-member')} (${
+									Room?.members.length
+								})`}</Typography.Text>
 								<Dropdown
 									menu={{
 										items: [
@@ -53,8 +54,16 @@ function Members() {
 								</Dropdown>
 							</Row>
 						</Space>
-						<Space>
-							<Row>{/* <UserAvatar id={undefined}/> */}</Row>
+						<Space size={24} className='max-width drawer-members-list' direction='vertical'>
+							{Room &&
+								Room.members.map((user) => (
+									<Member
+										key={user.id}
+										user={user}
+										info={Room.creatorId === user.id ? $$('owner') : undefined}
+										action={<MembersAction role='Owner' />}
+									/>
+								))}
 						</Space>
 					</Row>
 				</>

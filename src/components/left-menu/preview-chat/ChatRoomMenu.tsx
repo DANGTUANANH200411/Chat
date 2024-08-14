@@ -53,7 +53,7 @@ function ChatRoomMenu() {
     ];
     return (
         <Dropdown trigger={['click']} menu={{ items }} destroyPopupOnHide arrow>
-            <MoreOutlined rotate={90} className='preview-chat-item-more hoverable-icon' />
+            <MoreOutlined rotate={90} className='preview-chat-item-more hoverable-icon' onClick={(e)=> e.stopPropagation()}/>
         </Dropdown>
     );
 }

@@ -58,5 +58,11 @@ const vi: ILocale = {
 	//Members
 	'copy-group': 'Sao chép nhóm',
 	//#endregion
+	'owner': 'Trưởng nhóm',
+	'list-member': 'Danh sách thành viên',
+	'view-profile': 'Xem trang cá nhân',
+	'appointed-vice-leader': 'Bổ nhiệm làm phó nhóm',
+	'block-member': 'Chặn thành viên',
+	'remove-from-group': 'Xóa khỏi nhóm',
 };
 export { vi };

@@ -53,7 +53,7 @@ function SelectUsers(props: Props) {
 							className='hover-change-color user-row max-width'
 						>
 							<Checkbox checked={selectedUsers.has(user.id)} />
-							<UserAvatar id={user.id} user={user} />
+							<UserAvatar id={user.id} />
 							<Typography.Text strong ellipsis style={{ width: '25vh' }}>
 								{user.userName}
 							</Typography.Text>

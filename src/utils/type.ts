@@ -56,6 +56,7 @@ export interface ChatRoom {
 	members: User[];
 	previewMsg?: Message;
 	pinMessages: Message[];
+	creatorId?: string;
 }
 
 export interface Label {
@@ -70,3 +71,9 @@ export interface ReactionPopupProps {
 	y: number;
 	id: string | undefined;
 }
+export enum Role {
+	'Owner' = 0,
+	'Vice Leader' = 1,
+	'Member' = 2,
+}
+export type RoleType = keyof typeof Role;

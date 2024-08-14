@@ -448,6 +448,7 @@ const CHAT_ROOMS: ChatRoom[] = [
 		members: USERS,
 		previewMsg: MESSAGES.at(-1),
 		pinMessages: [],
+		creatorId: USERS[0].id,
 	},
 	{
 		id: GROUP_ID[1],
@@ -456,6 +457,7 @@ const CHAT_ROOMS: ChatRoom[] = [
 		members: USERS.slice(15, 20),
 		previewMsg: MESSAGES.at(-1),
 		pinMessages: [],
+		creatorId: USERS[16].id,
 	},
 	{
 		id: USERS[3].id,

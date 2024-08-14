@@ -22,7 +22,7 @@ function ChatWrapper() {
                 </div>
             </div>
             <ModalReactionLog/>
-            <Reaction/>
+            {/* <Reaction/> */}
         </>
         ) : (
         <Row>WELLCOME TO MY CHAT APP</Row>

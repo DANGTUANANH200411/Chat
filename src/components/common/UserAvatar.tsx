@@ -1,19 +1,16 @@
 import { observer } from 'mobx-react';
 import { useStores } from '../../stores/stores';
 import { Avatar, AvatarProps } from 'antd';
-import { User } from '../../utils/type';
 interface Props extends AvatarProps {
 	id: string;
 	className?: string;
-	user?: User;
 }
 function UserAvatar(props: Props) {
-	const { chatStore } = useStores();
-	const { user, id } = props;
-
-	if (!user) return <></>;
+	const { chatStore: {users} } = useStores();
+	const { id} = props;
+	const user = users.get(id);
 	return (
-		<Avatar src={user.imageSrc} {...props}>
+		<Avatar src={user?.imageSrc} {...props}>
 			{user ? user.userName : 'Unknown'}
 		</Avatar>
 	);

@@ -1,0 +1,8 @@
+.drawer-members-buttom {
+    height: 4.8rem;
+}
+
+.drawer-members-list {
+    height: calc(100% - 4.8rem);
+    overflow: auto;
+}

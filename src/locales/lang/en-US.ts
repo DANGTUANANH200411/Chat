@@ -57,6 +57,12 @@ const en = {
 	//Members
 	'copy-group': 'Copy group',
 	//#endregion
+	'owner': 'Owner',
+	'list-member': 'List Member',
+	'view-profile': 'View Profile',
+	'appointed-vice-leader': 'Appointed as group vice leader',
+	'block-member': 'Block member',
+	'remove-from-group': 'Remove from group',
 };
 
 export type ILocale = typeof en;

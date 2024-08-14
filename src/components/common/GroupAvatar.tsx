@@ -19,7 +19,7 @@ function GroupAvatar(props: Props) {
 					{`+ ${members.length - 3}`}
 				</Avatar>
 			) : (
-				<UserAvatar id={user.id} user={user} className='child-avt' />
+				<UserAvatar id={user.id} className='child-avt' />
 			)
 		);
 	return (

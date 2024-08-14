@@ -41,3 +41,12 @@
     bottom: 0;
     right: 0;
 }
+
+
+.member-action {
+    padding: 0 8px;
+    visibility: hidden;
+}
+.member:hover .member-action {
+    visibility: visible;
+}
