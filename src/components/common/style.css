@@ -42,9 +42,12 @@
     right: 0;
 }
 
-
+.member {
+    display: flex;
+    column-gap: 8px;
+    align-items: center;
+}
 .member-action {
-    padding: 0 8px;
     visibility: hidden;
 }
 .member:hover .member-action {

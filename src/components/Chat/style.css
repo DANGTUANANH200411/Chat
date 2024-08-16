@@ -23,6 +23,10 @@
 	bottom: 0;
 	transition: height .2s ease-in-out
 }
+.chat-header {
+	padding: 0 0.8rem;
+	column-gap: 0.8rem;
+}
 .chat-header * {
 	font-size: 1.2rem;
 }
@@ -154,10 +158,12 @@ body:is(.dark-theme) .chat-item-username {
 	color: pink;
 }
 .chat-item-action {
-	margin-left: 2rem;
-	display: none;
+	visibility: hidden;
 	font-size: medium;
 	/* padding: .2rem .4rem; */
+	display: flex;
+	flex-wrap: nowrap;
+	direction: ltr;
 	
 }
 .me .chat-item-action {
@@ -165,7 +171,7 @@ body:is(.dark-theme) .chat-item-username {
 	margin-right: 2rem;
 }
 .chat-item-content-wrapper:hover .chat-item-action {
-	display: block;
+	visibility: visible;
 }
 
 .reaction-action {

@@ -5,11 +5,11 @@ import React from 'react';
 
 function PreviewChatWrapper() {
     const {
-        chatStore: { chatRooms, setActiveRoom },
+        chatStore: { Rooms, setActiveRoom },
     } = useStores();
     return (
         <>
-            {chatRooms.map((e) => (
+            {Rooms.map((e) => (
                 <PreviewChatItem key={e.id} {...e} onClick={() => setActiveRoom(e.id)} />
             ))}
         </>

@@ -6,6 +6,8 @@ import CreateGroup from './modal/create-group/CreateGroup';
 import Members from './drawer/members/Members';
 import './style.css';
 import React from 'react';
+import AddFriendModal from './modal/add-friend/AddFriendModal';
+import AddToGroupModal from './modal/add-friend-to-group/AddToGroupModal';
 
 function Main() {
 	return (
@@ -19,6 +21,8 @@ function Main() {
 				<Members />
 			</Row>
 			<CreateGroup />
+			<AddFriendModal/>
+			<AddToGroupModal/>
 		</>
 	);
 }

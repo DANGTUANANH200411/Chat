@@ -7,6 +7,10 @@
 	overflow-y: auto;
 	overflow-x: hidden;
 }
+
+.user-row > .ant-space-item {
+	display: flex;
+}
 .list-label {
 	cursor: pointer;
 	overflow-x: auto;
@@ -28,7 +32,7 @@
 }
 .list-label::-webkit-scrollbar-button:horizontal:decrement {
 	position: absolute;
-	top: 0;
+	top: -10;
 	background-image: url('../../resources/left.png');
 }
 .list-label::-webkit-scrollbar-button:horizontal:increment {
@@ -41,7 +45,8 @@
 } */
 
 .list-selected-wapper {
-	height: 90%;
+	height: 85%;
+	width: 36%;
 	border: 1px solid var(--text-secondary);
 	/* position: absolute; */
 	top: 0;
@@ -63,8 +68,12 @@
 	cursor: pointer;
 	user-select: none;
 	/* background-color: var(--background-color); */
-	padding: 0.2rem 0.4rem;
+	padding: 0.2rem 0.6rem 0.2rem 0.4rem;
 	border-radius: 30px;
+	flex-wrap: nowrap;
+	flex-direction: row;
+	align-items: center;
+	column-gap: 0.4rem;
 }
 .list-selected .user-row {
 	background-color: var(--background-color);

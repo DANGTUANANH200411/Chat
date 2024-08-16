@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 import { ChatRoom, Message, MessageLog, ReactionPopupProps, ReactionType, TabItemType, User } from '../utils/type';
 import { CHAT_ROOMS, IS_FIREFOX, MESSAGES, USERS } from '../utils/constants';
-import { newGuid } from '../utils/helper';
+import { newGuid, toNormalize } from '../utils/helper';
 import { stores } from './stores';
 import { SYSTEM_NOW } from '../utils/dateHelper';
 import { notify } from '../utils/notify';
@@ -13,7 +13,6 @@ type DateMessage = {
 export default class ChatStore {
 	tabItem: TabItemType = 'All';
 	chatRooms: ChatRoom[] = CHAT_ROOMS;
-	users: Map<string, User> = new Map<string, User>();
 	messages: Message[] = MESSAGES;
 	activeRoom: string | undefined = undefined;
 
@@ -27,13 +26,15 @@ export default class ChatStore {
 
 	selectedUsers: Map<string, User> = new Map();
 
+	searchRoom: string = '';
+	get Rooms() {
+		if (!this.searchRoom) return this.chatRooms;
+		return this.chatRooms.filter((e) => toNormalize(e.name).includes(toNormalize(this.searchRoom)));
+	}
 	get Room() {
-		return this.chatRooms.find((e) => e.id === this.activeRoom);
+		return this.getActiveRoom();
 	}
-	get Users() {
-		const { user } = stores.appStore;
-		return Array.from(this.users.values()).filter((e) => e.id !== user.id);
-	}
+
 	get RoomMessages() {
 		if (!this.activeRoom) return [];
 		const roomMessages = this.messages.filter((e) => e.groupId === this.activeRoom);
@@ -67,28 +68,28 @@ export default class ChatStore {
 	}
 	constructor() {
 		makeAutoObservable(this);
-		USERS.map((e) => this.users.set(e.id, e));
 	}
+	//#region GET
+	getActiveRoom = (room?: string) => this.chatRooms.find((e) => e.id === (room ?? this.activeRoom));
+
+	getMessage = (id: string) => this.messages.find(e=> e.id === id);
+	//#endregion GET
+
+	//#region SET
+	setSearchRoom = (value: string) => (this.searchRoom = value);
 	setSelectedUsers = (state: Map<string, User>) => {
 		this.selectedUsers = state;
 	};
+	clearSelectedUsers = () => this.selectedUsers = new Map();
 	toggleCreateGroup = () => {
 		this.openCreateGroup = !this.openCreateGroup;
-		if (!this.openCreateGroup) {
-			this.selectedUsers = new Map();
-		}
-	};
-	getUserById = (id: string) => {
-		return this.users.get(id);
-	};
-
-	getUserName = (id: string | undefined) => {
-		if (!id) return 'Unknown';
-		return this.users.get(id)?.userName ?? 'Unknown';
+		!this.openCreateGroup && this.clearSelectedUsers();
 	};
 	setTabItem = (tab: TabItemType) => (this.tabItem = tab);
 	setActiveRoom = (room: string) => (this.activeRoom = room);
+	//#endregion SET
 
+	//#region FUNCTION
 	onCopyGroup = () => {
 		if (!this.Room) return;
 		this.Room.members.forEach((user) => {
@@ -96,6 +97,9 @@ export default class ChatStore {
 		});
 		this.openCreateGroup = true;
 	};
+	//#endregion FUNCTION
+	
+	//#region API
 	onSendMessage = (content: string) => {
 		if (!this.activeRoom) return;
 		const message: Message = {
@@ -111,9 +115,9 @@ export default class ChatStore {
 			logs: [],
 		};
 		this.messages = [...this.messages, message];
-		let room = this.chatRooms.find((e) => e.id === this.activeRoom);
+		let room = this.getActiveRoom();
 		if (room) room.previewMsg = message;
-		document.querySelector('.chat-body-view')?.scrollTo({top: 0})
+		document.querySelector('.chat-body-view')?.scrollTo({ top: 0 });
 	};
 	onCreateGroup = (group: ChatRoom) => {
 		const { $$ } = stores.appStore;
@@ -125,7 +129,10 @@ export default class ChatStore {
 				notify($$('invalid-group-members'), 'warning');
 				return;
 			}
-			group.members = Array.from(this.selectedUsers.values());
+			group.members = Array.from(this.selectedUsers.values()).map((e) => ({
+				...e,
+				invitedBy: stores.appStore.user.id,
+			}));
 			// Call API
 			//then
 
@@ -138,7 +145,7 @@ export default class ChatStore {
 	};
 
 	onPinMessage = (message: Message) => {
-		const room = this.chatRooms.find((e) => e.id === this.activeRoom);
+		const room = this.getActiveRoom();
 		if (!room) return;
 		if (room.pinMessages.find((e) => e.id === message.id)) {
 			//Unpin
@@ -148,37 +155,47 @@ export default class ChatStore {
 			room.pinMessages = [...(room.pinMessages ?? []), message];
 		}
 	};
-	scrollToMessage = (id: string) => {
-		const msg = document.getElementById(id);
-		document.querySelector('.forcus')?.classList.remove('forcus');
-		if (msg) {
-			IS_FIREFOX ? (msg as any).scrollIntoView() : (msg as any).scrollIntoViewIfNeeded();
-			msg.classList.add('forcus');
-		}
-	};
 
+	onChangeLabel = (roomId: string, label: string) => {
+		const room = this.getActiveRoom(roomId);
+		room!.label = label;
+	}
+	addFriendToGroup = () => {
+		const room = this.getActiveRoom();
+		if (!room) return;
+		room.members = [
+			...room.members,
+			...Array.from(this.selectedUsers.values()).map((e) => ({ ...e, invitedBy: stores.appStore.user.id })),
+		];
+	};
 	handleReaction = (id: string, reaction: ReactionType) => {
 		const userId = stores.appStore.user.id;
-		const log : MessageLog = {
+		const log: MessageLog = {
 			userId,
 			reactionDate: SYSTEM_NOW(),
 			reaction,
-		} 
-		let message = this.messages.find(e=> e.id === id);
-		if(message) {
-			let oldLog = message.logs.find(e=> e.userId === userId);
-			if(oldLog) {
-				if(oldLog.reaction === log.reaction) {
+		};
+		let message = this.messages.find((e) => e.id === id);
+		if (message) {
+			let oldLog = message.logs.find((e) => e.userId === userId);
+			if (oldLog) {
+				if (oldLog.reaction === log.reaction) {
 					//Remove
-					message.logs = message.logs.filter(e=> e.userId !== userId);
+					message.logs = message.logs.filter((e) => e.userId !== userId);
 				} else {
 					//Update
-					message.logs = message.logs.map(e=> e.userId === userId ? log : e);
+					message.logs = message.logs.map((e) => (e.userId === userId ? log : e));
 				}
 			} else {
 				// Add
 				message.logs = [...message.logs, log];
 			}
 		}
+	};
+
+	onDeleteMessage = (id: string) => {
+		const message = this.getMessage(id);
+		message!.deleted = true;
 	}
+	//#endregion API
 }

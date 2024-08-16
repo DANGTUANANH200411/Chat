@@ -4,6 +4,7 @@ const en = {
 	all: 'All',
 	unread: 'Unread',
 	'add-friend': 'Add friend',
+	unfriend: 'Unfriend',
 	'create-group-chat': 'Create group chat',
 	// Chat room menu
 	'pin-chatroom': 'Pin this conversation',
@@ -57,12 +58,22 @@ const en = {
 	//Members
 	'copy-group': 'Copy group',
 	//#endregion
-	'owner': 'Owner',
+	owner: 'Owner',
 	'list-member': 'List Member',
 	'view-profile': 'View Profile',
 	'appointed-vice-leader': 'Appointed as group vice leader',
 	'block-member': 'Block member',
 	'remove-from-group': 'Remove from group',
+	'phone-number': 'Phone number',
+	'add-by': 'Add by',
+	joined: 'Joined',
+	you: 'You',
+	customer: 'Customer',
+	family: 'Family',
+	work: 'Work',
+	friend: 'Friend',
+	'reply-later': 'Reply later',
+	'co-worker': 'Co-worker',
 };
 
 export type ILocale = typeof en;

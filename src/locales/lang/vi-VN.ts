@@ -6,6 +6,7 @@ const vi: ILocale = {
 	all: 'Tất cả',
 	unread: 'Chưa đọc',
 	'add-friend': 'Thêm bạn',
+	unfriend: 'Hủy kết bạn',
 	'create-group-chat': 'Tạo nhóm chat',
 	// Chat room menu
 	'pin-chatroom': 'Ghim hội thoại',
@@ -58,11 +59,21 @@ const vi: ILocale = {
 	//Members
 	'copy-group': 'Sao chép nhóm',
 	//#endregion
-	'owner': 'Trưởng nhóm',
+	owner: 'Trưởng nhóm',
 	'list-member': 'Danh sách thành viên',
 	'view-profile': 'Xem trang cá nhân',
 	'appointed-vice-leader': 'Bổ nhiệm làm phó nhóm',
 	'block-member': 'Chặn thành viên',
 	'remove-from-group': 'Xóa khỏi nhóm',
+	'phone-number': 'Số điện thoại',
+	'add-by': 'Thêm bởi',
+	joined: 'Đã tham gia',
+	you: 'Bạn',
+	customer: 'Khách hàng',
+	family: 'Gia đình',
+	work: 'Công việc',
+	friend: 'Bạn bè',
+	'reply-later': 'Trả lời sau',
+	'co-worker': 'Đồng nghiệp',
 };
 export { vi };

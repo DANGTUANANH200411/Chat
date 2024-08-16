@@ -20,23 +20,23 @@ import { notify } from '../../../utils/notify';
 interface Props {
 	message: Message;
 }
-function ChatAction({message}: Props) {
+function ChatAction({ message }: Props) {
 	const {
 		appStore: { $$ },
-        chatStore,
+		chatStore,
 	} = useStores();
-    const {Room, onPinMessage} =chatStore;
-    const {id, content} = message;
-    const isPined = Room?.pinMessages.find(e => e.id === id) ? true : false;
+	const { Room, onPinMessage, onDeleteMessage } = chatStore;
+	const { id, content } = message;
+	const isPined = Room?.pinMessages.find((e) => e.id === id) ? true : false;
 	const items: MenuProps['items'] = [
 		{
 			key: 'copy',
 			label: $$('copy-text'),
 			icon: <CopyOutlined />,
-            onClick: ()=> {
-                navigator.clipboard.writeText(content);
-                notify($$('copied'), 'info')
-            }
+			onClick: () => {
+				navigator.clipboard.writeText(content);
+				notify($$('copied'), 'info');
+			},
 		},
 		{
 			type: 'divider',
@@ -44,8 +44,8 @@ function ChatAction({message}: Props) {
 		{
 			key: 'pin',
 			label: isPined ? $$('unpin-msg') : $$('pin-msg'),
-			icon: isPined ? <PushpinFilled/> : <PushpinOutlined />,
-            onClick: ()=> onPinMessage(message),
+			icon: isPined ? <PushpinFilled /> : <PushpinOutlined />,
+			onClick: () => onPinMessage(message),
 		},
 		{
 			key: 'star',
@@ -74,6 +74,7 @@ function ChatAction({message}: Props) {
 			label: $$('delete-for-me'),
 			icon: <DeleteOutlined />,
 			danger: true,
+			onClick: () => onDeleteMessage(id),
 		},
 	];
 	return (
@@ -92,7 +93,7 @@ function ChatAction({message}: Props) {
 		</>
 	);
 }
-function propsAreEquals (prev: Props, next:Props) {
-    return prev.message.id == next.message.id;
+function propsAreEquals(prev: Props, next: Props) {
+	return prev.message.id == next.message.id;
 }
 export default React.memo(observer(ChatAction), propsAreEquals);

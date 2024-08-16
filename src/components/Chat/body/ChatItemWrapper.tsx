@@ -12,17 +12,12 @@ interface Props {
 }
 function ChatItemWrapper(props: Props) {
 	const {
-		chatStore: { getUserName },
-		appStore: { user },
+		appStore: { user, getUserName },
 	} = useStores();
 	return (
-		<Row className={`chat-item-wrapper ${props.messages[0].sender === user.id && 'me'}`}>
-			<Col span={1}>
-				<Row className='max-height' justify='center'>
-					<UserAvatar className='chat-item-avatar' id={props.messages[0].sender} size={40} />
-				</Row>
-			</Col>
-			<Col span={23}>
+		<Row className={`chat-item-wrapper ${props.messages[0].sender === user.id && 'me'}`} wrap={false}>
+			<UserAvatar className='chat-item-avatar' id={props.messages[0].sender} size={40} style={{margin: '0 8px'}}/>
+			<Row className='flex-grow'>
 				{props.messages.map((e, idx, arr) => (
 					<ChatItem
 						key={idx}
@@ -36,7 +31,7 @@ function ChatItemWrapper(props: Props) {
 						getUserName={getUserName}
 					/>
 				))}
-			</Col>
+			</Row>
 		</Row>
 	);
 }

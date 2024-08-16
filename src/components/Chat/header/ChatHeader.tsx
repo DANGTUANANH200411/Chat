@@ -1,4 +1,4 @@
-import { Avatar, Col, Dropdown, Row, Typography } from 'antd';
+import { Col, Dropdown, Row, Typography } from 'antd';
 import { observer } from 'mobx-react';
 import { useStores } from '../../../stores/stores';
 import {
@@ -16,42 +16,43 @@ import UserAvatar from '../../common/UserAvatar';
 function ChatHeader() {
 	const {
 		chatStore,
-		appStore: { $$, drawerOpen, setDrawerOpen },
+		appStore: { $$, drawerOpen, setDrawerOpen, setToggleAddToGroup, getLabel },
 	} = useStores();
 	const { Room } = chatStore;
 	if (!Room) return <></>;
-	const { id, name, isGroup, members, image } = Room;
+	const { id, name, isGroup, members, image, label } = Room;
+
 	return (
 		<Row className='header chat-header' align='middle'>
-			<Col span={2} className='max-height'>
-				<Row justify='center' align='middle' className='max-height'>
-					{isGroup ? <GroupAvatar image={image} members={members} /> : <UserAvatar id={id} size={40} />}
+			{isGroup ? <GroupAvatar image={image} members={members} /> : <UserAvatar id={id} size={40} />}
+			<Row className='flex-grow' wrap={false}>
+				<Row style={{overflow: 'hidden'}}>
+					<Row wrap={false}>
+						<Typography.Text ellipsis strong>
+							{name}
+						</Typography.Text>
+					</Row>
+					<Row wrap={false} >
+						<UserOutlined className='text-secondary' />
+						<Typography.Text ellipsis
+							className='hover-change-color text-secondary text-small'
+							onClick={() => setDrawerOpen(true)}
+						>{`${Room.members.length} ${$$('members')}`}</Typography.Text>
+						<Dropdown trigger={['click']} menu={{ items: LabelMenu(id) }} destroyPopupOnHide>
+							<TagFilled rotate={45} className='hover-change-color'  style={{color: getLabel(label)?.color ?? 'var(--text-secondary)'}} />
+						</Dropdown>
+					</Row>
 				</Row>
-			</Col>
-			<Col span={19}>
-				<Row>
-					<Typography.Text ellipsis strong>
-						{name}
-					</Typography.Text>
-				</Row>
-				<Row align='bottom'>
-					<UserOutlined className='text-secondary' />
-					<Typography.Text
-						className='hover-change-color text-secondary text-small'
-						onClick={() => setDrawerOpen(true)}
-					>{`${Room.members.length} ${$$('members')}`}</Typography.Text>
-					{/* <span style={{ fontSize: '1rem', borderRight: '1px solid black', padding: '0 .4rem' }}></span> */}
-					<Dropdown trigger={['click']} menu={{ items: LabelMenu() }} destroyPopupOnHide>
-						<TagFilled rotate={45} className='hover-change-color text-secondary' />
-					</Dropdown>
-				</Row>
-			</Col>
-			<Col span={3}>
-				<Row justify='space-around'>
+				<div
+					style={{
+						display: 'flex',
+						columnGap: '4px',
+					}}
+				>
 					<UsergroupAddOutlined
 						className='hoverable-icon'
 						title={$$('add-friends-to-group')}
-						onClick={() => console.log('djasdklasjkl')}
+						onClick={setToggleAddToGroup}
 					/>
 					<SearchOutlined
 						className='hoverable-icon'
@@ -69,8 +70,8 @@ function ChatHeader() {
 						style={{ color: drawerOpen ? 'var(--primary-color)' : 'unset' }}
 						onClick={() => setDrawerOpen(!drawerOpen)}
 					/>
-				</Row>
-			</Col>
+				</div>
+			</Row>
 		</Row>
 	);
 }

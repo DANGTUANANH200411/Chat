@@ -1,5 +1,4 @@
-import { Col, Row, Typography } from 'antd';
-import { timeFromNow } from '../../../utils/dateHelper';
+import { Row, Typography } from 'antd';
 import { ChatRoom } from '../../../utils/type';
 import React from 'react';
 import { observer } from 'mobx-react';
@@ -8,44 +7,39 @@ import ChatRoomMenu from './ChatRoomMenu';
 import GroupAvatar from '../../common/GroupAvatar';
 import UserAvatar from '../../common/UserAvatar';
 import TimeFromNow from './TimeFromNow';
+import { TagFilled } from '@ant-design/icons';
 
 interface Props {
 	onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 function PreviewChatItem(props: ChatRoom & Props) {
 	const {
-		chatStore: { users },
+		appStore: { users, getLabel },
 	} = useStores();
-	const { id, name, members, isGroup, previewMsg, image, onClick } = props;
+	const { id, name, members, isGroup, previewMsg, image, label, onClick } = props;
+
 	return (
-		<Row className='preview-chat-item' onClick={onClick}>
-			<Col span={5}>
-				<Row justify='center' align='middle' className='max-height text-ellipsis'>
-					{isGroup ? <GroupAvatar image={image} members={members} /> : <UserAvatar id={id} size={40} />}
-				</Row>
-			</Col>
-			<Col span={19}>
-				<Row>
-					<Col lg={18} md={17} sm={16}>
+		<Row className='preview-chat-item' onClick={onClick} wrap={false}>
+			{isGroup ? <GroupAvatar image={image} members={members} /> : <UserAvatar id={id} size={40} />}
+			<Row className='flex-grow' align='middle'>
+				<Row wrap={false}>
+					<Row className='flex-grow' wrap={false} style={{paddingRight: '8px'}}>
 						<Typography.Text strong ellipsis>
 							{name}
 						</Typography.Text>
-					</Col>
-					<Col lg={6} md={7} sm={10}>
-						<Row justify='end'>
-							<ChatRoomMenu />
-							<span className='preview-chat-item-time text-secondary text-small text-ellipsis'>
-								{previewMsg && <TimeFromNow date={previewMsg.createDate} />}
-							</span>
-						</Row>
-					</Col>
+						{label && <TagFilled style={{color: getLabel(label)?.color}}/>}
+					</Row>
+					<ChatRoomMenu roomId={id}/>
+					<span className='preview-chat-item-time text-secondary text-small text-ellipsis'>
+						{previewMsg && <TimeFromNow date={previewMsg.createDate} />}
+					</span>
 				</Row>
 				{previewMsg && (
 					<Typography.Text ellipsis type='secondary' className='text-small'>{`${
 						users.get(previewMsg.sender)?.userName ?? ''
 					}: ${previewMsg.content}`}</Typography.Text>
 				)}
-			</Col>
+			</Row>
 		</Row>
 	);
 }

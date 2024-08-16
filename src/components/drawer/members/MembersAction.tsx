@@ -1,19 +1,27 @@
 import React from "react";
 import { RoleType } from "../../../utils/type";
-import { AuditOutlined, DeleteOutlined, MoreOutlined, StopOutlined, UserAddOutlined, UserOutlined } from "@ant-design/icons";
+import { AuditOutlined, DeleteOutlined, MoreOutlined, StopOutlined, UserAddOutlined, UserDeleteOutlined, UserOutlined } from "@ant-design/icons";
 import { notify } from "../../../utils/notify";
 import { Dropdown } from "antd";
-import { MenuProps } from "antd/lib";
 import { useStores } from "../../../stores/stores";
 import { observer } from "mobx-react-lite";
+import { ItemType } from "antd/es/menu/interface";
 
 interface Props {
     role: RoleType;
+    isFriend: boolean | undefined;
 }
-function MemberActions(props: Props){
+function MembersAction(props: Props){
     const {appStore: {$$}} = useStores();
-    const {role} = props;
-    const items: MenuProps['items'] = [
+    const {role, isFriend} = props;
+    const friendItem: ItemType = {
+        key: 'add-remove-friend',
+        label: $$(isFriend ? 'unfriend' : 'add-friend'),
+        icon: isFriend ? <UserDeleteOutlined/> : <UserAddOutlined/>,
+        onClick: () => {}
+    }
+    const items: ItemType[] = [
+        friendItem,
         {
             key: 'profile',
             label: $$('view-profile'),
@@ -40,7 +48,7 @@ function MemberActions(props: Props){
             danger: true,
         },
     ];
-    console.log(role)
+
     switch (role) {
         case 'Owner':
             return (
@@ -56,4 +64,4 @@ function MemberActions(props: Props){
 
 }
 
-export default React.memo(observer(MemberActions));
+export default React.memo(observer(MembersAction));

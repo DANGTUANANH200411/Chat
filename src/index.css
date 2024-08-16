@@ -52,6 +52,10 @@ code {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+.text-smaller,
+.text-smaller strong {
+	font-size: 0.8rem !important;
+}
 
 .text-small,
 .text-small strong {
@@ -104,4 +108,46 @@ code {
 
 .body {
 	height: calc(100% - var(--header-height));
+}
+
+.styled-input {
+	border-width: 0 0 1px 0;
+	border-color: var(--border-color);
+	border-style: solid;
+	box-shadow: unset !important;
+	border-radius: 0;
+}
+
+.styled-select .ant-select-selector {
+	border-width: 0 0 1px 0 !important;
+	border-color: var(--border-color);
+	border-style: solid;
+	border-radius: 0;
+}
+
+.styled-select.ant-select-focused .ant-select-selector {
+	box-shadow: unset !important;
+}
+
+.ant-row,
+.ant-space.ant-space-vertical {
+	width: 100%;
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.container .grow-list {
+	flex: 1;
+	overflow: auto
+}
+
+.flex-grow {
+	flex: 1;
+}
+.fit-height {
+	height: fit-content !important;
 }

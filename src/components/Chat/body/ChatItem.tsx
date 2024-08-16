@@ -37,14 +37,14 @@ function ChatItem(props: Props) {
 
 	return (
 		<>
-			<Row align='middle' className='chat-item-content-wrapper'>
+			<Row align='middle' className='chat-item-content-wrapper' wrap={false}>
 				<div className={`chat-item-content ${deleted && 'deleted'}`} id={message.id}>
 					{isFirst && (
 						<Typography.Link className='chat-item-username small-text text-ellipsis' onClick={() => {}}>
 							{getUserName(sender)}
 						</Typography.Link>
 					)}
-					<ChatContent content={content} isFile={isFile} fileSize={fileSize} />
+					<ChatContent content={deleted ? 'Deleted message' : content} isFile={isFile} fileSize={fileSize}  />
 					{(isLast || showTime) && (
 						<Typography.Text type='secondary' className='small-text'>
 							{displayChatTime(createDate)}

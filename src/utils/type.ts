@@ -1,3 +1,5 @@
+import { COUNTRIES } from "./countries";
+
 export interface I18n {
 	messages: Record<string, Record<string, any>>;
 	lang: (module: string | Record<string, any>, name: string, args?: any[] | Record<string, any>) => string;
@@ -16,6 +18,8 @@ export interface User {
 	gender: Gender;
 	label?: string;
 	imageSrc?: string;
+	phoneNumber: string;
+	isFriend?: boolean;
 }
 
 export interface Message {
@@ -53,12 +57,17 @@ export interface ChatRoom {
 	isGroup: boolean;
 	label?: string;
 	image?: string;
-	members: User[];
+	members: RoomMember[];
 	previewMsg?: Message;
 	pinMessages: Message[];
 	creatorId?: string;
 }
 
+export interface RoomMember extends User{
+	lastLogTime?: string;
+	isRemoved?: boolean;
+	invitedBy: string;
+}
 export interface Label {
 	id: string;
 	name: string;
@@ -71,9 +80,11 @@ export interface ReactionPopupProps {
 	y: number;
 	id: string | undefined;
 }
+
 export enum Role {
 	'Owner' = 0,
 	'Vice Leader' = 1,
 	'Member' = 2,
 }
+
 export type RoleType = keyof typeof Role;

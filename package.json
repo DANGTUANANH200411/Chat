@@ -17,6 +17,7 @@
     "mobx-react": "^9.1.1",
     "mustache": "^4.2.0",
     "react": "^18.3.1",
+    "react-country-flag": "^3.1.0",
     "react-dom": "^18.3.1",
     "react-linkify": "^1.0.0-alpha",
     "react-scripts": "5.0.1",

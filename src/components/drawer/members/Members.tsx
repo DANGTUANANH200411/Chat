@@ -1,15 +1,14 @@
-import { Button, Col, Dropdown, Row, Space, Typography } from 'antd';
+import { Button, Dropdown, Row, Space, Typography } from 'antd';
 import { observer } from 'mobx-react';
 import { useStores } from '../../../stores/stores';
 import { MoreOutlined, UserAddOutlined } from '@ant-design/icons';
 import { useEffect } from 'react';
-import UserAvatar from '../../common/UserAvatar';
 import Member from '../../common/Member';
 import '../style.css';
 import MembersAction from './MembersAction';
 function Members() {
 	const {
-		appStore: { $$, drawerOpen },
+		appStore: { $$, drawerOpen, user: currentUser, setToggleAddToGroup, getUserName },
 		chatStore: { Room, onCopyGroup },
 	} = useStores();
 	useEffect(() => {
@@ -32,7 +31,7 @@ function Members() {
 					</Row>
 					<Row className='body' style={{ padding: '.8rem' }}>
 						<Space className='max-width drawer-members-buttom' direction='vertical'>
-							<Button className='max-width text-primary' icon={<UserAddOutlined />}>
+							<Button className='max-width text-primary' icon={<UserAddOutlined />} onClick={setToggleAddToGroup}>
 								{$$('add-friends-to-group')}
 							</Button>
 							<Row justify='space-between'>
@@ -60,8 +59,9 @@ function Members() {
 									<Member
 										key={user.id}
 										user={user}
-										info={Room.creatorId === user.id ? $$('owner') : undefined}
-										action={<MembersAction role='Owner' />}
+										isMe={user.id === currentUser.id}
+										info={Room.creatorId === user.id ? $$('owner') : `${$$('add-by')} ${getUserName(user.invitedBy, true).toLowerCase()}`}
+										action={<MembersAction isFriend={user.isFriend} role='Owner' />}
 									/>
 								))}
 						</Space>

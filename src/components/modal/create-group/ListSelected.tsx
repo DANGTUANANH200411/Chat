@@ -1,7 +1,8 @@
-import { Col, Row, Space, Typography } from 'antd';
-import UserAvatar from '../../common/UserAvatar';
+import React from 'react';
+import { Row, Space, Typography } from 'antd';
 import { User } from '../../../utils/type';
 import { CloseCircleFilled } from '@ant-design/icons';
+import Member from '../../common/Member';
 
 interface Props {
 	listChecked: Map<string, User>;
@@ -11,9 +12,9 @@ function ListSelected(props: Props) {
 	const { listChecked, onUncheck } = props;
 	return (
 		<div className='list-selected-wapper'>
-			<Row justify='space-between'>
-				<Typography.Text strong>Selected</Typography.Text>{' '}
-				<Typography.Text strong className='color-primary'>
+			<Row justify='space-between' className='fit-height'>
+				<Typography.Text className='flex-grow' strong ellipsis>Selected</Typography.Text>{' '}
+				<Typography.Text className='color-primary' strong>
 					{listChecked.size}/100
 				</Typography.Text>
 			</Row>
@@ -25,17 +26,7 @@ function ListSelected(props: Props) {
 						onClick={() => onUncheck(user)}
 						align='middle'
 					>
-						<Col span={4}>
-							<UserAvatar id={user.id} size='small' />
-						</Col>
-						<Col span={18}>
-							<Typography.Text className='text-small' ellipsis strong>
-								{user.userName}
-							</Typography.Text>
-						</Col>
-						<Col span={2}>
-							<CloseCircleFilled className='text-secondary' />
-						</Col>
+						<Member user={user} size='small' action={<CloseCircleFilled className='text-secondary' />}/>
 					</Row>
 				))}
 			</Space>
@@ -43,4 +34,4 @@ function ListSelected(props: Props) {
 	);
 }
 
-export default ListSelected;
+export default React.memo(ListSelected);

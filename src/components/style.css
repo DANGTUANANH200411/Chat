@@ -57,6 +57,7 @@
 }
 .preview-chat-item {
     padding: .4rem 0;
+    column-gap: 8px;
 }
 .preview-chat-item-more {
     display: none;

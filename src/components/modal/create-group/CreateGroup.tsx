@@ -11,31 +11,15 @@ import '../style.css';
 
 function CreateGroup() {
 	const {
-		appStore: { $$, labels, user },
+		appStore: { $$ },
 		chatStore: { openCreateGroup, toggleCreateGroup, onCreateGroup },
 	} = useStores();
 	const [groupName, setGroupName] = useState<string>('');
-	const [searchText, setSearchText] = useState<string>('');
-	const [selectedLabel, setSelectedLabel] = useState<string>('all');
 	const uploadRef = useRef<UploadRef>(null);
-	const listLabel = useMemo(
-		() =>
-			[{ id: 'all', name: $$('all'), color: 'black' }, ...labels].map((e) => (
-				<Tag
-					key={e.id}
-					color={e.id === selectedLabel ? e.color : undefined}
-					onClick={() => setSelectedLabel(e.id)}
-				>
-					{e.name}
-				</Tag>
-			)),
-		[labels, selectedLabel]
-	);
+	
 	useEffect(() => {
 		if (!openCreateGroup) {
 			setGroupName('');
-			setSearchText('');
-			setSelectedLabel('all');
 		}
 	}, [openCreateGroup]);
 	const handleCreateGroup = () => {
@@ -51,12 +35,13 @@ function CreateGroup() {
 	};
 	return (
 		<Modal
+			centered
+			destroyOnClose
 			key='modal-create-group'
 			open={openCreateGroup}
 			title={$$('create-group')}
 			width='30vw'
 			okText='Create group'
-			style={{ top: 10 }}
 			onOk={handleCreateGroup}
 			onCancel={toggleCreateGroup}
 		>
@@ -66,25 +51,14 @@ function CreateGroup() {
 						<CustomUpload ref={uploadRef} />
 					</Col>
 					<Input
-						className='max-width'
+						className='max-width styled-input'
 						value={groupName}
 						onChange={(e) => setGroupName(e.target.value)}
 						placeholder={$$('group-name-placeholder')}
 					/>
 				</Row>
 				<Row>
-					<Input
-						value={searchText}
-						placeholder={$$('search-place-holder')}
-						prefix={<SearchOutlined className='text-secondary' />}
-						onChange={(e) => setSearchText(e.target.value)}
-					/>
-				</Row>
-				<Row className='list-label' wrap={false}>
-					{listLabel}
-				</Row>
-				<Row>
-					<SelectUsers searchText={searchText} searchLabel={selectedLabel} />
+					<SelectUsers />
 				</Row>
 			</Space>
 		</Modal>

@@ -20,7 +20,7 @@ function ChatBody() {
 							{groupMsgs.map((messages, idx) => (
 								<ChatItemWrapper key={idx} messages={messages} />
 							))}
-							<Row justify='center'>
+							<Row justify='center' style={{marginBottom: '8px'}}>
 								<div className='date-item'>{displayChatDate(date)}</div>
 							</Row>
 						</>

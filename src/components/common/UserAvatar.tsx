@@ -6,7 +6,7 @@ interface Props extends AvatarProps {
 	className?: string;
 }
 function UserAvatar(props: Props) {
-	const { chatStore: {users} } = useStores();
+	const { appStore: {users} } = useStores();
 	const { id} = props;
 	const user = users.get(id);
 	return (

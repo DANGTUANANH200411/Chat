@@ -1,43 +1,52 @@
-import { Button, Col, Row, Typography } from 'antd';
-import React from 'react';
+import { Row, Typography } from 'antd';
+import React, { useMemo } from 'react';
 import { User } from '../../utils/type';
 import UserAvatar from './UserAvatar';
+import { useStores } from '../../stores/stores';
+import { observer } from 'mobx-react';
 interface Props {
 	user: User;
-    info?: string;
-    action?: React.ReactNode;
+	info?: string;
+	action?: React.ReactNode;
+	size?: 'small' | 'default' | 'large';
+	isMe?: boolean;
 }
 function Member(props: Props) {
-	const { user, info, action } = props;
+	const {appStore: {$$}} = useStores();
+	const { user, info, action, size, isMe } = props;
+
+	const [primaryClass, secondaryClass] = useMemo(() => {
+		switch (size) {
+			case 'large':
+				return ['text-large', 'text-medium'];
+			case 'small':
+				return ['text-small', 'text-smaller'];
+			default:
+				return ['text-medium', 'text-small'];
+		}
+	}, [size]);
 	return (
-		<Row className='max-width member' align='middle' wrap={false}>
-            <Col span={4}>
-			    <UserAvatar id={user.id} className='member-avatar' />
-            </Col>
-			<Col span={20} className='member-info'>
-				<Row wrap={false} justify='space-between' align='middle'>
-                    <Row>
-                        <Row className='max-width'>
-                            <Typography.Text strong ellipsis>
-                                {user.userName}
-                            </Typography.Text>
-                        </Row>
-                        {info && (
-                            <Row>
-                                <Typography.Text className='text-small' ellipsis type='secondary'>{info}</Typography.Text>
-                            </Row>
-                        )}
-                    </Row>
-                    {action && (
-                        <div className='member-action'>
-                            {action}
-                        </div>
-                    )}
-                </Row>
-			</Col>
-            
-		</Row>
+		<div className='max-width member'>
+			<UserAvatar id={user.id} className='member-avatar' size={size} />
+			<Row wrap={false} justify='space-between' align='middle' className='flex-grow'>
+				<Row>
+					<Row>
+						<Typography.Text strong ellipsis className={primaryClass}>
+							{isMe ? $$('you') : user.userName}
+						</Typography.Text>
+					</Row>
+					{info && (
+						<Row>
+							<Typography.Text className={secondaryClass} ellipsis type='secondary'>
+								{info}
+							</Typography.Text>
+						</Row>
+					)}
+				</Row>
+				{action && <div className={`member-action ${primaryClass}`}>{action}</div>}
+			</Row>
+		</div>
 	);
 }
 
-export default React.memo(Member);
+export default React.memo(observer(Member));

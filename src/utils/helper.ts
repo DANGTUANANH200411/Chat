@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { IS_FIREFOX } from './constants';
+import {COUNTRIES} from './countries';
 
 const toString = Object.prototype.toString;
 
@@ -125,3 +126,12 @@ export function template(str: string, args: Record<string, any> = {}) {
 export const toNormalize = (str: string) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase();
 
 export const newGuid = () => crypto.randomUUID();
+export const getMobileCode = (code: string) => COUNTRIES.find(e=> e.code === code)?.phone ?? '';
+
+export const randomInt = (max: number) => Math.floor(Math.random() * max);
+export const generatePhoneNumber = () =>  ['(+84)',8,6, ...Array(7).fill(0).map(e=> randomInt(10))].join('');
+
+export const defaultText = (str: string, defaultText: string) => {
+    return str ? str : defaultText;
+}
+

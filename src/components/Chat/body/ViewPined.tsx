@@ -3,15 +3,16 @@ import { Button, Dropdown, Row, Space, Typography } from 'antd';
 import { observer } from 'mobx-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useStores } from '../../../stores/stores';
+import { IS_FIREFOX } from '../../../utils/constants';
 
 function ViewPined() {
 	const {
-		appStore: { $$ },
-		chatStore: { Room, getUserName, scrollToMessage, onPinMessage },
+		appStore: { $$, getUserName},
+		chatStore: { Room, onPinMessage },
 	} = useStores();
 	const ref = useRef(null);
 	const [expanded, setExpanded] = useState<boolean>(false);
-
+	
 	useEffect(()=> {
 		if (!Room?.pinMessages || !ref.current) return;
 		const height = expanded ? Room.pinMessages.length > 2 ? '17vh' : '12vh' : '5vh';
@@ -26,6 +27,14 @@ function ViewPined() {
 	}
 	const messages = expanded ? [...Room.pinMessages] : [Room.pinMessages.at(-1)];
 
+	const scrollToMessage = (id: string) => {
+		const msg = document.getElementById(id);
+		document.querySelector('.forcus')?.classList.remove('forcus');
+		if (msg) {
+			IS_FIREFOX ? (msg as any).scrollIntoView() : (msg as any).scrollIntoViewIfNeeded();
+			msg.classList.add('forcus');
+		}
+	};
 	return (
 		<Row ref={ref} className={`chat-body-pin ${expanded ? 'expanded' : ''}`} align='middle' justify='space-around'>
 			<Space className='chat-body-pin-item-wrapper' direction='vertical' size={8}>

@@ -1,5 +1,5 @@
-import { ChatRoom, Label, Message, User } from '../utils/type';
-import { newGuid } from '../utils/helper';
+import { ChatRoom, Label, Message, RoomMember, User } from '../utils/type';
+import { generatePhoneNumber, newGuid } from '../utils/helper';
 import { addHours, addMinutes, NOW, SYSTEM_NOW, toSystemDate } from './dateHelper';
 import IMG_LIKE from '../resources/like.png';
 import IMG_HAHA from '../resources/haha.png';
@@ -11,32 +11,32 @@ import IMG_ANGRY from '../resources/angry.png';
 const LABELS: Label[] = [
 	{
 		id: newGuid(),
-		name: 'Customer',
+		name: 'customer',
 		color: 'rgb(217, 27, 27)',
 	},
 	{
 		id: newGuid(),
-		name: 'Family',
+		name: 'family',
 		color: 'rgb(75, 195, 119)',
 	},
 	{
 		id: newGuid(),
-		name: 'Work',
+		name: 'work',
 		color: 'rgb(255, 105, 5)',
 	},
 	{
 		id: newGuid(),
-		name: 'Friend',
+		name: 'friend',
 		color: 'rgb(111, 63, 207)',
 	},
 	{
 		id: newGuid(),
-		name: 'Reply later',
+		name: 'reply-later',
 		color: 'rgb(250, 192, 0)',
 	},
 	{
 		id: newGuid(),
-		name: 'Co-worker',
+		name: 'co-worker',
 		color: 'rgb(0, 104, 255)',
 	},
 ];
@@ -46,6 +46,8 @@ const USERS: User[] = [
 		id: newGuid(),
 		userName: 'Spider man',
 		gender: 'Male',
+		phoneNumber: generatePhoneNumber(),
+		isFriend: true,
 		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsMJCEL-gwuBuMZISCNc1Ln1RCxxaCfXHQCA&s',
 	},
 	{
@@ -53,6 +55,8 @@ const USERS: User[] = [
 		userName: 'Iron man',
 		gender: 'Male',
 		label: LABELS[1].id,
+		phoneNumber: generatePhoneNumber(),
+		isFriend: true,
 		imageSrc:
 			'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRv29RTQSTxtUkPMJ5NS3gxA1gYtf1Issran7buj8_kufO4BLZB9qGYdTlgoGxR6hSXuc&usqp=CAU',
 	},
@@ -61,6 +65,8 @@ const USERS: User[] = [
 		userName: 'War machine',
 		gender: 'Male',
 		label: LABELS[5].id,
+		phoneNumber: generatePhoneNumber(),
+		isFriend: true,
 		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6MJxTQA5iqWf6CBidW35yjHNXVDLEsT-5oA&s',
 	},
 	{
@@ -68,6 +74,8 @@ const USERS: User[] = [
 		userName: 'Scarlet Witch',
 		gender: 'Female',
 		label: LABELS[5].id,
+		phoneNumber: generatePhoneNumber(),
+		isFriend: true,
 		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUPjY0wehRCpurO8HUq4Jws6ORZ6BxpU1GSg&s',
 	},
 	{
@@ -75,6 +83,8 @@ const USERS: User[] = [
 		userName: 'Captain America',
 		gender: 'Male',
 		label: LABELS[5].id,
+		phoneNumber: generatePhoneNumber(),
+		isFriend: true,
 		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTktZg6ntf22im44NAxWN-zKCme_nAyXOpgPg&s',
 	},
 	{
@@ -82,6 +92,8 @@ const USERS: User[] = [
 		userName: 'Black Widow',
 		gender: 'Female',
 		label: LABELS[5].id,
+		phoneNumber: generatePhoneNumber(),
+		isFriend: true,
 		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6D5IrpKWfaNkbmom7fW6_jeyUNfweWNqjZA&s',
 	},
 	{
@@ -89,6 +101,8 @@ const USERS: User[] = [
 		userName: 'Hawkeye',
 		gender: 'Male',
 		label: LABELS[5].id,
+		phoneNumber: generatePhoneNumber(),
+		isFriend: true,
 		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4b0k_ypO8_xyo-c046qL6gvRJ5rpf2WNwog&s',
 	},
 	{
@@ -96,6 +110,8 @@ const USERS: User[] = [
 		userName: 'Black Panther',
 		gender: 'Male',
 		label: LABELS[5].id,
+		phoneNumber: generatePhoneNumber(),
+		isFriend: true,
 		imageSrc: 'https://avatarfiles.alphacoders.com/370/370610.jpg',
 	},
 	{
@@ -103,6 +119,7 @@ const USERS: User[] = [
 		userName: 'Thor',
 		gender: 'Male',
 		label: LABELS[5].id,
+		phoneNumber: generatePhoneNumber(),
 		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8bs5YMdtD4LS2rblEweHR3XsfOt_pYlUwsw&s',
 	},
 	{
@@ -110,6 +127,7 @@ const USERS: User[] = [
 		userName: 'Loki',
 		gender: 'Male',
 		label: LABELS[2].id,
+		phoneNumber: generatePhoneNumber(),
 		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVZ98AMwo8rfNzuNWkPEwMb2sZFd5bRaZwVA&s',
 	},
 	{
@@ -117,6 +135,7 @@ const USERS: User[] = [
 		userName: 'Hulk',
 		gender: 'Male',
 		label: LABELS[5].id,
+		phoneNumber: generatePhoneNumber(),
 		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThX2KkLOgZAdUyBd57ecBcHOa7puac5KUR5A&s',
 	},
 	{
@@ -124,6 +143,7 @@ const USERS: User[] = [
 		userName: 'Dr. Strange',
 		gender: 'Male',
 		label: LABELS[5].id,
+		phoneNumber: generatePhoneNumber(),
 		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_g7hmBZNO8X2wpJe1YWzXiVfwysqDNFeKxw&s',
 	},
 	{
@@ -131,6 +151,7 @@ const USERS: User[] = [
 		userName: 'Nick Fury',
 		gender: 'Male',
 		label: LABELS[5].id,
+		phoneNumber: generatePhoneNumber(),
 		imageSrc: 'https://storage.moemate.io/f55ba2c4f19df020936c41b85df9863eeb2a24a6/Nick-Fury.png',
 	},
 	{
@@ -138,6 +159,7 @@ const USERS: User[] = [
 		userName: 'Ant-man',
 		gender: 'Male',
 		label: LABELS[5].id,
+		phoneNumber: generatePhoneNumber(),
 		imageSrc: 'https://i.pinimg.com/736x/86/6c/2c/866c2cae2cce1055872b09f1371cd419.jpg',
 	},
 	{
@@ -145,6 +167,7 @@ const USERS: User[] = [
 		userName: 'The wasp',
 		gender: 'Male',
 		label: LABELS[5].id,
+		phoneNumber: generatePhoneNumber(),
 		imageSrc: 'https://upload.wikimedia.org/wikipedia/en/6/6e/Evangeline_Lilly_as_Wasp.jpeg',
 	},
 	{
@@ -152,6 +175,7 @@ const USERS: User[] = [
 		userName: 'Star lord',
 		gender: 'Male',
 		label: LABELS[0].id,
+		phoneNumber: generatePhoneNumber(),
 		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRDAErV--HEtZCMwuiLP6OFEPeeBvXKXlT3A&s',
 	},
 	{
@@ -159,6 +183,7 @@ const USERS: User[] = [
 		userName: 'Gamora',
 		gender: 'Female',
 		label: LABELS[0].id,
+		phoneNumber: generatePhoneNumber(),
 		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEjtK4migKwEq6zFx_zoMErjiry-mt7v4dPg&s',
 	},
 	{
@@ -166,6 +191,7 @@ const USERS: User[] = [
 		userName: 'Nebula',
 		gender: 'Female',
 		label: LABELS[0].id,
+		phoneNumber: generatePhoneNumber(),
 		imageSrc:
 			'https://i.redd.it/concept-arts-for-nebula-in-guardians-of-the-galaxy-vol-3-v0-5w79bpjc0f1b1.jpg?width=1000&format=pjpg&auto=webp&s=a287a48579dcc9b0d698b4764bf33037870793ea',
 	},
@@ -174,6 +200,7 @@ const USERS: User[] = [
 		userName: 'Rocket',
 		gender: 'Male',
 		label: LABELS[0].id,
+		phoneNumber: generatePhoneNumber(),
 		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9poCRxqUC_lKqKp0qNQVSGL8-MoHlAEkcBQ&s',
 	},
 	{
@@ -181,6 +208,7 @@ const USERS: User[] = [
 		userName: 'Groot',
 		gender: 'Male',
 		label: LABELS[0].id,
+		phoneNumber: generatePhoneNumber(),
 		imageSrc: 'https://avatarfiles.alphacoders.com/858/85823.jpg',
 	},
 	{
@@ -188,6 +216,7 @@ const USERS: User[] = [
 		userName: 'Drax the destroyer',
 		gender: 'Male',
 		label: LABELS[0].id,
+		phoneNumber: generatePhoneNumber(),
 		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB1mmWDMbTKVKS-IOe0R8Jqkz73VxVvJkmfQ&s',
 	},
 
@@ -196,6 +225,7 @@ const USERS: User[] = [
 		userName: 'Aunt May',
 		gender: 'Female',
 		label: LABELS[1].id,
+		phoneNumber: generatePhoneNumber(),
 		imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjPp1qmfLPz0IAKQbuFsqGPIUnsC5xB4TKtA&s',
 	},
 ];
@@ -440,12 +470,18 @@ const MESSAGES: Message[] = [
 	},
 ];
 
+const ROOM_MEMBER: RoomMember[] = USERS.map((e) => ({
+	...e,
+	lastLogTime: MESSAGES.findLast((msg) => msg.sender === e.id)?.lastUpdateDate,
+	invitedBy: USERS[0].id,
+}));
+
 const CHAT_ROOMS: ChatRoom[] = [
 	{
 		id: GROUP_ID[0],
 		name: 'Marvel',
 		isGroup: true,
-		members: USERS,
+		members: ROOM_MEMBER,
 		previewMsg: MESSAGES.at(-1),
 		pinMessages: [],
 		creatorId: USERS[0].id,
@@ -454,18 +490,20 @@ const CHAT_ROOMS: ChatRoom[] = [
 		id: GROUP_ID[1],
 		name: 'Guardians of the Galaxy',
 		isGroup: true,
-		members: USERS.slice(15, 20),
+		members: [...ROOM_MEMBER.slice(15, 20)],
 		previewMsg: MESSAGES.at(-1),
 		pinMessages: [],
 		creatorId: USERS[16].id,
+		label: LABELS[2].id,
 	},
 	{
 		id: USERS[3].id,
-		name: USERS[3].userName,
+		name: ROOM_MEMBER[3].userName,
 		isGroup: false,
 		members: [],
 		previewMsg: undefined,
 		pinMessages: [],
+		label: LABELS[4].id,
 	},
 ];
 
@@ -488,4 +526,17 @@ const BROWSER_VERSION = (function () {
 
 const IS_FIREFOX = navigator.userAgent.toLowerCase().includes('firefox');
 
-export { USERS, CHAT_ROOMS, MESSAGES, IMG_LIKE, IMG_HAHA, IMG_HEART, IMG_WOW, IMG_SAD, IMG_ANGRY, LABELS, BROWSER_VERSION, IS_FIREFOX };
+export {
+	USERS,
+	CHAT_ROOMS,
+	MESSAGES,
+	IMG_LIKE,
+	IMG_HAHA,
+	IMG_HEART,
+	IMG_WOW,
+	IMG_SAD,
+	IMG_ANGRY,
+	LABELS,
+	BROWSER_VERSION,
+	IS_FIREFOX,
+};
