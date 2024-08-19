@@ -74,6 +74,7 @@ const en = {
 	friend: 'Friend',
 	'reply-later': 'Reply later',
 	'co-worker': 'Co-worker',
+	image: 'Image',
 };
 
 export type ILocale = typeof en;

@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Message, ReactionPopupProps, ReactionType } from '../../../utils/type';
 import { Popover, Row, Tooltip, Typography } from 'antd';
 import { displayChatTime } from '../../../utils/dateHelper';
@@ -8,6 +8,8 @@ import ChatAction from './ChatAction';
 import ChatContent from './ChatContent';
 import { HeartOutlined } from '@ant-design/icons';
 import Reaction from '../popup/Reaction';
+import { isImage } from '../../../utils/helper';
+import ReplyContent from './ReplyContent';
 
 interface Props {
 	isFirst: boolean;
@@ -18,55 +20,42 @@ interface Props {
 }
 function ChatItem(props: Props) {
 	const { isFirst, isLast, showTime, message, getUserName } = props;
-	const { sender, content, deleted, createDate, logs, isFile, fileSize } = message;
-
-	const renderReaction = (e: ReactionType) => {
-		switch (e) {
-			case 'LOVE':
-				return <img src={IMG_HEART} />;
-			case 'SAD':
-				return <img src={IMG_SAD} />;
-			case 'ANGRY':
-				return <img src={IMG_ANGRY} />;
-			case 'WOW':
-				return <img src={IMG_WOW} />;
-			default:
-				return <img src={IMG_LIKE} />;
-		}
-	};
+	const { sender, content, deleted, createDate, logs, isFile, fileSize, reply } = message;
+	const [hover, setHover] = useState<boolean>(false);
 
 	return (
 		<>
-			<Row align='middle' className='chat-item-content-wrapper' wrap={false}>
-				<div className={`chat-item-content ${deleted && 'deleted'}`} id={message.id}>
+			<Row
+				align='middle'
+				className='chat-item-content-wrapper'
+				wrap={false}
+				onMouseEnter={() => setHover(true)}
+				onMouseLeave={() => setHover(false)}
+			>
+				<div className={`chat-item-content ${deleted && 'deleted'} ${isImage(content) && 'short'}`} id={message.id}>
 					{isFirst && (
 						<Typography.Link className='chat-item-username small-text text-ellipsis' onClick={() => {}}>
 							{getUserName(sender)}
 						</Typography.Link>
 					)}
-					<ChatContent content={deleted ? 'Deleted message' : content} isFile={isFile} fileSize={fileSize}  />
+					{reply && <ReplyContent replyMessage={reply}/>}
+					<ChatContent content={deleted ? 'Deleted message' : content} isFile={isFile} fileSize={fileSize} />
 					{(isLast || showTime) && (
 						<Typography.Text type='secondary' className='small-text'>
 							{displayChatTime(createDate)}
 						</Typography.Text>
 					)}
-					<Popover
-						content={<Reaction id={message.id}/>}
-						trigger='hover'
-						placement='bottom'
-						arrow={false}
-						destroyTooltipOnHide
-						overlayInnerStyle={{padding: 4, borderRadius: 30}}
-					>
-						<HeartOutlined className='reaction-action' />
-					</Popover>
+					<Reaction id={message.id} />
 					{logs.length > 0 && (
-						<div className='list-reaction'>{logs.map((e) => renderReaction(e.reaction))}</div>
+						<div className='list-reaction'>{logs.map((e) => <img key={e.reaction} src={e.reaction} />)}</div>
 					)}
 				</div>
-				<div className='chat-item-action'>
-					<ChatAction message={message} />
-				</div>
+				
+				{hover && (
+					<div className='chat-item-action'>
+						<ChatAction message={message} />
+					</div>
+				)}
 			</Row>
 		</>
 	);

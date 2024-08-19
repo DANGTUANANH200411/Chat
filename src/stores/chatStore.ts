@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
-import { ChatRoom, Message, MessageLog, ReactionPopupProps, ReactionType, TabItemType, User } from '../utils/type';
-import { CHAT_ROOMS, IS_FIREFOX, MESSAGES, USERS } from '../utils/constants';
+import { ChatRoom, Message, MessageLog, ReactionPopupProps, ReactionType, ReplyMessage, TabItemType, User } from '../utils/type';
+import { CHAT_ROOMS, MESSAGES } from '../utils/constants';
 import { newGuid, toNormalize } from '../utils/helper';
 import { stores } from './stores';
 import { SYSTEM_NOW } from '../utils/dateHelper';
@@ -13,7 +13,7 @@ type DateMessage = {
 export default class ChatStore {
 	tabItem: TabItemType = 'All';
 	chatRooms: ChatRoom[] = CHAT_ROOMS;
-	messages: Message[] = MESSAGES;
+	messages: Message[] = [];
 	activeRoom: string | undefined = undefined;
 
 	openCreateGroup: boolean = false;
@@ -27,6 +27,11 @@ export default class ChatStore {
 	selectedUsers: Map<string, User> = new Map();
 
 	searchRoom: string = '';
+
+	fetching: boolean = false;
+	activePin: string | undefined = undefined;
+	replyMessage: ReplyMessage | undefined = undefined;
+
 	get Rooms() {
 		if (!this.searchRoom) return this.chatRooms;
 		return this.chatRooms.filter((e) => toNormalize(e.name).includes(toNormalize(this.searchRoom)));
@@ -36,11 +41,8 @@ export default class ChatStore {
 	}
 
 	get RoomMessages() {
-		if (!this.activeRoom) return [];
-		const roomMessages = this.messages.filter((e) => e.groupId === this.activeRoom);
-
-		if (!roomMessages.length) return [];
-		roomMessages.sort((a, b) => Number(b.createDate) - Number(a.createDate));
+		if (!this.activeRoom || !this.messages || !this.messages.length) return [];
+		const roomMessages = this.messages.slice().sort((a, b) => Number(b.createDate) - Number(a.createDate));
 		let dayMessages: DateMessage = {};
 		let group: Message[][] = [];
 		let messages: Message[] = [];
@@ -72,21 +74,30 @@ export default class ChatStore {
 	//#region GET
 	getActiveRoom = (room?: string) => this.chatRooms.find((e) => e.id === (room ?? this.activeRoom));
 
-	getMessage = (id: string) => this.messages.find(e=> e.id === id);
+	getMessage = (id: string) => this.messages.find((e) => e.id === id);
 	//#endregion GET
 
 	//#region SET
+	lockFetch = () => (this.fetching = true);
+	unlockFetch = () => (this.fetching = false);
 	setSearchRoom = (value: string) => (this.searchRoom = value);
 	setSelectedUsers = (state: Map<string, User>) => {
 		this.selectedUsers = state;
 	};
-	clearSelectedUsers = () => this.selectedUsers = new Map();
+	clearSelectedUsers = () => (this.selectedUsers = new Map());
 	toggleCreateGroup = () => {
 		this.openCreateGroup = !this.openCreateGroup;
 		!this.openCreateGroup && this.clearSelectedUsers();
 	};
 	setTabItem = (tab: TabItemType) => (this.tabItem = tab);
-	setActiveRoom = (room: string) => (this.activeRoom = room);
+	setActiveRoom = (room: string) => {
+		if (this.activeRoom === room) return;
+		this.activeRoom = room;
+		this.onGetMessage(room);
+	};
+	setActivePin = (id: string | undefined) => this.activePin = id;
+
+	setReplyMessage = (msg: ReplyMessage | undefined) => this.replyMessage = msg;
 	//#endregion SET
 
 	//#region FUNCTION
@@ -98,8 +109,44 @@ export default class ChatStore {
 		this.openCreateGroup = true;
 	};
 	//#endregion FUNCTION
-	
+
+	//#region FAKE BACKEND
+	fakeFetchMessage = async (roomId: string, skip: number) => {
+		return MESSAGES.filter((e) => e.groupId === roomId)
+			.sort((a, b) => b.createDate.localeCompare(a.createDate))
+			.splice(skip, 20);
+	};
+	fakeFetchPinMessage = async (id: string, roomId: string, skip: number) => {
+		const listMsg = MESSAGES.filter((e) => e.groupId === roomId)
+			.sort((a, b) => b.createDate.localeCompare(a.createDate));
+		const idx = listMsg.findIndex(e=> e.id === id);
+		return listMsg.splice(skip, Math.min(idx + 20 - skip, listMsg.length))
+	}
+	//#endregion FAKE BACKEND
+
 	//#region API
+	
+	onGetMessage = async (roomId?: string) => {
+		const room = roomId ?? this.activeRoom;
+		if (this.fetching || !room) return;
+		this.lockFetch();
+		const skip = roomId ? 0 : this.messages.length;
+		let result: Message[] = [];
+		try {
+			result = await this.fakeFetchMessage(room, skip);
+			if(roomId) {
+				this.messages = result;
+			}else {
+				this.messages.push(...result);
+			}
+		} catch (err) {
+			console.log(err);
+			result = [];
+		} finally {
+			this.unlockFetch();
+			return result;
+		}
+	};
 	onSendMessage = (content: string) => {
 		if (!this.activeRoom) return;
 		const message: Message = {
@@ -113,10 +160,12 @@ export default class ChatStore {
 			edited: false,
 			deleted: false,
 			logs: [],
+			reply: this.replyMessage,
 		};
-		this.messages = [...this.messages, message];
+		this.messages.push(message);
 		let room = this.getActiveRoom();
 		if (room) room.previewMsg = message;
+		this.replyMessage = undefined;
 		document.querySelector('.chat-body-view')?.scrollTo({ top: 0 });
 	};
 	onCreateGroup = (group: ChatRoom) => {
@@ -159,7 +208,7 @@ export default class ChatStore {
 	onChangeLabel = (roomId: string, label: string) => {
 		const room = this.getActiveRoom(roomId);
 		room!.label = label;
-	}
+	};
 	addFriendToGroup = () => {
 		const room = this.getActiveRoom();
 		if (!room) return;
@@ -196,6 +245,20 @@ export default class ChatStore {
 	onDeleteMessage = (id: string) => {
 		const message = this.getMessage(id);
 		message!.deleted = true;
+	};
+
+	scrollToMessage = async (id: string) => {
+		this.setActivePin(id);
+		if (!this.activeRoom || this.messages.some(e=> e.id === id)) return;
+		this.lockFetch();
+		try {
+			const res = await this.fakeFetchPinMessage(id, this.activeRoom, this.messages.length);
+			this.messages.push(...res);
+		} catch(err) {
+			console.log(err);
+		} finally {
+			this.unlockFetch();
+		}
 	}
 	//#endregion API
 }

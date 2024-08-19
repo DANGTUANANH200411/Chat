@@ -1,5 +1,5 @@
 import { ChatRoom, Label, Message, RoomMember, User } from '../utils/type';
-import { generatePhoneNumber, newGuid } from '../utils/helper';
+import { generatePhoneNumber, newGuid, randomInt } from '../utils/helper';
 import { addHours, addMinutes, NOW, SYSTEM_NOW, toSystemDate } from './dateHelper';
 import IMG_LIKE from '../resources/like.png';
 import IMG_HAHA from '../resources/haha.png';
@@ -231,6 +231,18 @@ const USERS: User[] = [
 ];
 const GROUP_ID: string[] = [newGuid(), newGuid()];
 const MESSAGES: Message[] = [
+	...Array(300).fill(0).map((e, index)=> ({
+		id: newGuid(),
+		groupId: GROUP_ID[0],
+		sender: USERS[randomInt(USERS.length)].id,
+		content: index.toString(),
+		isFile: false,
+		createDate: toSystemDate(NOW().subtract(48 + index, 'hours')),
+		lastUpdateDate: toSystemDate(NOW().subtract(48 + index, 'hours')),
+		edited: false,
+		deleted: false,
+		logs: [],
+	})),
 	{
 		id: newGuid(),
 		groupId: GROUP_ID[0],
@@ -241,7 +253,6 @@ const MESSAGES: Message[] = [
 		lastUpdateDate: toSystemDate(NOW().subtract(48, 'hours')),
 		edited: false,
 		deleted: false,
-		relateId: undefined,
 		logs: [],
 	},
 	{
@@ -254,7 +265,6 @@ const MESSAGES: Message[] = [
 		lastUpdateDate: toSystemDate(addHours(new Date(), -47)),
 		edited: false,
 		deleted: false,
-		relateId: undefined,
 		logs: [],
 	},
 	{
@@ -267,7 +277,6 @@ const MESSAGES: Message[] = [
 		lastUpdateDate: toSystemDate(addHours(new Date(), -23)),
 		edited: false,
 		deleted: false,
-		relateId: undefined,
 		logs: [],
 	},
 	{
@@ -280,7 +289,6 @@ const MESSAGES: Message[] = [
 		lastUpdateDate: toSystemDate(addMinutes(new Date(), -45)),
 		edited: false,
 		deleted: false,
-		relateId: undefined,
 		logs: [],
 	},
 	{
@@ -293,7 +301,6 @@ const MESSAGES: Message[] = [
 		lastUpdateDate: toSystemDate(addMinutes(new Date(), -30)),
 		edited: false,
 		deleted: false,
-		relateId: undefined,
 		logs: [],
 	},
 	{
@@ -306,7 +313,6 @@ const MESSAGES: Message[] = [
 		lastUpdateDate: toSystemDate(addMinutes(new Date(), -29)),
 		edited: false,
 		deleted: false,
-		relateId: undefined,
 		logs: [],
 	},
 	{
@@ -319,7 +325,6 @@ const MESSAGES: Message[] = [
 		lastUpdateDate: toSystemDate(addMinutes(new Date(), -28)),
 		edited: false,
 		deleted: false,
-		relateId: undefined,
 		logs: [],
 	},
 	{
@@ -332,7 +337,6 @@ const MESSAGES: Message[] = [
 		lastUpdateDate: toSystemDate(addMinutes(new Date(), -27)),
 		edited: false,
 		deleted: false,
-		relateId: undefined,
 		logs: [],
 	},
 	{
@@ -345,7 +349,6 @@ const MESSAGES: Message[] = [
 		lastUpdateDate: toSystemDate(addMinutes(new Date(), -26)),
 		edited: false,
 		deleted: false,
-		relateId: undefined,
 		logs: [
 			{
 				userId: USERS[1].id,
@@ -369,7 +372,6 @@ const MESSAGES: Message[] = [
 		lastUpdateDate: toSystemDate(addMinutes(new Date(), -25)),
 		edited: false,
 		deleted: false,
-		relateId: undefined,
 		logs: [],
 	},
 	{
@@ -382,7 +384,6 @@ const MESSAGES: Message[] = [
 		lastUpdateDate: toSystemDate(addMinutes(new Date(), -24)),
 		edited: false,
 		deleted: false,
-		relateId: undefined,
 		logs: [],
 	},
 	{
@@ -395,7 +396,6 @@ const MESSAGES: Message[] = [
 		lastUpdateDate: toSystemDate(addMinutes(new Date(), -23)),
 		edited: false,
 		deleted: false,
-		relateId: undefined,
 		logs: [
 			{
 				userId: USERS[1].id,
@@ -419,7 +419,6 @@ const MESSAGES: Message[] = [
 		lastUpdateDate: toSystemDate(addMinutes(new Date(), -22)),
 		edited: false,
 		deleted: true,
-		relateId: undefined,
 		logs: [
 			{
 				userId: USERS[1].id,
@@ -438,20 +437,30 @@ const MESSAGES: Message[] = [
 		lastUpdateDate: toSystemDate(addMinutes(new Date(), -21)),
 		edited: false,
 		deleted: false,
-		relateId: undefined,
 		logs: [],
 	},
 	{
 		id: newGuid(),
 		groupId: GROUP_ID[0],
 		sender: USERS[10].id,
-		content: 'https://th.bing.com/th/id/R.2a5ac658be9ff439f978ac8cc3b58e10?rik=Dn%2fyKYfre9RpPQ&pid=ImgRaw&r=0',
-		isFile: false,
+		content: 'https://www.shutterstock.com/image-vector/july-7-2023-full-body-260nw-2329083689.jpg',
+		isFile: true,
 		createDate: toSystemDate(addMinutes(new Date(), -20)),
 		lastUpdateDate: toSystemDate(addMinutes(new Date(), -20)),
 		edited: false,
 		deleted: false,
-		relateId: undefined,
+		logs: [],
+	},
+	{
+		id: newGuid(),
+		groupId: GROUP_ID[0],
+		sender: USERS[10].id,
+		content: 'https://www.shutterstock.com/image-vector/july-7-2023-full-body-260nw-2329083689.jpg',
+		isFile: true,
+		createDate: toSystemDate(addMinutes(new Date(), -19)),
+		lastUpdateDate: toSystemDate(addMinutes(new Date(), -19)),
+		edited: false,
+		deleted: false,
 		logs: [],
 	},
 	{
@@ -461,11 +470,10 @@ const MESSAGES: Message[] = [
 		content: 'fileName.xlsx',
 		isFile: true,
 		fileSize: 2120,
-		createDate: toSystemDate(addMinutes(new Date(), -19)),
-		lastUpdateDate: toSystemDate(addMinutes(new Date(), -19)),
+		createDate: toSystemDate(addMinutes(new Date(), -18)),
+		lastUpdateDate: toSystemDate(addMinutes(new Date(), -18)),
 		edited: false,
 		deleted: false,
-		relateId: undefined,
 		logs: [],
 	},
 ];
@@ -482,8 +490,8 @@ const CHAT_ROOMS: ChatRoom[] = [
 		name: 'Marvel',
 		isGroup: true,
 		members: ROOM_MEMBER,
-		previewMsg: MESSAGES.at(-1),
-		pinMessages: [],
+		previewMsg: MESSAGES.findLast(e=> e.groupId === GROUP_ID[0]),
+		pinMessages: [MESSAGES[MESSAGES.length - 1], MESSAGES[100], MESSAGES[299]],
 		creatorId: USERS[0].id,
 	},
 	{
@@ -491,7 +499,7 @@ const CHAT_ROOMS: ChatRoom[] = [
 		name: 'Guardians of the Galaxy',
 		isGroup: true,
 		members: [...ROOM_MEMBER.slice(15, 20)],
-		previewMsg: MESSAGES.at(-1),
+		previewMsg: MESSAGES.findLast(e=> e.groupId === GROUP_ID[1]),
 		pinMessages: [],
 		creatorId: USERS[16].id,
 		label: LABELS[2].id,
@@ -501,7 +509,7 @@ const CHAT_ROOMS: ChatRoom[] = [
 		name: ROOM_MEMBER[3].userName,
 		isGroup: false,
 		members: [],
-		previewMsg: undefined,
+		previewMsg: MESSAGES.findLast(e=> e.groupId === USERS[3].id),
 		pinMessages: [],
 		label: LABELS[4].id,
 	},

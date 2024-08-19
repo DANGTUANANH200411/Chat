@@ -1,6 +1,11 @@
-import { IS_FIREFOX } from './constants';
 import {COUNTRIES} from './countries';
-
+import WORD from '../resources/file/word.svg';
+import EXCEL from '../resources/file/excel.svg';
+import PDF from '../resources/file/pdf.png';
+import PPTX from '../resources/file/pptx.png';
+import ZIP from '../resources/file/zip.png';
+import TXT from '../resources/file/txt.png';
+import UNKNOWN from '../resources/file/unknown.png';
 const toString = Object.prototype.toString;
 
 export function is(val: unknown, type: string) {
@@ -134,4 +139,27 @@ export const generatePhoneNumber = () =>  ['(+84)',8,6, ...Array(7).fill(0).map(
 export const defaultText = (str: string, defaultText: string) => {
     return str ? str : defaultText;
 }
-
+export const getFileIcon = (ext?: string) => {
+    if (!ext) return WORD;
+    switch (ext) {
+        case 'txt':
+            return TXT;
+        case 'doc':
+        case 'docx':
+            return WORD;
+        case 'xls':
+        case 'xlsx':
+            return EXCEL;
+        case 'pdf':
+            return PDF;
+        case 'ppt':
+        case 'pptx':
+            return PPTX;
+        case 'zip':
+        case 'rar':
+        case '7z':
+            return ZIP;
+        default:
+            return UNKNOWN;
+    }
+};

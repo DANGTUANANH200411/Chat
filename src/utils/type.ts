@@ -33,8 +33,14 @@ export interface Message {
 	lastUpdateDate: string;
 	edited: boolean;
 	deleted: boolean;
-	relateId?: string; //relate message
 	logs: MessageLog[];
+	reply?: ReplyMessage;
+}
+export interface ReplyMessage {
+	id: string;
+	sender: string;
+	content: string;
+	isFile: boolean;
 }
 export interface MessageLog {
 	userId: string;

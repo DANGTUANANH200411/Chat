@@ -1,7 +1,9 @@
-import React from 'react';
-import { IMG_ANGRY, IMG_HEART, IMG_LIKE, IMG_SAD, IMG_WOW } from '../../../utils/constants';
+import React, { useState } from 'react';
 import { useStores } from '../../../stores/stores';
 import { observer } from 'mobx-react';
+import EmojiPicker from 'emoji-picker-react';
+import { HeartOutlined } from '@ant-design/icons';
+import { Popover } from 'antd';
 
 interface Props {
 	id: string;
@@ -11,14 +13,24 @@ function Reaction(props: Props) {
 		chatStore: { handleReaction },
 	} = useStores();
 	const { id } = props;
+	const [open, setOpen] = useState<boolean>(false)
 	return (
-		<div className='reaction-selector'>
-			<img src={IMG_HEART} onClick={() => handleReaction(id, 'LOVE')} />
-			<img src={IMG_SAD} onClick={() => handleReaction(id, 'SAD')}/>
-			<img src={IMG_ANGRY} onClick={() => handleReaction(id, 'ANGRY')}/>
-			<img src={IMG_WOW} onClick={() => handleReaction(id, 'WOW')}/>
-			<img src={IMG_LIKE} onClick={() => handleReaction(id, 'LIKE')}/>
-		</div>
+		<Popover
+			open={open}
+			content={
+				<div className='reaction-selector'>
+					<EmojiPicker reactionsDefaultOpen onReactionClick={(e) => console.log(e)} onEmojiClick={(e) => {}} />
+				</div>
+			}
+			trigger={['click']}
+			placement='bottom'
+			arrow={false}
+			destroyTooltipOnHide
+			overlayInnerStyle={{ padding: 4, borderRadius: 30 }}
+			onOpenChange={(e)=> setOpen(e)}
+		>
+			<HeartOutlined className='reaction-action' />
+		</Popover>
 	);
 }
 

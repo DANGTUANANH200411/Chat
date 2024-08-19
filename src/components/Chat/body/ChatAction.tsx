@@ -25,8 +25,8 @@ function ChatAction({ message }: Props) {
 		appStore: { $$ },
 		chatStore,
 	} = useStores();
-	const { Room, onPinMessage, onDeleteMessage } = chatStore;
-	const { id, content } = message;
+	const { Room, onPinMessage, onDeleteMessage, setReplyMessage } = chatStore;
+	const { id, sender, content, isFile } = message;
 	const isPined = Room?.pinMessages.find((e) => e.id === id) ? true : false;
 	const items: MenuProps['items'] = [
 		{
@@ -79,13 +79,13 @@ function ChatAction({ message }: Props) {
 	];
 	return (
 		<>
-			<Tooltip title={$$('reply')}>
-				<EditFilled className='text-secondary hoverable-icon' />
+			<Tooltip title={$$('reply')} destroyTooltipOnHide>
+				<EditFilled className='text-secondary hoverable-icon' onClick={()=> setReplyMessage({id, sender, content, isFile})}/>
 			</Tooltip>
-			<Tooltip title={$$('forwarding')}>
+			<Tooltip title={$$('forwarding')} destroyTooltipOnHide>
 				<ShareAltOutlined className='text-secondary hoverable-icon' />
 			</Tooltip>
-			<Tooltip title={$$('more')}>
+			<Tooltip title={$$('more')} destroyTooltipOnHide>
 				<Dropdown menu={{ items: items }} trigger={['click']}>
 					<MoreOutlined className='text-secondary hoverable-icon' />
 				</Dropdown>

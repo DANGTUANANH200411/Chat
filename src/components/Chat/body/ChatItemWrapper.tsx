@@ -20,7 +20,7 @@ function ChatItemWrapper(props: Props) {
 			<Row className='flex-grow'>
 				{props.messages.map((e, idx, arr) => (
 					<ChatItem
-						key={idx}
+						key={e.id}
 						isFirst={idx === 0}
 						isLast={idx === props.messages.length - 1}
 						message={e}

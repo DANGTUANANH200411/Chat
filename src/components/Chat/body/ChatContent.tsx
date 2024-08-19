@@ -1,64 +1,58 @@
-import { Row, Typography } from 'antd';
+import { Image, Row, Typography } from 'antd';
 import ReactLinkify from 'react-linkify';
-import WORD from '../../../resources/file/word.svg'
-import EXCEL from '../../../resources/file/excel.svg'
-import PDF from '../../../resources/file/pdf.png'
-import PPTX from '../../../resources/file/pptx.png'
-import ZIP from '../../../resources/file/zip.png'
-import TXT from '../../../resources/file/txt.png'
-import UNKNOWN from '../../../resources/file/unknown.png'
-import filesize from "filesize";
+
+import filesize from 'filesize';
+import { getFileIcon, isImage } from '../../../utils/helper';
+import React from 'react';
 interface Props {
 	isFile: boolean;
 	content: string;
-    fileSize?: number;
+	fileSize?: number;
 }
 function ChatContent(props: Props) {
 	const { content, isFile, fileSize } = props;
-    
-    const fileIcon = () => {
-        const ext = content.split('.').pop()?.toLocaleLowerCase();
-        if(!ext) return WORD;
-        switch(ext) {
-            case 'txt':
-                return TXT;
-            case 'doc':
-            case 'docx':
-                return WORD;
-            case 'xls':
-            case 'xlsx':
-                return EXCEL
-            case 'pdf':
-                return PDF;
-            case 'ppt':
-            case 'pptx':
-                return PPTX;
-            case 'zip':
-            case 'rar':
-            case '7z':
-                return ZIP;
-            default:
-                return UNKNOWN;
-        }
-    }
+
 	const renderContent = () => {
 		if (isFile) {
+			if (isImage(content)) {
+				return (
+					<Image.PreviewGroup>
+						{content.split(',').map((item, idx) => (
+							<Image key={idx} src={item} style={{ maxHeight: 200, padding: 2 }}></Image>
+						))}
+					</Image.PreviewGroup>
+				);
+			}
 			return (
 				<Row align='middle'>
-					<img src={fileIcon()} alt='file-icon' style={{width: '2rem', height: '2rem', marginRight: '.4rem'}}/>
+					<img
+						src={getFileIcon(content.split('.').pop()?.toLocaleLowerCase())}
+						alt='file-icon'
+						style={{ width: '2rem', height: '2rem', marginRight: '.4rem' }}
+					/>
 					<div>
-                    <Row>
-                    <Typography.Link ellipsis>{content}</Typography.Link>
-                    </Row>
 						<Row>
-                            <Typography.Text type='secondary' className='text-small'>{filesize(fileSize ?? 0)}</Typography.Text>
-                        </Row>
+							<Typography.Link ellipsis download>
+								{content}
+							</Typography.Link>
+						</Row>
+						<Row>
+							<Typography.Text type='secondary' className='text-small'>
+								{filesize(fileSize ?? 0)}
+							</Typography.Text>
+						</Row>
 					</div>
 				</Row>
 			);
 		}
 		return (
-			<ReactLinkify>
+			<ReactLinkify
+				componentDecorator={(href, text, key) => (
+					<a target='_blank' href={href} key={key} download={'foo.txt'}>
+						{text}
+					</a>
+				)}
+			>
 				<Typography.Text
 					className='text-primary'
 					style={{
@@ -73,4 +67,4 @@ function ChatContent(props: Props) {
 	};
 	return <Row>{renderContent()}</Row>;
 }
-export default ChatContent;
+export default React.memo(ChatContent);
