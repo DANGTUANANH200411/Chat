@@ -13,6 +13,7 @@
     "@types/react-dom": "^18.3.0",
     "antd": "^5.19.0",
     "dayjs": "^1.11.11",
+    "emoji-js": "^3.8.0",
     "emoji-picker-react": "^4.11.1",
     "mobx": "^6.13.0",
     "mobx-react": "^9.1.1",

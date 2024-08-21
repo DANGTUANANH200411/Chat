@@ -1,16 +1,13 @@
 import { observer } from 'mobx-react';
-import React, { useEffect, useRef, useState } from 'react';
-import { Message, ReactionPopupProps, ReactionType } from '../../../utils/type';
-import { Popover, Row, Tooltip, Typography } from 'antd';
+import React, { useState } from 'react';
+import { Message } from '../../../utils/type';
+import { Row, Typography } from 'antd';
 import { displayChatTime } from '../../../utils/dateHelper';
-import { IMG_ANGRY, IMG_HEART, IMG_LIKE, IMG_SAD, IMG_WOW } from '../../../utils/constants';
 import ChatAction from './ChatAction';
 import ChatContent from './ChatContent';
-import { HeartOutlined } from '@ant-design/icons';
 import Reaction from '../popup/Reaction';
-import { isImage } from '../../../utils/helper';
+import { getEmojiSrc, isImage } from '../../../utils/helper';
 import ReplyContent from './ReplyContent';
-
 interface Props {
 	isFirst: boolean;
 	isLast: boolean;
@@ -47,7 +44,7 @@ function ChatItem(props: Props) {
 					)}
 					<Reaction id={message.id} />
 					{logs.length > 0 && (
-						<div className='list-reaction'>{logs.map((e) => <img key={e.reaction} src={e.reaction} />)}</div>
+						<div className='list-reaction'>{logs.map((e) => <img key={e.reaction} src={getEmojiSrc(e.reaction)} />)}</div>
 					)}
 				</div>
 				

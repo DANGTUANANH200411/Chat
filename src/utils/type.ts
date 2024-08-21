@@ -44,7 +44,7 @@ export interface ReplyMessage {
 }
 export interface MessageLog {
 	userId: string;
-	reaction: keyof typeof Reaction;
+	reaction: string;
 	reactionDate: string;
 }
 

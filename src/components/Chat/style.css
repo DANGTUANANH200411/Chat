@@ -62,6 +62,7 @@
 	width: 100%;
 	flex-direction: column;
 	flex-wrap: nowrap;
+	z-index: 1031;
 }
 .chat-footer-bar {
 	height: 4vh;

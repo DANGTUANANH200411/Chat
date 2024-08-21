@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useStores } from '../../../stores/stores';
 import { observer } from 'mobx-react';
-import EmojiPicker from 'emoji-picker-react';
+import EmojiPicker, { EmojiClickData, EmojiStyle } from 'emoji-picker-react';
 import { HeartOutlined } from '@ant-design/icons';
 import { Popover } from 'antd';
 
@@ -14,12 +14,14 @@ function Reaction(props: Props) {
 	} = useStores();
 	const { id } = props;
 	const [open, setOpen] = useState<boolean>(false)
+	
+	const onClickEmoji = (e: EmojiClickData) => handleReaction(id, e.unified);
 	return (
 		<Popover
 			open={open}
 			content={
 				<div className='reaction-selector'>
-					<EmojiPicker reactionsDefaultOpen onReactionClick={(e) => console.log(e)} onEmojiClick={(e) => {}} />
+					<EmojiPicker reactionsDefaultOpen emojiStyle={EmojiStyle.FACEBOOK} onReactionClick={onClickEmoji} onEmojiClick={onClickEmoji} />
 				</div>
 			}
 			trigger={['click']}

@@ -10,14 +10,17 @@ import {
 } from '@ant-design/icons';
 import { Input, Popover, Row } from 'antd';
 import { observer } from 'mobx-react';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useStores } from '../../../stores/stores';
 import ReplyContent from '../body/ReplyContent';
-import EmojiPicker from 'emoji-picker-react';
-
+import EmojiPicker, { EmojiStyle } from 'emoji-picker-react';
+import ChatFooterBar from './ChatFooterBar';
+import { TextAreaRef } from 'antd/es/input/TextArea';
+import { ChatInput } from './ChatInput';
 function ChatFooter() {
 	const { chatStore } = useStores();
-	const [text, setText] = useState<string>('');
+	const [text, setText] = useState<string | null>('');
+	const ref = useRef<HTMLDivElement>(null);
 	const { replyMessage, onSendMessage, setReplyMessage } = chatStore;
 	return (
 		<Row className='chat-footer'>
@@ -31,28 +34,28 @@ function ChatFooter() {
 				</Row>
 			)}
 			<Row className='chat-footer-bar max-width' align='middle'>
-				<Popover
-					trigger={['click']}
-					destroyTooltipOnHide
-					content={
-						<EmojiPicker
-							onEmojiClick={(e) => setText(text + e.emoji)}
-						/>
-					}
-				>
-					<SmileOutlined />
-				</Popover>
-				<FileImageOutlined />
-				<LinkOutlined />
-				<IdcardOutlined onClick={() => {}} />
-				<FontSizeOutlined />
+				<ChatFooterBar
+					onEmoji={(e) => {
+						setText(text + e)
+					}}
+				/>
 			</Row>
-			<Input.TextArea
+			<ChatInput value={text as any} setValue={setText}/>
+			{/* <div contentEditable onInput={(e) => setText(e.currentTarget.innerHTML)}>{text}</div> */}
+			{/* <InputEmoji
+				value={text}
+				onChange={(text) => {
+					setText(text);
+					console.log(text);
+				}}
+				shouldReturn={false}
+				shouldConvertEmojiToImage={false}
+			/> */}
+			{/* <Input.TextArea
+				ref={ref}
 				className='chat-footer-input max-width max-height'
 				autoSize={{ minRows: 1, maxRows: 8 }}
 				size='large'
-				value={text}
-				onChange={(e) => setText(e.target.value)}
 				onKeyDown={(e) => {
 					if (!e.shiftKey && e.key === 'Enter') {
 						e.preventDefault();
@@ -60,7 +63,7 @@ function ChatFooter() {
 						setText('');
 					}
 				}}
-			/>
+			/> */}
 			<div className='chat-footer-input-action'>
 				<LikeFilled className='hoverable-icon' style={{ color: 'var(--primary-color)' }} />
 				<SendOutlined className='hoverable-icon' />

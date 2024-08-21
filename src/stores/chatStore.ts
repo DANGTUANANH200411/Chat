@@ -217,7 +217,7 @@ export default class ChatStore {
 			...Array.from(this.selectedUsers.values()).map((e) => ({ ...e, invitedBy: stores.appStore.user.id })),
 		];
 	};
-	handleReaction = (id: string, reaction: ReactionType) => {
+	handleReaction = (id: string, reaction: string) => {
 		const userId = stores.appStore.user.id;
 		const log: MessageLog = {
 			userId,
