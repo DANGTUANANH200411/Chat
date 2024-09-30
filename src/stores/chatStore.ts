@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 import { ChatRoom, Message, MessageLog, ReactionPopupProps, ReactionType, ReplyMessage, TabItemType, User } from '../utils/type';
 import { CHAT_ROOMS, MESSAGES } from '../utils/constants';
-import { newGuid, toNormalize } from '../utils/helper';
+import { isEmpty, newGuid, toNormalize } from '../utils/helper';
 import { stores } from './stores';
 import { SYSTEM_NOW } from '../utils/dateHelper';
 import { notify } from '../utils/notify';
@@ -148,7 +148,7 @@ export default class ChatStore {
 		}
 	};
 	onSendMessage = (content: string) => {
-		if (!this.activeRoom) return;
+		if (!this.activeRoom || isEmpty(content)) return;
 		const message: Message = {
 			id: newGuid(),
 			groupId: this.activeRoom,

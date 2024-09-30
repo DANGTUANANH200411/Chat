@@ -1,9 +1,8 @@
 import { Image, Row, Typography } from 'antd';
 import ReactLinkify from 'react-linkify';
-
 import filesize from 'filesize';
-import { getFileIcon, isImage } from '../../../utils/helper';
-import React from 'react';
+import { getFileIcon, isImage, mentionRegex, uuidRegx } from '../../../utils/helper';
+import React, { useMemo } from 'react';
 interface Props {
 	isFile: boolean;
 	content: string;
@@ -11,7 +10,18 @@ interface Props {
 }
 function ChatContent(props: Props) {
 	const { content, isFile, fileSize } = props;
-
+	const replacer = (matchString: string) => {
+		const name = matchString.substring(matchString.indexOf('[') + 1, matchString.indexOf(']'));
+		const mGuid = matchString.match(uuidRegx)
+		let id = '';
+		if (mGuid) id = mGuid[0];
+		return `<a data-id="${id})" class="mention-member">${name}</a>`
+	}
+	const parsedContent = useMemo(()=> {
+		let str = content;
+		str = str.replaceAll('http://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72', 'https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64')
+		return str.replace(mentionRegex, replacer)
+	}, [content])
 	const renderContent = () => {
 		if (isFile) {
 			if (isImage(content)) {
@@ -45,6 +55,7 @@ function ChatContent(props: Props) {
 				</Row>
 			);
 		}
+		
 		return (
 			<ReactLinkify
 				componentDecorator={(href, text, key) => (
@@ -58,9 +69,10 @@ function ChatContent(props: Props) {
 					style={{
 						whiteSpace: 'pre-wrap',
 						direction: 'ltr',
+						fontSize: 16
 					}}
 				>
-					{content}
+					<div dangerouslySetInnerHTML={{__html: parsedContent}}></div>
 				</Typography.Text>
 			</ReactLinkify>
 		);

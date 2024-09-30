@@ -1,27 +1,23 @@
 import {
 	CloseOutlined,
-	FileImageOutlined,
-	FontSizeOutlined,
-	IdcardOutlined,
 	LikeFilled,
-	LinkOutlined,
 	SendOutlined,
-	SmileOutlined,
 } from '@ant-design/icons';
-import { Input, Popover, Row } from 'antd';
+import { Row } from 'antd';
 import { observer } from 'mobx-react';
 import React, { useRef, useState } from 'react';
 import { useStores } from '../../../stores/stores';
 import ReplyContent from '../body/ReplyContent';
-import EmojiPicker, { EmojiStyle } from 'emoji-picker-react';
 import ChatFooterBar from './ChatFooterBar';
-import { TextAreaRef } from 'antd/es/input/TextArea';
-import { ChatInput } from './ChatInput';
+import InputEmoji from 'react-input-emoji';
+import { toNormalize } from '../../../utils/helper';
 function ChatFooter() {
-	const { chatStore } = useStores();
-	const [text, setText] = useState<string | null>('');
+	const { chatStore, appStore } = useStores();
+	const [text, setText] = useState<string>('');
 	const ref = useRef<HTMLDivElement>(null);
 	const { replyMessage, onSendMessage, setReplyMessage } = chatStore;
+	const { Users } = appStore;
+
 	return (
 		<Row className='chat-footer'>
 			{replyMessage && (
@@ -36,38 +32,39 @@ function ChatFooter() {
 			<Row className='chat-footer-bar max-width' align='middle'>
 				<ChatFooterBar
 					onEmoji={(e) => {
-						setText(text + e)
+						setText(text + e);
 					}}
 				/>
 			</Row>
-			<ChatInput value={text as any} setValue={setText}/>
-			{/* <div contentEditable onInput={(e) => setText(e.currentTarget.innerHTML)}>{text}</div> */}
-			{/* <InputEmoji
+			<InputEmoji
 				value={text}
-				onChange={(text) => {
-					setText(text);
-					console.log(text);
-				}}
-				shouldReturn={false}
-				shouldConvertEmojiToImage={false}
-			/> */}
-			{/* <Input.TextArea
-				ref={ref}
-				className='chat-footer-input max-width max-height'
-				autoSize={{ minRows: 1, maxRows: 8 }}
-				size='large'
-				onKeyDown={(e) => {
-					if (!e.shiftKey && e.key === 'Enter') {
-						e.preventDefault();
-						onSendMessage(text);
-						setText('');
-					}
-				}}
-			/> */}
-			<div className='chat-footer-input-action'>
+				keepOpened
+				shouldReturn
+				onChange={setText}
+				onEnter={(text) => onSendMessage(text.trim())}
+				cleanOnEnter
+				shouldConvertEmojiToImage
+				searchMention={(value) => {
+					const searchText = value.replace('@', '');
+					return new Promise<any>((resolve) => {
+						resolve(
+							Users.filter((e) => !searchText || toNormalize(e.userName).includes(toNormalize(searchText)))
+							.map((e) => ({
+								id: e.id,
+								name: e.userName,
+								image: e.imageSrc,
+							}))
+						);
+					})
+				}
+					
+				}
+			/>
+			
+			{/* <div className='chat-footer-input-action'>
 				<LikeFilled className='hoverable-icon' style={{ color: 'var(--primary-color)' }} />
 				<SendOutlined className='hoverable-icon' />
-			</div>
+			</div> */}
 		</Row>
 	);
 }

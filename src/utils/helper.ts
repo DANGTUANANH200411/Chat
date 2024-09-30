@@ -178,3 +178,7 @@ export const getFileIcon = (ext?: string) => {
 
 export const getEmojiSrc = (unified: string) =>
 	`https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/${unified}.png`;
+
+export const uuidRegx = /[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/g;
+
+export const mentionRegex = /@\[([\w\s]+)\]\(userId:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\)/g;

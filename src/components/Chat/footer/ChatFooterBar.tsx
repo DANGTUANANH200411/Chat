@@ -13,7 +13,7 @@ export default function ChatFooterBar(props:Props) {
 				destroyTooltipOnHide
 				content={
 					<EmojiPicker
-						emojiStyle={EmojiStyle.FACEBOOK}
+						emojiStyle={EmojiStyle.APPLE}
 						onEmojiClick={(e) => {
 							props.onEmoji(e.emoji);
 						}}

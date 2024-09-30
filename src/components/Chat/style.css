@@ -332,3 +332,8 @@ body:is(.dark-theme) .chat-item-username {
 .chat-footer-reply-wrapper .reply-content {
 	padding-left: 1rem;
 }
+
+.react-input-emoji--mention--list {
+	max-height: 20vh;
+	overflow-y: auto;
+}
