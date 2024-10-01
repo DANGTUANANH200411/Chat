@@ -62,7 +62,7 @@
 	width: 100%;
 	flex-direction: column;
 	flex-wrap: nowrap;
-	z-index: 1031;
+	z-index: 1;
 }
 .chat-footer-bar {
 	height: 4vh;
@@ -130,6 +130,8 @@ body:is(.dark-theme) .chat-footer > * {
 .chat-item-content.short {
 	background-color: unset;
 	border: unset;
+	padding-left: 0;
+	padding-right: 0;
 }
 .chat-item-content.short img{
 	border-radius: 8px;
@@ -140,14 +142,32 @@ body:is(.dark-theme) .chat-footer > * {
 	border-radius: 15px;
 	margin-bottom: 0.4rem;
 }
-.chat-item-content.short .reaction-action {
+.chat-item-wrapper:not(.me) .chat-item-content.short .reaction-action {
 	right: 0.8rem;
     bottom: 0rem;
 }
-.chat-item-content.short .list-reaction {
+.chat-item-wrapper:not(.me) .chat-item-content.short .list-reaction {
     bottom: 0rem;
-	right: 2rem
+	right: 2rem;
 }
+
+.chat-item-wrapper:is(.me) .chat-item-content.short .reaction-action {
+	left: 0.8rem;
+    bottom: 0rem;
+}
+.chat-item-wrapper:is(.me) .chat-item-content.short .list-reaction {
+	right: 2rem;
+    bottom: 0rem;
+}
+.chat-item-content.short .send-time {
+	position: absolute;
+    bottom: 0;
+    background-color: #ffffff;
+    padding: 0px 8px;
+    border-radius: 15px;
+	border: 1px solid var(--border-color);
+}
+
 body:is(.dark-theme) .chat-item-content {
 	background-color: #414141;
 	border: 1px solid #414141;
@@ -325,6 +345,7 @@ body:is(.dark-theme) .chat-item-username {
     align-items: center;
 	cursor: pointer;
 }
+.chat-footer .preview-upload,
 .chat-footer-reply-wrapper {
 	padding: 0.4rem 1rem;
 	border-bottom: 1px solid var(--border-color);
@@ -336,4 +357,32 @@ body:is(.dark-theme) .chat-item-username {
 .react-input-emoji--mention--list {
 	max-height: 20vh;
 	overflow-y: auto;
+}
+
+.list-reaction{
+	direction: rtl;
+}
+.me .list-reaction{
+	direction: ltr;
+}
+
+.list-reaction .ant-avatar-string{
+	transform: scale(0.5) !important;
+	color: black;
+}
+
+/*override antd group gap*/
+.list-reaction .ant-avatar-group >*:not(:first-child) {
+    margin-inline-start: -4px;
+}
+.drag-background {
+	background: #bce6ff80;
+    position: absolute;
+    z-index: 10;
+    display: flex;
+    border: 2px var(--primary-color) dashed;
+    font-size: 1.4rem;
+    color: black;
+	height: calc(100% - 4px); /*100% - border*/
+	width: calc(100% - 4px);
 }

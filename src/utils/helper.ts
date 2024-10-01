@@ -100,9 +100,10 @@ export const isServer = typeof window === 'undefined';
 
 export const isClient = !isServer;
 
+export const urlRegx = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
+
 export function isUrl(path: string): boolean {
-	const reg =
-		/(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
+	const reg = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/i;
 	return reg.test(path);
 }
 
@@ -181,4 +182,9 @@ export const getEmojiSrc = (unified: string) =>
 
 export const uuidRegx = /[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/g;
 
-export const mentionRegex = /@\[([\w\s]+)\]\(userId:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\)/g;
+export const mentionRegex =
+	/@\[([\w\s]+)\]\(userId:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\)/g;
+
+export function distictBy(arr: any[], key: (item: any) => unknown) {
+	return [...new Map(arr.map((e) => [key(e), e])).values()];
+}

@@ -94,3 +94,8 @@ export enum Role {
 }
 
 export type RoleType = keyof typeof Role;
+
+export interface ReactLogPopProps {
+	visible: boolean;
+	logs: MessageLog[];
+}

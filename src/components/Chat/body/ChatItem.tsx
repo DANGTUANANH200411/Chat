@@ -1,13 +1,14 @@
 import { observer } from 'mobx-react';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Message } from '../../../utils/type';
 import { Row, Typography } from 'antd';
 import { displayChatTime } from '../../../utils/dateHelper';
 import ChatAction from './ChatAction';
 import ChatContent from './ChatContent';
 import Reaction from '../popup/Reaction';
-import { getEmojiSrc, isImage } from '../../../utils/helper';
+import { isImage, isUrl } from '../../../utils/helper';
 import ReplyContent from './ReplyContent';
+import ListReaction from './chat-item/ListReaction';
 interface Props {
 	isFirst: boolean;
 	isLast: boolean;
@@ -19,7 +20,7 @@ function ChatItem(props: Props) {
 	const { isFirst, isLast, showTime, message, getUserName } = props;
 	const { sender, content, deleted, createDate, logs, isFile, fileSize, reply } = message;
 	const [hover, setHover] = useState<boolean>(false);
-
+	const isShort = useMemo(()=> isFile && (isImage(content) || isUrl(content)) ? 'short' : '', [content]);
 	return (
 		<>
 			<Row
@@ -29,7 +30,7 @@ function ChatItem(props: Props) {
 				onMouseEnter={() => setHover(true)}
 				onMouseLeave={() => setHover(false)}
 			>
-				<div className={`chat-item-content ${deleted && 'deleted'} ${isImage(content) && 'short'}`} id={message.id}>
+				<div className={`chat-item-content ${deleted && 'deleted'} ${isShort}`} id={message.id}>
 					{isFirst && (
 						<Typography.Link className='chat-item-username small-text text-ellipsis' onClick={() => {}}>
 							{getUserName(sender)}
@@ -38,13 +39,14 @@ function ChatItem(props: Props) {
 					{reply && <ReplyContent replyMessage={reply}/>}
 					<ChatContent content={deleted ? 'Deleted message' : content} isFile={isFile} fileSize={fileSize} />
 					{(isLast || showTime) && (
-						<Typography.Text type='secondary' className='small-text'>
+						<Typography.Text type='secondary' className='small-text send-time'>
 							{displayChatTime(createDate)}
 						</Typography.Text>
 					)}
 					<Reaction id={message.id} />
+					
 					{logs.length > 0 && (
-						<div className='list-reaction'>{logs.map((e) => <img key={e.reaction} src={getEmojiSrc(e.reaction)} />)}</div>
+						<ListReaction logs={logs}/>
 					)}
 				</div>
 				

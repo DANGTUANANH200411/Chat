@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { ChatRoom, Message, MessageLog, ReactionPopupProps, ReactionType, ReplyMessage, TabItemType, User } from '../utils/type';
+import { ChatRoom, Message, MessageLog, ReactionPopupProps, ReactionType, ReactLogPopProps, ReplyMessage, TabItemType, User } from '../utils/type';
 import { CHAT_ROOMS, MESSAGES } from '../utils/constants';
 import { isEmpty, newGuid, toNormalize } from '../utils/helper';
 import { stores } from './stores';
@@ -17,12 +17,6 @@ export default class ChatStore {
 	activeRoom: string | undefined = undefined;
 
 	openCreateGroup: boolean = false;
-	reactionPopup: ReactionPopupProps = {
-		visible: false,
-		x: 0,
-		y: 0,
-		id: undefined,
-	};
 
 	selectedUsers: Map<string, User> = new Map();
 
@@ -31,7 +25,10 @@ export default class ChatStore {
 	fetching: boolean = false;
 	activePin: string | undefined = undefined;
 	replyMessage: ReplyMessage | undefined = undefined;
-
+	reactLogPopup: ReactLogPopProps = {
+		visible: false,
+		logs: [],
+	}
 	get Rooms() {
 		if (!this.searchRoom) return this.chatRooms;
 		return this.chatRooms.filter((e) => toNormalize(e.name).includes(toNormalize(this.searchRoom)));
@@ -108,6 +105,12 @@ export default class ChatStore {
 		});
 		this.openCreateGroup = true;
 	};
+	toggleReactLog = (logs?: MessageLog[]) => {
+		this.reactLogPopup = {
+			visible: logs ? true : false,
+			logs: logs ?? [],
+		}
+	}
 	//#endregion FUNCTION
 
 	//#region FAKE BACKEND

@@ -10,10 +10,11 @@ interface Props {
 	action?: React.ReactNode;
 	size?: 'small' | 'default' | 'large';
 	isMe?: boolean;
+	suffix?: React.ReactNode;
 }
 function Member(props: Props) {
 	const {appStore: {$$}} = useStores();
-	const { user, info, action, size, isMe } = props;
+	const { user, info, action, size, isMe, suffix } = props;
 
 	const [primaryClass, secondaryClass] = useMemo(() => {
 		switch (size) {
@@ -43,6 +44,7 @@ function Member(props: Props) {
 						</Row>
 					)}
 				</Row>
+				{suffix}
 				{action && <div className={`member-action ${primaryClass}`}>{action}</div>}
 			</Row>
 		</div>

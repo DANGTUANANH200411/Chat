@@ -7,12 +7,14 @@ import ViewPined from './ViewPined';
 import { useEffect, useState } from 'react';
 import { IS_FIREFOX } from '../../../utils/constants';
 import { Message } from '../../../utils/type';
+import { useDropzone } from 'react-dropzone';
 
 function ChatBody() {
 	const { chatStore } = useStores();
 	const { activeRoom, activePin, RoomMessages, onGetMessage, setActivePin } = chatStore;
 	const [isEnd, setIsEnd] = useState<boolean>(false);
 	const [activeNode, setActiveNode] = useState<HTMLElement | null>(null);
+
 	useEffect(() => {
 		setIsEnd(false);
 	}, [activeRoom]);
@@ -31,7 +33,7 @@ function ChatBody() {
 
 	const handleScroll = async (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
 		if (activeNode) {
-			console.log(activeNode)
+			console.log(activeNode);
 			activeNode.classList.remove('forcus');
 			setActiveNode(null);
 		}
@@ -42,15 +44,24 @@ function ChatBody() {
 			if (res && !res.length) setIsEnd(true);
 		}
 	};
-
+	const onDrop = () => {};
+	const { getRootProps, getInputProps, isDragActive } = useDropzone({ noClick: true, onDrop });
 	return (
-		<Row className='chat-body'>
+		<Row className='chat-body' {...getRootProps()}>
+			<input {...getInputProps()} />
+			{isDragActive && (
+				<div
+					className='drag-background'
+				>
+					<label style={{margin: 'auto'}}>Drop over here to send file</label>
+				</div>
+			)}
 			<ViewPined />
 			<div className='chat-body-view' onScroll={handleScroll}>
 				{Object.entries(RoomMessages)
 					.reverse()
 					.map(([date, groupMsgs]) => (
-						<DateMessageWrapper key={date} date={date} groupMsgs={groupMsgs}/>
+						<DateMessageWrapper key={date} date={date} groupMsgs={groupMsgs} />
 					))}
 			</div>
 		</Row>
@@ -58,17 +69,19 @@ function ChatBody() {
 }
 interface DateMessageProps {
 	date: string;
-	groupMsgs: Message[][]
+	groupMsgs: Message[][];
 }
-function DateMessageWrapper (props: DateMessageProps) {
-	const {date, groupMsgs} = props;
-	return <>
-		{groupMsgs.map((messages, idx) => (
-			<ChatItemWrapper key={idx} messages={messages} />
-		))}
-		<Row justify='center' style={{ marginBottom: '8px' }}>
-			<div className='date-item'>{displayChatDate(date)}</div>
-		</Row>
-	</>
+function DateMessageWrapper(props: DateMessageProps) {
+	const { date, groupMsgs } = props;
+	return (
+		<>
+			{groupMsgs.map((messages, idx) => (
+				<ChatItemWrapper key={idx} messages={messages} />
+			))}
+			<Row justify='center' style={{ marginBottom: '8px' }}>
+				<div className='date-item'>{displayChatDate(date)}</div>
+			</Row>
+		</>
+	);
 }
 export default observer(ChatBody);

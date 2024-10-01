@@ -353,12 +353,27 @@ const MESSAGES: Message[] = [
 			{
 				userId: USERS[1].id,
 				reactionDate: SYSTEM_NOW(),
-				reaction: 'LOVE',
+				reaction: '1f623',
 			},
 			{
 				userId: USERS[2].id,
 				reactionDate: SYSTEM_NOW(),
-				reaction: 'SAD',
+				reaction: '1f622',
+			},
+			{
+				userId: USERS[3].id,
+				reactionDate: SYSTEM_NOW(),
+				reaction: '1f607',
+			},
+			{
+				userId: USERS[4].id,
+				reactionDate: SYSTEM_NOW(),
+				reaction: '1f923',
+			},
+			{
+				userId: USERS[5].id,
+				reactionDate: SYSTEM_NOW(),
+				reaction: '1f602',
 			},
 		],
 	},
@@ -400,12 +415,12 @@ const MESSAGES: Message[] = [
 			{
 				userId: USERS[1].id,
 				reactionDate: SYSTEM_NOW(),
-				reaction: 'LOVE',
+				reaction: '1f623',
 			},
 			{
 				userId: USERS[2].id,
 				reactionDate: SYSTEM_NOW(),
-				reaction: 'SAD',
+				reaction: '1f622',
 			},
 		],
 	},
@@ -423,7 +438,7 @@ const MESSAGES: Message[] = [
 			{
 				userId: USERS[1].id,
 				reactionDate: SYSTEM_NOW(),
-				reaction: 'ANGRY',
+				reaction: '1f622',
 			},
 		],
 	},

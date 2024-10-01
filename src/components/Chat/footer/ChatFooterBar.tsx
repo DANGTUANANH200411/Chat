@@ -1,6 +1,4 @@
-import { FileImageOutlined, FontSizeOutlined, IdcardOutlined, LinkOutlined, SmileOutlined } from "@ant-design/icons";
-import { Popover } from "antd";
-import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
+import { FileImageOutlined, FontSizeOutlined, IdcardOutlined, LinkOutlined } from "@ant-design/icons";
 
 interface Props {
     onEmoji: (e: any)=> void;
@@ -8,20 +6,6 @@ interface Props {
 export default function ChatFooterBar(props:Props) {
 	return (
 		<>
-			<Popover
-				trigger={['click']}
-				destroyTooltipOnHide
-				content={
-					<EmojiPicker
-						emojiStyle={EmojiStyle.APPLE}
-						onEmojiClick={(e) => {
-							props.onEmoji(e.emoji);
-						}}
-					/>
-				}
-			>
-				<SmileOutlined />
-			</Popover>
 			<FileImageOutlined />
 			<LinkOutlined />
 			<IdcardOutlined onClick={() => {}} />

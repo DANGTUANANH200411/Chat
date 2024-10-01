@@ -1,7 +1,6 @@
 import { Image, Row, Typography } from 'antd';
-import ReactLinkify from 'react-linkify';
 import filesize from 'filesize';
-import { getFileIcon, isImage, mentionRegex, uuidRegx } from '../../../utils/helper';
+import { getFileIcon, isImage, isUrl, mentionRegex, urlRegx, uuidRegx } from '../../../utils/helper';
 import React, { useMemo } from 'react';
 interface Props {
 	isFile: boolean;
@@ -10,28 +9,11 @@ interface Props {
 }
 function ChatContent(props: Props) {
 	const { content, isFile, fileSize } = props;
-	const replacer = (matchString: string) => {
-		const name = matchString.substring(matchString.indexOf('[') + 1, matchString.indexOf(']'));
-		const mGuid = matchString.match(uuidRegx)
-		let id = '';
-		if (mGuid) id = mGuid[0];
-		return `<a data-id="${id})" class="mention-member">${name}</a>`
-	}
-	const parsedContent = useMemo(()=> {
-		let str = content;
-		str = str.replaceAll('http://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72', 'https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64')
-		return str.replace(mentionRegex, replacer)
-	}, [content])
+	const listSrc: string[] = [];
 	const renderContent = () => {
 		if (isFile) {
 			if (isImage(content)) {
-				return (
-					<Image.PreviewGroup>
-						{content.split(',').map((item, idx) => (
-							<Image key={idx} src={item} style={{ maxHeight: 200, padding: 2 }}></Image>
-						))}
-					</Image.PreviewGroup>
-				);
+				return <Image src={content} style={{ maxHeight: 200, padding: 2 }}></Image>;
 			}
 			return (
 				<Row align='middle'>
@@ -54,27 +36,56 @@ function ChatContent(props: Props) {
 					</div>
 				</Row>
 			);
+		} else if (isUrl(content)) {
+			const ytbRegx = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
+			let match = content.match(ytbRegx);
+			if (match && match[2].length == 11) {
+				return (
+					<iframe
+						src={`https://www.youtube.com/embed/${match[2]}?autoplay=0`}
+						title='Youtube Video'
+						allowFullScreen
+					></iframe>
+				);
+			}
 		}
-		
+		const replacer = (matchString: string) => {
+			const name = matchString.substring(matchString.indexOf('[') + 1, matchString.indexOf(']'));
+			const mGuid = matchString.match(uuidRegx);
+			let id = '';
+			if (mGuid) id = mGuid[0];
+			return `<a data-id="${id})" class="mention-member">${name}</a>`;
+		};
+
+		const urlReplacer = (matchString: string) => {
+			if (isImage(matchString)) {
+				listSrc.push(matchString);
+			}
+			return `<a href="${matchString}" target="_blank">${matchString}</a>`;
+		};
+
+		const parseContent = () => {
+			let str = content;
+			str = str.replaceAll(
+				'http://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72',
+				'https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64'
+			);
+			str = str.replace(urlRegx, urlReplacer);
+			return str.replace(mentionRegex, replacer);
+		};
+
 		return (
-			<ReactLinkify
-				componentDecorator={(href, text, key) => (
-					<a target='_blank' href={href} key={key} download={'foo.txt'}>
-						{text}
-					</a>
-				)}
+			<Typography.Text
+				className='text-primary'
+				style={{
+					whiteSpace: 'pre-wrap',
+					direction: 'ltr',
+					fontSize: 16,
+				}}
 			>
-				<Typography.Text
-					className='text-primary'
-					style={{
-						whiteSpace: 'pre-wrap',
-						direction: 'ltr',
-						fontSize: 16
-					}}
-				>
-					<div dangerouslySetInnerHTML={{__html: parsedContent}}></div>
-				</Typography.Text>
-			</ReactLinkify>
+				<div dangerouslySetInnerHTML={{ __html: parseContent() }}></div>
+				{listSrc.length === 1 && <Image src={listSrc[0]} style={{ maxHeight: 200, padding: 2 }}></Image>}
+			</Typography.Text>
 		);
 	};
 	return <Row>{renderContent()}</Row>;

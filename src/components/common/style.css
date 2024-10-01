@@ -53,3 +53,7 @@
 .member:hover .member-action {
     visibility: visible;
 }
+
+.custom-upload .ant-upload.ant-upload-btn {
+    padding: 0 !important
+}
