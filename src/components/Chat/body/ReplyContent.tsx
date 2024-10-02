@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ReplyMessage } from '../../../utils/type';
 import { Row, Typography } from 'antd';
 import { useStores } from '../../../stores/stores';
@@ -13,8 +13,14 @@ function ReplyContent(props: Props) {
 		appStore: { $$, getUserName },
 		chatStore: { scrollToMessage },
 	} = useStores();
-	const { id, sender, content, isFile } = props.replyMessage;
-	const previewSrc = isImage(content) ? content : getFileIcon(content.split('.').pop()?.toLocaleLowerCase());
+	const { id, sender, content, isFile, data } = props.replyMessage;
+	const previewSrc = useMemo(() => {
+		if (data) {
+			return data;
+		} else {
+			return isImage(content) ? content : getFileIcon(content.split('.').pop()?.toLocaleLowerCase());
+		}
+	}, []);
 	const displayContent = () => {
 		if (isImage(content)) {
 			return `[${$$('image')}]`;

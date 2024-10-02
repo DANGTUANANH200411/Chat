@@ -12,7 +12,7 @@ interface Props {
 function FileMessage(props: Props) {
     const {content, fileSize, data, imgStyle} = props;
     if (isImage(content)) {
-        return <Image src={data ?? content} style={{ maxHeight: 200, padding: 2, ...imgStyle}}></Image>;
+        return <Image src={data ?? content} style={{ minHeight: 150, maxHeight: '40vh', padding: 2, ...imgStyle}}></Image>;
     }
     return (
         <Row align='middle'>

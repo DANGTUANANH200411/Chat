@@ -1,7 +1,7 @@
 import { CloseOutlined } from '@ant-design/icons';
 import { Row } from 'antd';
 import { observer } from 'mobx-react';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useStores } from '../../../stores/stores';
 import ReplyContent from '../body/ReplyContent';
 import ChatFooterBar from './ChatFooterBar';
@@ -10,15 +10,28 @@ import { toNormalize } from '../../../utils/helper';
 import { useDropzone } from 'react-dropzone';
 import PreviewUploaded from './PreviewUploaded';
 import { Attachment } from '../../../utils/type';
+import PreviewGIF from './PreviewGIF';
 
 function ChatFooter() {
 	const { chatStore, appStore } = useStores();
 	const [text, setText] = useState<string>('');
-	const ref = useRef<HTMLDivElement>(null);
-	const { replyMessage, onSendMessage, setReplyMessage } = chatStore;
+	const { replyMessage, onSendMessage, setReplyMessage, listGIF} = chatStore;
 	const { Users } = appStore;
 	const [uploaded, setUploaded] = useState<Attachment[]>([]);
-	
+	const mentionsList = useMemo(() => {
+		return [
+			{
+				id: "GIF",
+				name: "GIF",
+				image: "",
+			},
+			...Users.map(e=> ({
+				id: e.id,
+				name: e.userName,
+				image: e.imageSrc,
+			}))
+		]
+	}, [Users])
 	const onDrop = useCallback(
 		async (acceptedFiles: any) => {
 			const filePromises = acceptedFiles.map((file: any) => {
@@ -53,7 +66,6 @@ function ChatFooter() {
 	);
 	const { getRootProps, getInputProps, isDragActive, inputRef } = useDropzone({ noClick: true, onDrop });
 
-	console.log(inputRef)
 	return (
 		<Row className='chat-footer' {...getRootProps()}>
 			<input {...getInputProps()} />
@@ -72,7 +84,9 @@ function ChatFooter() {
 					/>
 				</Row>
 			)}
-
+			{(text.startsWith("@GIF ") || text.startsWith("@[GIF]") )&& (
+				<PreviewGIF searchText={text.substring(text.indexOf(' '))} setText={setText}/>
+			)}
 			<PreviewUploaded uploaded={uploaded} setUploaded={setUploaded} />
 
 			<ChatFooterBar uploadInputRef={inputRef} />
@@ -84,7 +98,7 @@ function ChatFooter() {
 				onChange={setText}
 				shouldConvertEmojiToImage
 				onEnter={(text) => {
-					onSendMessage(text.trim(), uploaded);
+					onSendMessage(text.trim(), false, uploaded);
 					setText('');
 					setUploaded([]);
 				}}
@@ -92,13 +106,9 @@ function ChatFooter() {
 					const searchText = value.replace('@', '');
 					return new Promise<any>((resolve) => {
 						resolve(
-							Users.filter(
-								(e) => !searchText || toNormalize(e.userName).includes(toNormalize(searchText))
-							).map((e) => ({
-								id: e.id,
-								name: e.userName,
-								image: e.imageSrc,
-							}))
+							mentionsList.filter(
+								(e) => !searchText || toNormalize(e.name).includes(toNormalize(searchText))
+							)
 						);
 					});
 				}}

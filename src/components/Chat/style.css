@@ -121,7 +121,7 @@ body:is(.dark-theme) .chat-footer > * {
 }
 .chat-item-content.forcus,
 .chat-item-content.selected {
-	border: 1px solid blue;
+	border: 1px solid blue !important;
 }
 .chat-item-content:has(.list-reaction) {
 	margin-bottom: 0.6rem;
@@ -135,7 +135,7 @@ body:is(.dark-theme) .chat-footer > * {
 	padding-left: 0;
 	padding-right: 0;
 }
-.chat-item-content.short img{
+.chat-item-content.short .ant-image-img{
 	border-radius: 8px;
 }
 .chat-item-content.short .chat-item-username {
@@ -158,8 +158,8 @@ body:is(.dark-theme) .chat-footer > * {
     bottom: 0rem;
 }
 .chat-item-wrapper:is(.me) .chat-item-content.short .list-reaction {
-	right: 2rem;
-    bottom: 0rem;
+	left: 2rem;
+    bottom: 0;
 }
 .chat-item-content.short .send-time {
 	position: absolute;

@@ -21,8 +21,8 @@ function TextMessage(props: Props) {
 	};
 
 	const urlReplacer = (matchString: string) => {
+		if (matchString.startsWith("https://cdn.jsdelivr.net")) return matchString;
 		if (isImage(matchString)) {
-			console.log('HAHAHA', matchString);
 			listSrc.push(matchString);
 		}
 		return `<a href="${matchString}" target="_blank">${matchString}</a>`;
@@ -37,7 +37,7 @@ function TextMessage(props: Props) {
 		str = str.replace(urlRegx, urlReplacer);
 		return str.replace(mentionRegex, replacer);
 	};
-
+	console.log(parseContent())
 	return (
 		<Typography.Text
 			className='text-primary'

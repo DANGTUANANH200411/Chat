@@ -30,7 +30,6 @@ export default class AppStore {
 		makeAutoObservable(this);
 		initI18n(this);
 		USERS.map((e) => this.users.set(e.id, e));
-		console.log(USERS)
 	}
 	get Users() {
 		return Array.from(this.users.values()).filter((e) => e.id !== this.user.id);

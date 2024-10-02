@@ -20,10 +20,12 @@ function ChatBody() {
 	}, [activeRoom]);
 
 	useEffect(() => {
+		console.log(activePin)
 		if (!activePin) return;
 		const msg = document.getElementById(activePin);
 		document.querySelector('.forcus')?.classList.remove('forcus');
 		if (msg) {
+			console.log(msg)
 			IS_FIREFOX ? (msg as any).scrollIntoView() : (msg as any).scrollIntoViewIfNeeded();
 			msg.classList.add('forcus');
 			setActiveNode(msg);

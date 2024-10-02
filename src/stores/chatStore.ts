@@ -41,7 +41,11 @@ export default class ChatStore {
 		logs: [],
 	};
 
-	listGIF: string[] = [];
+	listGIF: {
+		id: string;
+		previewSrc: string;
+		src: string;
+	}[] = [];
 	get Rooms() {
 		if (!this.searchRoom) return this.chatRooms;
 		return this.chatRooms.filter((e) => toNormalize(e.name).includes(toNormalize(this.searchRoom)));
@@ -130,9 +134,9 @@ export default class ChatStore {
 
 		let room = this.getActiveRoom();
 		if (room) room.previewMsg = message;
-		this.replyMessage = undefined;
+		if (message.reply) this.replyMessage = undefined;
 		document.querySelector('.chat-body-view')?.scrollTo({ top: 0 });
-	}
+	};
 	//#endregion FUNCTION
 
 	//#region FAKE BACKEND
@@ -151,15 +155,22 @@ export default class ChatStore {
 	//#endregion FAKE BACKEND
 
 	//#region API
-	onSearchGif = async (searchTxt: string) => {
-		const apikey = "LIVDSRZULELA";
-		const lmt = 20;
-		const url = `https://g.tenor.com/v1/search?q=${searchTxt}&key=${apikey}&limit=${lmt}`
-	
-		await fetch(url, {headers: {method: "GET"}})
-				.then(res => res.json())
-				.then(res => this.listGIF = res.map((e: any)=> e.media[0].nanogif ));
-	}
+	onSearchGIF = async (searchTxt: string) => {
+		const apikey = 'LIVDSRZULELA';
+		const lmt = 30;
+		const url = `https://g.tenor.com/v1/search?q=${searchTxt}&key=${apikey}&limit=${lmt}`;
+
+		await fetch(url, { headers: { method: 'GET' } })
+			.then((res) => res.json())
+			.then(
+				(res) =>
+					(this.listGIF = res.results?.map((e: any) => ({
+						id: e.id,
+						previewSrc: e.media[0].nanogif.url,
+						src: e.media[0].tinygif.url,
+					})))
+			);
+	};
 	onGetMessage = async (roomId?: string) => {
 		const room = roomId ?? this.activeRoom;
 		if (this.fetching || !room) return;
@@ -181,7 +192,7 @@ export default class ChatStore {
 			return result;
 		}
 	};
-	onSendMessage = (content: string, files?: any[]) => {
+	onSendMessage = (content: string, isFile?: boolean, files?: any[]) => {
 		const activeRoom = this.activeRoom;
 		if (!activeRoom || (isEmpty(content) && (!files || !files.length))) return;
 		const message: Message = {
@@ -189,18 +200,18 @@ export default class ChatStore {
 			groupId: activeRoom,
 			sender: stores.appStore.user.id,
 			content,
-			isFile: false,
+			isFile: !!isFile,
 			createDate: SYSTEM_NOW(),
 			lastUpdateDate: SYSTEM_NOW(),
 			edited: false,
 			deleted: false,
 			logs: [],
 			reply: this.replyMessage,
-			attachment: files
+			attachment: files,
 		};
-		this.pushMessage(message)
+		this.pushMessage(message);
 	};
-	
+
 	onSendFile = (file: Attachment, error?: boolean) => {
 		const activeRoom = this.activeRoom;
 		if (!activeRoom || isEmpty(file.data)) return;
@@ -217,12 +228,12 @@ export default class ChatStore {
 			edited: false,
 			deleted: false,
 			logs: [],
-			reply: this.replyMessage,
-			error
-		}
+			reply: undefined,
+			error,
+		};
 
-		this.pushMessage(message)
-	}
+		this.pushMessage(message);
+	};
 
 	onCreateGroup = (group: ChatRoom) => {
 		const { $$ } = stores.appStore;

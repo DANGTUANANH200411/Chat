@@ -1,0 +1,14 @@
+.preview-link-wrapper {
+    direction: ltr;
+    width: 300px;
+    flex-wrap: nowrap;
+    column-gap: 8px;
+	background-color: white;
+    cursor: pointer;
+    border-radius: 8px !important;
+    overflow: hidden;
+    flex-direction: column;
+}
+.preview-link-wrapper:hover .preview-title {
+    color: rgb(0, 89, 255)
+}

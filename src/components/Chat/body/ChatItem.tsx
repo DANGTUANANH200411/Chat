@@ -41,6 +41,7 @@ function ChatItem(props: Props) {
 
 					<Row>
 						<ChatContent
+							id={message.id}
 							content={content}
 							deleted={deleted}
 							isFile={isFile}

@@ -43,6 +43,7 @@ export interface ReplyMessage {
 	id: string;
 	sender: string;
 	content: string;
+	data?:any;
 	isFile: boolean;
 }
 export interface MessageLog {

@@ -243,6 +243,19 @@ const MESSAGES: Message[] = [
 		deleted: false,
 		logs: [],
 	})),
+	
+	{
+		id: newGuid(),
+		groupId: GROUP_ID[0],
+		sender: USERS[2].id,
+		content: 'No arms and no legs',
+		isFile: false,
+		createDate: toSystemDate(NOW().subtract(48, 'hours')),
+		lastUpdateDate: toSystemDate(NOW().subtract(48, 'hours')),
+		edited: false,
+		deleted: false,
+		logs: [],
+	},
 	{
 		id: newGuid(),
 		groupId: GROUP_ID[0],
@@ -457,8 +470,8 @@ const MESSAGES: Message[] = [
 	{
 		id: newGuid(),
 		groupId: GROUP_ID[0],
-		sender: USERS[10].id,
-		content: 'https://www.shutterstock.com/image-vector/july-7-2023-full-body-260nw-2329083689.jpg',
+		sender: USERS[13].id,
+		content: 'https://www.youtube.com/watch?v=7gphiFVVtUI',
 		isFile: false,
 		createDate: toSystemDate(addMinutes(new Date(), -20)),
 		lastUpdateDate: toSystemDate(addMinutes(new Date(), -20)),
