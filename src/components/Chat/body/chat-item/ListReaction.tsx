@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import React from 'react';
 import { useStores } from '../../../../stores/stores';
 import { distictBy, getEmojiSrc } from '../../../../utils/helper';
 import { MessageLog } from '../../../../utils/type';
@@ -12,14 +12,13 @@ function ListReaction(props: Props) {
 		chatStore: { toggleReactLog },
 	} = useStores();
 	const { logs } = props;
-	const dLogs: MessageLog[] = useMemo(() => distictBy(logs, (e) => e.reaction), [logs]);
 
 	return (
 		<div className='list-reaction' onClick={() => toggleReactLog(logs)}>
 			<Avatar.Group
 				size={16}
 			>
-				{dLogs.slice(0, 3).map((e) => (
+				{distictBy(logs, (e) => e.reaction).slice(0, 3).map((e) => (
 					<Avatar key={e.reaction} src={getEmojiSrc(e.reaction)} />
 				))}
 				{logs.length > 1 && <Avatar key='total' style={{ color: 'black'}}>{logs.length}</Avatar>}
@@ -28,4 +27,4 @@ function ListReaction(props: Props) {
 	);
 }
 
-export default ListReaction;
+export default React.memo(ListReaction);

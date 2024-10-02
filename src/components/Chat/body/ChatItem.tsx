@@ -18,9 +18,10 @@ interface Props {
 }
 function ChatItem(props: Props) {
 	const { isFirst, isLast, showTime, message, getUserName } = props;
-	const { sender, content, deleted, createDate, logs, isFile, fileSize, reply } = message;
+	const { sender, content, deleted, createDate, logs, isFile, fileSize, reply, attachment, data } = message;
 	const [hover, setHover] = useState<boolean>(false);
-	const isShort = useMemo(()=> isFile && (isImage(content) || isUrl(content)) ? 'short' : '', [content]);
+	const isShort = useMemo(() => (isFile && (isImage(content) || isUrl(content)) ? 'short' : ''), [content]);
+	
 	return (
 		<>
 			<Row
@@ -36,20 +37,30 @@ function ChatItem(props: Props) {
 							{getUserName(sender)}
 						</Typography.Link>
 					)}
-					{reply && <ReplyContent replyMessage={reply}/>}
-					<ChatContent content={deleted ? 'Deleted message' : content} isFile={isFile} fileSize={fileSize} />
+					{reply && <ReplyContent replyMessage={reply} />}
+
+					<Row>
+						<ChatContent
+							content={content}
+							deleted={deleted}
+							isFile={isFile}
+							data={data}
+							fileSize={fileSize}
+							attachment={attachment}
+						/>
+					</Row>
+
 					{(isLast || showTime) && (
 						<Typography.Text type='secondary' className='small-text send-time'>
 							{displayChatTime(createDate)}
 						</Typography.Text>
 					)}
+
 					<Reaction id={message.id} />
-					
-					{logs.length > 0 && (
-						<ListReaction logs={logs}/>
-					)}
+
+					{logs.length > 0 && <ListReaction logs={logs} />}
 				</div>
-				
+
 				{hover && (
 					<div className='chat-item-action'>
 						<ChatAction message={message} />

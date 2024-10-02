@@ -4,14 +4,14 @@ import { useStores } from '../../../stores/stores';
 import ChatItemWrapper from './ChatItemWrapper';
 import { displayChatDate } from '../../../utils/dateHelper';
 import ViewPined from './ViewPined';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { IS_FIREFOX } from '../../../utils/constants';
 import { Message } from '../../../utils/type';
 import { useDropzone } from 'react-dropzone';
 
 function ChatBody() {
 	const { chatStore } = useStores();
-	const { activeRoom, activePin, RoomMessages, onGetMessage, setActivePin } = chatStore;
+	const { activeRoom, activePin, RoomMessages, onGetMessage, setActivePin, onSendFile } = chatStore;
 	const [isEnd, setIsEnd] = useState<boolean>(false);
 	const [activeNode, setActiveNode] = useState<HTMLElement | null>(null);
 
@@ -33,7 +33,6 @@ function ChatBody() {
 
 	const handleScroll = async (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
 		if (activeNode) {
-			console.log(activeNode);
 			activeNode.classList.remove('forcus');
 			setActiveNode(null);
 		}
@@ -44,16 +43,48 @@ function ChatBody() {
 			if (res && !res.length) setIsEnd(true);
 		}
 	};
-	const onDrop = () => {};
+
+	const onDrop = useCallback((acceptedFiles: any) => {
+		const reject = (file: any) => {
+			onSendFile(
+				{
+					name: file.name,
+					data: '',
+					size: file.size,
+				},
+				true
+			);
+		};
+		acceptedFiles.forEach((file: any) => {
+			const reader = new FileReader();
+			reader.onabort = (error) => {
+				reject(file);
+			};
+			reader.onerror = (error) => {
+				reject(file);
+			};
+			reader.onload = () => {
+				try {
+					onSendFile({
+						name: file.name,
+						data: reader.result as string,
+						size: file.size,
+					});
+				} catch (error) {
+					reject(file);
+				}
+			};
+			reader.readAsDataURL(file);
+		});
+	}, []);
+	
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({ noClick: true, onDrop });
 	return (
 		<Row className='chat-body' {...getRootProps()}>
 			<input {...getInputProps()} />
 			{isDragActive && (
-				<div
-					className='drag-background'
-				>
-					<label style={{margin: 'auto'}}>Drop over here to send file</label>
+				<div className='drag-background'>
+					<label style={{ margin: 'auto' }}>Drop over here to send file</label>
 				</div>
 			)}
 			<ViewPined />

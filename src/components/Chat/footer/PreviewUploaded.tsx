@@ -1,29 +1,39 @@
 import { CloseOutlined } from '@ant-design/icons';
-import { Avatar, Image, Row } from 'antd';
+import { Avatar, Col, Image, Row } from 'antd';
 import React from 'react';
 import { isImage } from '../../../utils/helper';
+import { Attachment } from '../../../utils/type';
+import FileMessage from '../body/content-render/FileMessage';
 
 interface Props {
-	uploaded: any[];
-	setUploaded: React.Dispatch<React.SetStateAction<any[]>>;
+	uploaded: Attachment[];
+	setUploaded: React.Dispatch<React.SetStateAction<Attachment[]>>;
 }
 function PreviewUploaded(props: Props) {
 	const { uploaded, setUploaded } = props;
-    console.log(uploaded)
-	return !uploaded.length ? <></> : (
-		<Row className='preview-upload' justify="space-between">
-			<div>
-				<Image.PreviewGroup>
-					{uploaded.map((e, idx) => {
-                        if(isImage(e.name)) {
-                            return <Image key={idx} src={e.data} height={'5vh'} />;
-                        }
-                        return <></>
-                    })}
-				</Image.PreviewGroup>
-			</div>
-            <CloseOutlined className='text-secondary hoverable-icon' onClick={()=> setUploaded([])}/>
-		</Row>
+	return !uploaded.length ? (
+		<></>
+	) : (
+		<div className='preview-upload'>
+			<Row justify='space-between'>
+				<Col span={23}>
+					<Image.PreviewGroup>
+						{uploaded.map((file, idx) => {
+							return (
+								<FileMessage
+									key={idx}
+									content={file.name}
+									fileSize={file.size}
+									data={file.data}
+									imgStyle={{ height: '5vh' }}
+								/>
+							);
+						})}
+					</Image.PreviewGroup>
+				</Col>
+				<CloseOutlined className='text-secondary hoverable-icon btn-clear' onClick={() => setUploaded([])} />
+			</Row>
+		</div>
 	);
 }
 function propsAreEquals(prev: Props, next: Props) {

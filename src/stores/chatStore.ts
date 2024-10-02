@@ -1,5 +1,16 @@
 import { makeAutoObservable } from 'mobx';
-import { ChatRoom, Message, MessageLog, ReactionPopupProps, ReactionType, ReactLogPopProps, ReplyMessage, TabItemType, User } from '../utils/type';
+import {
+	Attachment,
+	ChatRoom,
+	Message,
+	MessageLog,
+	ReactionPopupProps,
+	ReactionType,
+	ReactLogPopProps,
+	ReplyMessage,
+	TabItemType,
+	User,
+} from '../utils/type';
 import { CHAT_ROOMS, MESSAGES } from '../utils/constants';
 import { isEmpty, newGuid, toNormalize } from '../utils/helper';
 import { stores } from './stores';
@@ -28,7 +39,9 @@ export default class ChatStore {
 	reactLogPopup: ReactLogPopProps = {
 		visible: false,
 		logs: [],
-	}
+	};
+
+	listGIF: string[] = [];
 	get Rooms() {
 		if (!this.searchRoom) return this.chatRooms;
 		return this.chatRooms.filter((e) => toNormalize(e.name).includes(toNormalize(this.searchRoom)));
@@ -92,9 +105,9 @@ export default class ChatStore {
 		this.activeRoom = room;
 		this.onGetMessage(room);
 	};
-	setActivePin = (id: string | undefined) => this.activePin = id;
+	setActivePin = (id: string | undefined) => (this.activePin = id);
 
-	setReplyMessage = (msg: ReplyMessage | undefined) => this.replyMessage = msg;
+	setReplyMessage = (msg: ReplyMessage | undefined) => (this.replyMessage = msg);
 	//#endregion SET
 
 	//#region FUNCTION
@@ -109,7 +122,16 @@ export default class ChatStore {
 		this.reactLogPopup = {
 			visible: logs ? true : false,
 			logs: logs ?? [],
-		}
+		};
+	};
+
+	pushMessage = (message: Message) => {
+		this.messages.push(message);
+
+		let room = this.getActiveRoom();
+		if (room) room.previewMsg = message;
+		this.replyMessage = undefined;
+		document.querySelector('.chat-body-view')?.scrollTo({ top: 0 });
 	}
 	//#endregion FUNCTION
 
@@ -120,15 +142,24 @@ export default class ChatStore {
 			.splice(skip, 20);
 	};
 	fakeFetchPinMessage = async (id: string, roomId: string, skip: number) => {
-		const listMsg = MESSAGES.filter((e) => e.groupId === roomId)
-			.sort((a, b) => b.createDate.localeCompare(a.createDate));
-		const idx = listMsg.findIndex(e=> e.id === id);
-		return listMsg.splice(skip, Math.min(idx + 20 - skip, listMsg.length))
-	}
+		const listMsg = MESSAGES.filter((e) => e.groupId === roomId).sort((a, b) =>
+			b.createDate.localeCompare(a.createDate)
+		);
+		const idx = listMsg.findIndex((e) => e.id === id);
+		return listMsg.splice(skip, Math.min(idx + 20 - skip, listMsg.length));
+	};
 	//#endregion FAKE BACKEND
 
 	//#region API
+	onSearchGif = async (searchTxt: string) => {
+		const apikey = "LIVDSRZULELA";
+		const lmt = 20;
+		const url = `https://g.tenor.com/v1/search?q=${searchTxt}&key=${apikey}&limit=${lmt}`
 	
+		await fetch(url, {headers: {method: "GET"}})
+				.then(res => res.json())
+				.then(res => this.listGIF = res.map((e: any)=> e.media[0].nanogif ));
+	}
 	onGetMessage = async (roomId?: string) => {
 		const room = roomId ?? this.activeRoom;
 		if (this.fetching || !room) return;
@@ -137,9 +168,9 @@ export default class ChatStore {
 		let result: Message[] = [];
 		try {
 			result = await this.fakeFetchMessage(room, skip);
-			if(roomId) {
+			if (roomId) {
 				this.messages = result;
-			}else {
+			} else {
 				this.messages.push(...result);
 			}
 		} catch (err) {
@@ -150,11 +181,12 @@ export default class ChatStore {
 			return result;
 		}
 	};
-	onSendMessage = (content: string) => {
-		if (!this.activeRoom || isEmpty(content)) return;
+	onSendMessage = (content: string, files?: any[]) => {
+		const activeRoom = this.activeRoom;
+		if (!activeRoom || (isEmpty(content) && (!files || !files.length))) return;
 		const message: Message = {
 			id: newGuid(),
-			groupId: this.activeRoom,
+			groupId: activeRoom,
 			sender: stores.appStore.user.id,
 			content,
 			isFile: false,
@@ -164,13 +196,34 @@ export default class ChatStore {
 			deleted: false,
 			logs: [],
 			reply: this.replyMessage,
+			attachment: files
 		};
-		this.messages.push(message);
-		let room = this.getActiveRoom();
-		if (room) room.previewMsg = message;
-		this.replyMessage = undefined;
-		document.querySelector('.chat-body-view')?.scrollTo({ top: 0 });
+		this.pushMessage(message)
 	};
+	
+	onSendFile = (file: Attachment, error?: boolean) => {
+		const activeRoom = this.activeRoom;
+		if (!activeRoom || isEmpty(file.data)) return;
+		const message: Message = {
+			id: newGuid(),
+			groupId: activeRoom,
+			sender: stores.appStore.user.id,
+			content: file.name,
+			isFile: true,
+			data: file.data,
+			fileSize: file.size,
+			createDate: SYSTEM_NOW(),
+			lastUpdateDate: SYSTEM_NOW(),
+			edited: false,
+			deleted: false,
+			logs: [],
+			reply: this.replyMessage,
+			error
+		}
+
+		this.pushMessage(message)
+	}
+
 	onCreateGroup = (group: ChatRoom) => {
 		const { $$ } = stores.appStore;
 		try {
@@ -252,16 +305,16 @@ export default class ChatStore {
 
 	scrollToMessage = async (id: string) => {
 		this.setActivePin(id);
-		if (!this.activeRoom || this.messages.some(e=> e.id === id)) return;
+		if (!this.activeRoom || this.messages.some((e) => e.id === id)) return;
 		this.lockFetch();
 		try {
 			const res = await this.fakeFetchPinMessage(id, this.activeRoom, this.messages.length);
 			this.messages.push(...res);
-		} catch(err) {
+		} catch (err) {
 			console.log(err);
 		} finally {
 			this.unlockFetch();
 		}
-	}
+	};
 	//#endregion API
 }

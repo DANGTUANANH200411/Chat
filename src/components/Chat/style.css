@@ -66,6 +66,7 @@
 }
 .chat-footer-bar {
 	height: 4vh;
+	padding-left: 8px;
 }
 .chat-footer > * {
 	background-color: white;
@@ -77,7 +78,8 @@ body:is(.dark-theme) .chat-footer > * {
 .chat-footer-bar > * {
 	padding: 0 8px;
 	cursor: pointer;
-	font-size: 20px;
+	font-size: 24px;
+	color: #757575;
 }
 
 .chat-footer-input {
@@ -347,6 +349,7 @@ body:is(.dark-theme) .chat-item-username {
 }
 .chat-footer .preview-upload,
 .chat-footer-reply-wrapper {
+	position: relative;
 	padding: 0.4rem 1rem;
 	border-bottom: 1px solid var(--border-color);
 }
@@ -354,6 +357,17 @@ body:is(.dark-theme) .chat-item-username {
 	padding-left: 1rem;
 }
 
+.chat-footer .preview-upload > div{
+	max-height: 20vh;
+	overflow: auto;
+}
+.chat-footer-reply-wrapper .btn-clear,
+.chat-footer .preview-upload .btn-clear {
+	position: absolute;
+	right: 40px;
+	font-size: 14px;
+	top: calc(50% - 7px);
+}
 .react-input-emoji--mention--list {
 	max-height: 20vh;
 	overflow-y: auto;

@@ -459,7 +459,7 @@ const MESSAGES: Message[] = [
 		groupId: GROUP_ID[0],
 		sender: USERS[10].id,
 		content: 'https://www.shutterstock.com/image-vector/july-7-2023-full-body-260nw-2329083689.jpg',
-		isFile: true,
+		isFile: false,
 		createDate: toSystemDate(addMinutes(new Date(), -20)),
 		lastUpdateDate: toSystemDate(addMinutes(new Date(), -20)),
 		edited: false,

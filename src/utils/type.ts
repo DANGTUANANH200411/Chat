@@ -35,6 +35,9 @@ export interface Message {
 	deleted: boolean;
 	logs: MessageLog[];
 	reply?: ReplyMessage;
+	data?: any; //tmp for display image only FE
+	attachment?: Attachment[];
+	error?: boolean;
 }
 export interface ReplyMessage {
 	id: string;
@@ -98,4 +101,10 @@ export type RoleType = keyof typeof Role;
 export interface ReactLogPopProps {
 	visible: boolean;
 	logs: MessageLog[];
+}
+
+export interface Attachment {
+	name: string;
+	data: string;  //tmp for display image only FE
+	size: number;
 }

@@ -1,15 +1,28 @@
-import { FileImageOutlined, FontSizeOutlined, IdcardOutlined, LinkOutlined } from "@ant-design/icons";
+import { FileImageOutlined, FontSizeOutlined, IdcardOutlined, PaperClipOutlined } from "@ant-design/icons";
+import { Row } from "antd";
+import React from "react";
 
 interface Props {
-    onEmoji: (e: any)=> void;
+	uploadInputRef: React.RefObject<HTMLInputElement>
 }
-export default function ChatFooterBar(props:Props) {
+function ChatFooterBar(props: Props) {
+	const {uploadInputRef} = props;
+
 	return (
-		<>
-			<FileImageOutlined />
-			<LinkOutlined />
+		<Row className='chat-footer-bar max-width' align='middle'>
+			{/* <FileImageOutlined onClick={()=> {
+				if(!uploadInputRef.current) return;
+				uploadInputRef.current.accept = "image/*";
+				uploadInputRef.current.click()
+			}}/> */}
+			<PaperClipOutlined onClick={()=> {
+				if(!uploadInputRef.current) return;
+				uploadInputRef.current.accept = "";
+				uploadInputRef.current.click()
+			}}/>
 			<IdcardOutlined onClick={() => {}} />
-			<FontSizeOutlined />
-		</>
+		</Row>
 	);
 }
+
+export default React.memo(ChatFooterBar)
