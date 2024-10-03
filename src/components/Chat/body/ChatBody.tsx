@@ -1,31 +1,29 @@
-import { Row } from 'antd';
+import { Button, Row } from 'antd';
 import { observer } from 'mobx-react';
 import { useStores } from '../../../stores/stores';
 import ChatItemWrapper from './ChatItemWrapper';
 import { displayChatDate } from '../../../utils/dateHelper';
-import ViewPinned from './ViewPinned';
 import { useCallback, useEffect, useState } from 'react';
 import { IS_FIREFOX } from '../../../utils/constants';
 import { Message } from '../../../utils/type';
 import { useDropzone } from 'react-dropzone';
+import { DoubleRightOutlined } from '@ant-design/icons';
 
 function ChatBody() {
 	const { chatStore } = useStores();
 	const { activeRoom, activePin, RoomMessages, onGetMessage, setActivePin, onSendFile } = chatStore;
 	const [isEnd, setIsEnd] = useState<boolean>(false);
 	const [activeNode, setActiveNode] = useState<HTMLElement | null>(null);
-
+	const [visible, setVisible] = useState<boolean>(false);
 	useEffect(() => {
 		setIsEnd(false);
 	}, [activeRoom]);
 
 	useEffect(() => {
-		console.log(activePin)
 		if (!activePin) return;
 		const msg = document.getElementById(activePin);
 		document.querySelector('.forcus')?.classList.remove('forcus');
 		if (msg) {
-			console.log(msg)
 			IS_FIREFOX ? (msg as any).scrollIntoView() : (msg as any).scrollIntoViewIfNeeded();
 			msg.classList.add('forcus');
 			setActiveNode(msg);
@@ -33,6 +31,9 @@ function ChatBody() {
 		}
 	}, [activePin, RoomMessages]);
 
+	const scrollToBottom = () => {
+		visible && document.querySelector('.chat-body-view')!.scrollTo(0, 0);
+	};
 	const handleScroll = async (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
 		if (activeNode) {
 			activeNode.classList.remove('forcus');
@@ -40,6 +41,11 @@ function ChatBody() {
 		}
 		if (isEnd) return;
 		const { scrollHeight, scrollTop, clientHeight } = e.target as HTMLElement;
+		if (scrollTop < -1000) {
+			setVisible(true);
+		} else {
+			setVisible(false);
+		}
 		if (scrollHeight + scrollTop - 100 < clientHeight) {
 			const res = await onGetMessage();
 			if (res && !res.length) setIsEnd(true);
@@ -79,8 +85,8 @@ function ChatBody() {
 			reader.readAsDataURL(file);
 		});
 	}, []);
-	
-	const { getRootProps, getInputProps, isDragActive } = useDropzone({ noClick: true, onDrop });
+
+	const { getRootProps, getInputProps, isDragActive } = useDropzone({ noClick: true, noKeyboard: true, onDrop });
 	return (
 		<Row className='chat-body' {...getRootProps()}>
 			<input {...getInputProps()} />
@@ -89,7 +95,6 @@ function ChatBody() {
 					<label style={{ margin: 'auto' }}>Drop over here to send file</label>
 				</div>
 			)}
-			<ViewPinned />
 			<div className='chat-body-view' onScroll={handleScroll}>
 				{Object.entries(RoomMessages)
 					.reverse()
@@ -97,6 +102,13 @@ function ChatBody() {
 						<DateMessageWrapper key={date} date={date} groupMsgs={groupMsgs} />
 					))}
 			</div>
+			<Button
+				className='btn-scroll-bottom'
+				shape='circle'
+				icon={<DoubleRightOutlined rotate={90} />}
+				onClick={scrollToBottom}
+				style={{ opacity: visible ? 100 : 0, cursor: visible ? 'pointer' : 'unset', userSelect: 'none' }}
+			/>
 		</Row>
 	);
 }

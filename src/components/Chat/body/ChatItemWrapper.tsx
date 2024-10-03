@@ -1,13 +1,13 @@
+import { Row } from 'antd';
+import dayjs from 'dayjs';
 import { observer } from 'mobx-react';
+import React from 'react';
 import { useStores } from '../../../stores/stores';
 import { Message } from '../../../utils/type';
-import React, { useMemo } from 'react';
-import { Col, message, Row, Typography } from 'antd';
 import ChatItem from './ChatItem';
-import UserAvatar from '../../common/UserAvatar';
-import dayjs from 'dayjs';
 
 interface Props {
+	view?: true;
 	messages: Message[];
 }
 function ChatItemWrapper(props: Props) {
@@ -15,16 +15,16 @@ function ChatItemWrapper(props: Props) {
 		appStore: { user, getUserName },
 		chatStore: {listIdPinned},
 	} = useStores();
-
+	const {view, messages} = props;
 	return (
-		<Row className={`chat-item-wrapper ${props.messages[0].sender === user.id && 'me'}`} wrap={false}>
-			<UserAvatar className='chat-item-avatar' id={props.messages[0].sender} size={40} style={{margin: '0 8px'}}/>
+		<Row className={`chat-item-wrapper ${messages[0].sender === user.id && 'me'}`} wrap={false}>
 			<Row className='flex-grow'>
-				{props.messages.map((e, idx, arr) => (
+				{messages.map((e, idx, arr) => (
 					<ChatItem
 						key={e.id}
+						id={e.id}
 						isFirst={idx === 0}
-						isLast={idx === props.messages.length - 1}
+						isLast={idx === messages.length - 1}
 						message={e}
 						showTime={
 							idx < arr.length - 1 &&
@@ -32,6 +32,7 @@ function ChatItemWrapper(props: Props) {
 						}
 						getUserName={getUserName}
 						pinned={listIdPinned.includes(e.id)}
+						view={view}
 					/>
 				))}
 			</Row>

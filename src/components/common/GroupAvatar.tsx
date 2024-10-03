@@ -16,7 +16,7 @@ function GroupAvatar(props: Props) {
 					className='child-avt'
 					style={{ backgroundColor: 'var(--primary-color)', fontSize: 'medium' }}
 				>
-					{`+ ${members.length - 3}`}
+					{`+${members.length - 3}`}
 				</Avatar>
 			) : (
 				<UserAvatar key={user.id} id={user.id} className='child-avt' />

@@ -75,6 +75,8 @@ const en = {
 	'reply-later': 'Reply later',
 	'co-worker': 'Co-worker',
 	image: 'Image',
+	yesterday: 'Yesterday',
+	'recalled-msg': 'This message is recalled',
 };
 
 export type ILocale = typeof en;

@@ -1,7 +1,9 @@
 import {
 	CopyOutlined,
 	DeleteOutlined,
+	DownloadOutlined,
 	EditFilled,
+	EnterOutlined,
 	InfoCircleOutlined,
 	MoreOutlined,
 	PushpinFilled,
@@ -16,6 +18,7 @@ import { Message } from '../../../utils/type';
 import { observer } from 'mobx-react';
 import React from 'react';
 import { notify } from '../../../utils/notify';
+import { downloadUrl } from '../../../utils/helper';
 
 interface Props {
 	message: Message;
@@ -25,8 +28,8 @@ function ChatAction({ message }: Props) {
 		appStore: { $$ },
 		chatStore,
 	} = useStores();
-	const { Room, onPinMessage, onDeleteMessage, setReplyMessage } = chatStore;
-	const { id, sender, content, isFile, data } = message;
+	const { Room, onPinMessage, onDeleteMessage, setReplyMessage, setModalDetail, onSelectMessage } = chatStore;
+	const { id, sender, content, isFile, data, recalled } = message;
 	const isPinned = Room?.pinMessages.find((e) => e.id === id) ? true : false;
 	const items: MenuProps['items'] = [
 		{
@@ -56,12 +59,24 @@ function ChatAction({ message }: Props) {
 			key: 'select',
 			label: $$('select-msg'),
 			icon: <UnorderedListOutlined />,
+			onClick: () => onSelectMessage(message.id),
 		},
 		{
 			key: 'details',
 			label: $$('view-details'),
 			icon: <InfoCircleOutlined />,
+			onClick: () => setModalDetail({ visible: true, message }),
 		},
+		...(isFile
+			? [
+					{
+						key: 'download',
+						label: 'save-file',
+						icon: <DownloadOutlined />,
+						onClick: () => downloadUrl(data ?? content, content.split('/').at(-1) ?? ''),
+					},
+			  ]
+			: []),
 		{
 			key: 'other',
 			label: $$('other-options'),
@@ -77,10 +92,21 @@ function ChatAction({ message }: Props) {
 			onClick: () => onDeleteMessage(id),
 		},
 	];
-	return (
+	return recalled ? (
+		<>
+			<EditFilled
+				className='text-secondary hoverable-icon'
+				style={{background: 'white', padding: 2, borderRadius: 15}}
+				onClick={() => setReplyMessage({ id, sender, content, isFile, data })}
+			/>
+		</>
+	) : (
 		<>
 			<Tooltip title={$$('reply')} destroyTooltipOnHide>
-				<EditFilled className='text-secondary hoverable-icon' onClick={()=> setReplyMessage({id, sender, content, isFile, data})}/>
+				<EnterOutlined
+					className='text-secondary hoverable-icon'
+					onClick={() => setReplyMessage({ id, sender, content, isFile, data })}
+				/>
 			</Tooltip>
 			<Tooltip title={$$('forwarding')} destroyTooltipOnHide>
 				<ShareAltOutlined className='text-secondary hoverable-icon' />

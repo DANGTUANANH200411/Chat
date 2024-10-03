@@ -7,13 +7,14 @@ import { observer } from 'mobx-react';
 
 interface Props {
 	replyMessage: ReplyMessage;
+	disableClick?: boolean;
 }
 function ReplyContent(props: Props) {
 	const {
 		appStore: { $$, getUserName },
 		chatStore: { scrollToMessage },
 	} = useStores();
-	const { id, sender, content, isFile, data } = props.replyMessage;
+	const { id, sender, content, isFile, data, } = props.replyMessage;
 	const previewSrc = useMemo(() => {
 		if (data) {
 			return data;
@@ -29,7 +30,7 @@ function ReplyContent(props: Props) {
 		} else return content;
 	};
 	return (
-		<div className='reply-content' onClick={() => scrollToMessage(id)}>
+		<div className='reply-content' onClick={() => !props.disableClick && scrollToMessage(id)}>
 			{isFile && <img src={previewSrc} alt='file-icon' style={{ width: '3rem', height: '3rem' }} />}
 			<div>
 				<Row>

@@ -31,7 +31,7 @@ export interface Message {
 	fileSize?: number;
 	createDate: string;
 	lastUpdateDate: string;
-	edited: boolean;
+	recalled: boolean;
 	deleted: boolean;
 	logs: MessageLog[];
 	reply?: ReplyMessage;
@@ -108,4 +108,9 @@ export interface Attachment {
 	name: string;
 	data: string;  //tmp for display image only FE
 	size: number;
+}
+
+export interface ModalDetailMsgProps {
+	visible: boolean;
+	message?: Message;
 }

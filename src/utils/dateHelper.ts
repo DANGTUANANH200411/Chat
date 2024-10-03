@@ -37,6 +37,21 @@ export function displayChatDate (date: string) {
 export function displayChatTime (date: string) {
 	return dayjs(date).format('HH:mm');
 }
+
+export function displayChatTimeFull (date: string, $$: any) {
+	let str = date;
+	if (str.length > 8) {
+		str = date.substring(0, 8);
+	}
+	const day = dayjs(str);
+	if(day.diff(dayjs(), 'day') === 0) {
+		return displayChatTime(date);
+	}
+	if (day.diff(dayjs(), 'day') === -1) {
+		return `${$$('yesterday')} ${displayChatTime(date)}`
+	}
+	return dayjs(date).format('DD-MM-YYYY HH:mm');
+}
 export function timeFromNow(date: string) {
 	return dayjs(date).fromNow(true);
 }

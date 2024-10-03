@@ -64,7 +64,7 @@ function ChatFooter() {
 		},
 		[uploaded]
 	);
-	const { getRootProps, getInputProps, isDragActive, inputRef } = useDropzone({ noClick: true, onDrop });
+	const { getRootProps, getInputProps, isDragActive, inputRef } = useDropzone({ noClick: true, noKeyboard: true, onDrop });
 
 	return (
 		<Row className='chat-footer' {...getRootProps()}>

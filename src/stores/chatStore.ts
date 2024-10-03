@@ -4,6 +4,7 @@ import {
 	ChatRoom,
 	Message,
 	MessageLog,
+	ModalDetailMsgProps,
 	ReactionPopupProps,
 	ReactionType,
 	ReactLogPopProps,
@@ -46,6 +47,13 @@ export default class ChatStore {
 		previewSrc: string;
 		src: string;
 	}[] = [];
+
+	modalDetailMsg: ModalDetailMsgProps = {
+		visible: false,
+		message: undefined,
+	};
+
+	selectMessages: Set<string> = new Set();
 	get Rooms() {
 		if (!this.searchRoom) return this.chatRooms;
 		return this.chatRooms.filter((e) => toNormalize(e.name).includes(toNormalize(this.searchRoom)));
@@ -83,8 +91,12 @@ export default class ChatStore {
 		return dayMessages;
 	}
 
-	get listIdPinned () {
-		return this.Room?.pinMessages.map(e=> e.id) ?? [];
+	get listIdPinned() {
+		return this.Room?.pinMessages.map((e) => e.id) ?? [];
+	}
+
+	get Selecting() {
+		return this.selectMessages.size > 0;
 	}
 	constructor() {
 		makeAutoObservable(this);
@@ -116,6 +128,13 @@ export default class ChatStore {
 	setActivePin = (id: string | undefined) => (this.activePin = id);
 
 	setReplyMessage = (msg: ReplyMessage | undefined) => (this.replyMessage = msg);
+
+	setModalDetail = (state: ModalDetailMsgProps) => (this.modalDetailMsg = state);
+
+	clearListSelectedMsg = () => this.selectMessages.clear();
+	onSelectMessage = (msgId: string) =>
+		this.selectMessages.has(msgId) ? this.selectMessages.delete(msgId) : this.selectMessages.add(msgId);
+
 	//#endregion SET
 
 	//#region FUNCTION
@@ -207,7 +226,7 @@ export default class ChatStore {
 			isFile: !!isFile,
 			createDate: SYSTEM_NOW(),
 			lastUpdateDate: SYSTEM_NOW(),
-			edited: false,
+			recalled: false,
 			deleted: false,
 			logs: [],
 			reply: this.replyMessage,
@@ -229,7 +248,7 @@ export default class ChatStore {
 			fileSize: file.size,
 			createDate: SYSTEM_NOW(),
 			lastUpdateDate: SYSTEM_NOW(),
-			edited: false,
+			recalled: false,
 			deleted: false,
 			logs: [],
 			reply: undefined,

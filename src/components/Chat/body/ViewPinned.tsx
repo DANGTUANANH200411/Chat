@@ -1,7 +1,7 @@
 import { CaretDownFilled, MessageOutlined, MoreOutlined, UpOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Row, Space, Typography } from 'antd';
 import { observer } from 'mobx-react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useStores } from '../../../stores/stores';
 
 function ViewPinned() {
@@ -9,25 +9,15 @@ function ViewPinned() {
 		appStore: { $$, getUserName},
 		chatStore: { Room, onPinMessage, scrollToMessage },
 	} = useStores();
-	const ref = useRef(null);
 	const [expanded, setExpanded] = useState<boolean>(false);
 	
-	useEffect(()=> {
-		if (!Room?.pinMessages || !ref.current) return;
-		const height = expanded ? Room.pinMessages.length > 2 ? '17vh' : '12vh' : '5vh';
-		(ref.current as HTMLElement).style.height = height;
-		const view = document.querySelector('.chat-body-view');
-		if (view) {
-			(view as HTMLElement).style.height = `calc(100% - ${height})`;
-		}
-	}, [expanded, ref, Room?.pinMessages]);
 	if (!Room || !Room.pinMessages || !Room.pinMessages.length) {
 		return <></>;
 	}
 	const messages = expanded ? [...Room.pinMessages] : [Room.pinMessages.at(-1)];
 
 	return (
-		<Row ref={ref} className={`chat-body-pin ${expanded ? 'expanded' : ''}`} align='middle' justify='space-around'>
+		<Row className={`chat-body-pin ${expanded ? 'expanded' : ''}`} align='middle' justify='space-around'>
 			<Space className='chat-body-pin-item-wrapper' direction='vertical' size={8}>
 				{messages.reverse().map((message) => (
 					<Row key={message?.id} className='max-width chat-body-pin-item' align='middle' >

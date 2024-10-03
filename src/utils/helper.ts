@@ -188,3 +188,22 @@ export const mentionRegex =
 export function distictBy(arr: any[], key: (item: any) => unknown) {
 	return [...new Map(arr.map((e) => [key(e), e])).values()];
 }
+
+export function getExt(str: string) {
+	const match = str.match(/\.[0-9a-z]+$/i);
+    return match ? match[0].slice(1) : "";
+}
+
+export function downloadUrl (url: string, fileName: string) {
+	fetch(url)
+        .then((res) => res.blob())
+		.then((blob) => {
+            const link = document.createElement("a");
+			link.href = URL.createObjectURL(blob);
+			link.download = fileName;
+			link.click();
+        })
+		.catch((error) => {
+            console.log(error)
+        });
+}

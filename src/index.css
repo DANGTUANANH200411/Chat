@@ -12,7 +12,7 @@ html {
 	--side-bar-w: 3vw;
 	--left-menu-w: 17vw;
 	--drawer-w: 0vw;
-	--chat-w: calc(100vw - var(--side-bar-w) - var(--left-menu-w) - var(--drawer-w))
+	--chat-w: calc(100vw - var(--side-bar-w) - var(--left-menu-w) - var(--drawer-w));
 }
 body:is(.dark-theme) {
 	--text-color: #ffffff;
@@ -72,12 +72,18 @@ code {
 .hoverable-icon {
 	padding: 0.2rem;
 	border-radius: 15px;
-}
-.hoverable-icon:hover {
-	/* background-color: rgb(210, 210, 210); */
-	color: var(--primary-color) !important;
+	outline: none;
 }
 
+.hoverable-icon:not(.icon-danger):hover {
+	color: var(--primary-color) !important;
+}
+.icon-danger {
+	color: red !important
+}
+.hoverable-icon:is(.icon-danger):hover {
+	color: rgb(255, 73, 73) !important;
+}
 .hover-change-color:hover,
 .hover-change-color:hover * {
 	color: var(--primary-color) !important;

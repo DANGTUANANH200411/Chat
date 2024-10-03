@@ -75,6 +75,8 @@ const vi: ILocale = {
 	friend: 'Bạn bè',
 	'reply-later': 'Trả lời sau',
 	'co-worker': 'Đồng nghiệp',
-	image: 'Hình ảnh'
+	image: 'Hình ảnh',
+	yesterday: 'Hôm qua',
+	'recalled-msg': 'Tin nhắn đã được thu hồi',
 };
 export { vi };

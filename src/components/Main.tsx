@@ -1,4 +1,4 @@
-import { Col, Row } from 'antd';
+import { Col, Row, Watermark } from 'antd';
 import LeftMenu from './left-menu/LeftMenu';
 import ChatWrapper from './Chat/ChatWrapper';
 import TopBar from './topbar/TopBar';
@@ -11,7 +11,7 @@ import AddToGroupModal from './modal/add-friend-to-group/AddToGroupModal';
 
 function Main() {
 	return (
-		<>
+		<Watermark content="MK04">
 			<Row className='main'>
 				<TopBar />
 				<LeftMenu />
@@ -23,7 +23,7 @@ function Main() {
 			<CreateGroup />
 			<AddFriendModal/>
 			<AddToGroupModal/>
-		</>
+		</Watermark>
 	);
 }
 

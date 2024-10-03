@@ -15,12 +15,12 @@ function ChatFooterBar(props: Props) {
 				uploadInputRef.current.accept = "image/*";
 				uploadInputRef.current.click()
 			}}/> */}
-			<PaperClipOutlined onClick={()=> {
+			<PaperClipOutlined className="hoverable-icon" onClick={()=> {
 				if(!uploadInputRef.current) return;
 				uploadInputRef.current.accept = "";
 				uploadInputRef.current.click()
 			}}/>
-			<IdcardOutlined onClick={() => {}} />
+			<IdcardOutlined className="hoverable-icon" onClick={() => {}} />
 		</Row>
 	);
 }
