@@ -146,20 +146,20 @@ body:is(.dark-theme) .chat-footer > * {
 }
 .chat-item-wrapper:not(.me) .chat-item-content.short .reaction-action {
 	right: 0.8rem;
-    bottom: 0rem;
+    bottom: -8px;
 }
 .chat-item-wrapper:not(.me) .chat-item-content.short .list-reaction {
-    bottom: 0rem;
-	right: 2rem;
+    bottom: -8px;
+	right: 2.1rem;
 }
 
 .chat-item-wrapper:is(.me) .chat-item-content.short .reaction-action {
 	left: 0.8rem;
-    bottom: 0rem;
+    bottom: -8px;
 }
 .chat-item-wrapper:is(.me) .chat-item-content.short .list-reaction {
-	left: 2rem;
-    bottom: 0;
+	left: 2.1rem;
+    bottom: -8px;
 }
 .chat-item-content.short .send-time {
 	position: absolute;
@@ -226,7 +226,7 @@ body:is(.dark-theme) .chat-item-username {
 	right: 0rem;
 	bottom: -0.6rem;
 	direction: rtl;
-    font-size: small;
+    font-size: 14px;
 	border: 1px solid #d7d7d7;
 	color: #757575;
 	padding: 2px;
@@ -399,4 +399,24 @@ body:is(.dark-theme) .chat-item-username {
     color: black;
 	height: calc(100% - 4px); /*100% - border*/
 	width: calc(100% - 4px);
+}
+
+.chat-content {
+	justify-content: left;
+}
+.chat-item-content:is(.short) .chat-content {
+	position: relative;
+}
+.chat-item-pin-icon {
+	position: absolute;
+	font-size: 16px;
+	top: -8px;
+	right: -8px;
+	color: var(--primary-color);
+}
+
+.me .chat-item-pin-icon {
+	right: unset;
+	left: -8px;
+	transform: rotateY(180deg);
 }

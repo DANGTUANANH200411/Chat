@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { useStores } from '../../../stores/stores';
 import ChatItemWrapper from './ChatItemWrapper';
 import { displayChatDate } from '../../../utils/dateHelper';
-import ViewPined from './ViewPined';
+import ViewPinned from './ViewPinned';
 import { useCallback, useEffect, useState } from 'react';
 import { IS_FIREFOX } from '../../../utils/constants';
 import { Message } from '../../../utils/type';
@@ -89,7 +89,7 @@ function ChatBody() {
 					<label style={{ margin: 'auto' }}>Drop over here to send file</label>
 				</div>
 			)}
-			<ViewPined />
+			<ViewPinned />
 			<div className='chat-body-view' onScroll={handleScroll}>
 				{Object.entries(RoomMessages)
 					.reverse()

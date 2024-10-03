@@ -230,6 +230,19 @@ const USERS: User[] = [
 	},
 ];
 const GROUP_ID: string[] = [newGuid(), newGuid()];
+
+const TMP_MESSAGE = {
+	id: newGuid(),
+	groupId: GROUP_ID[0],
+	sender: USERS[4].id,
+	content: 'https://www.youtube.com/watch?v=uPAOcqmvzys',
+	isFile: false,
+	createDate: toSystemDate(NOW().subtract(49, 'hours')),
+	lastUpdateDate: toSystemDate(NOW().subtract(49, 'hours')),
+	edited: false,
+	deleted: false,
+	logs: [],
+};
 const MESSAGES: Message[] = [
 	...Array(300).fill(0).map((e, index)=> ({
 		id: newGuid(),
@@ -243,7 +256,7 @@ const MESSAGES: Message[] = [
 		deleted: false,
 		logs: [],
 	})),
-	
+	TMP_MESSAGE,
 	{
 		id: newGuid(),
 		groupId: GROUP_ID[0],
@@ -413,6 +426,9 @@ const MESSAGES: Message[] = [
 		edited: false,
 		deleted: false,
 		logs: [],
+		reply: {
+			...TMP_MESSAGE,
+		}
 	},
 	{
 		id: newGuid(),

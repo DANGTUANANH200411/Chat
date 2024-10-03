@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import { useStores } from '../../../stores/stores';
 import { Message } from '../../../utils/type';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Col, message, Row, Typography } from 'antd';
 import ChatItem from './ChatItem';
 import UserAvatar from '../../common/UserAvatar';
@@ -13,7 +13,9 @@ interface Props {
 function ChatItemWrapper(props: Props) {
 	const {
 		appStore: { user, getUserName },
+		chatStore: {listIdPinned},
 	} = useStores();
+
 	return (
 		<Row className={`chat-item-wrapper ${props.messages[0].sender === user.id && 'me'}`} wrap={false}>
 			<UserAvatar className='chat-item-avatar' id={props.messages[0].sender} size={40} style={{margin: '0 8px'}}/>
@@ -29,6 +31,7 @@ function ChatItemWrapper(props: Props) {
 							dayjs(arr[idx].createDate).diff(dayjs(arr[idx + 1].createDate)) < -60000
 						}
 						getUserName={getUserName}
+						pinned={listIdPinned.includes(e.id)}
 					/>
 				))}
 			</Row>

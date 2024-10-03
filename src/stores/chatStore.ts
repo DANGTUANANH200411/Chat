@@ -82,6 +82,10 @@ export default class ChatStore {
 		}
 		return dayMessages;
 	}
+
+	get listIdPinned () {
+		return this.Room?.pinMessages.map(e=> e.id) ?? [];
+	}
 	constructor() {
 		makeAutoObservable(this);
 	}

@@ -27,7 +27,7 @@ function ChatAction({ message }: Props) {
 	} = useStores();
 	const { Room, onPinMessage, onDeleteMessage, setReplyMessage } = chatStore;
 	const { id, sender, content, isFile, data } = message;
-	const isPined = Room?.pinMessages.find((e) => e.id === id) ? true : false;
+	const isPinned = Room?.pinMessages.find((e) => e.id === id) ? true : false;
 	const items: MenuProps['items'] = [
 		{
 			key: 'copy',
@@ -43,8 +43,8 @@ function ChatAction({ message }: Props) {
 		},
 		{
 			key: 'pin',
-			label: isPined ? $$('unpin-msg') : $$('pin-msg'),
-			icon: isPined ? <PushpinFilled /> : <PushpinOutlined />,
+			label: isPinned ? $$('unpin-msg') : $$('pin-msg'),
+			icon: isPinned ? <PushpinFilled /> : <PushpinOutlined />,
 			onClick: () => onPinMessage(message),
 		},
 		{

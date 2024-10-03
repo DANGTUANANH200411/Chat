@@ -9,15 +9,17 @@ import Reaction from '../popup/Reaction';
 import { isImage, isUrl } from '../../../utils/helper';
 import ReplyContent from './ReplyContent';
 import ListReaction from './chat-item/ListReaction';
+import { PushpinFilled } from '@ant-design/icons';
 interface Props {
 	isFirst: boolean;
 	isLast: boolean;
 	message: Message;
 	showTime: boolean;
+	pinned: boolean;
 	getUserName: (id: string) => string;
 }
 function ChatItem(props: Props) {
-	const { isFirst, isLast, showTime, message, getUserName } = props;
+	const { isFirst, isLast, showTime, message, pinned, getUserName } = props;
 	const { sender, content, deleted, createDate, logs, isFile, fileSize, reply, attachment, data } = message;
 	const [hover, setHover] = useState<boolean>(false);
 	const isShort = useMemo(() => (isFile && (isImage(content) || isUrl(content)) ? 'short' : ''), [content]);
@@ -39,7 +41,7 @@ function ChatItem(props: Props) {
 					)}
 					{reply && <ReplyContent replyMessage={reply} />}
 
-					<Row>
+					<Row className='chat-content'>
 						<ChatContent
 							id={message.id}
 							content={content}
@@ -49,6 +51,11 @@ function ChatItem(props: Props) {
 							fileSize={fileSize}
 							attachment={attachment}
 						/>
+						<Reaction id={message.id} />
+
+						{logs.length > 0 && <ListReaction logs={logs} />}
+
+						{pinned && <PushpinFilled className='chat-item-pin-icon'/>}
 					</Row>
 
 					{(isLast || showTime) && (
@@ -56,10 +63,6 @@ function ChatItem(props: Props) {
 							{displayChatTime(createDate)}
 						</Typography.Text>
 					)}
-
-					<Reaction id={message.id} />
-
-					{logs.length > 0 && <ListReaction logs={logs} />}
 				</div>
 
 				{hover && (

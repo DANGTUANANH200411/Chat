@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useStores } from '../../../stores/stores';
 
-function ViewPined() {
+function ViewPinned() {
 	const {
 		appStore: { $$, getUserName},
 		chatStore: { Room, onPinMessage, scrollToMessage },
@@ -88,4 +88,4 @@ function ViewPined() {
 		</Row>
 	);
 }
-export default React.memo(observer(ViewPined));
+export default React.memo(observer(ViewPinned));
