@@ -2,6 +2,7 @@ import { Avatar, Row } from 'antd';
 import './style.css';
 import UserAvatar from './UserAvatar';
 import { User } from '../../utils/type';
+import { GROUP_AVT_SIZE } from '../../utils/constants';
 interface Props {
 	image?: string;
 	members: User[];
@@ -23,7 +24,7 @@ function GroupAvatar(props: Props) {
 			)
 		);
 	return (
-		<>{image ? <Avatar src={image} /> : <div className='max-height custom-group-avt'> {generateGroupAvt()}</div>}</>
+		<>{image ? <Avatar src={image} size={GROUP_AVT_SIZE} /> : <div className='max-height custom-group-avt'> {generateGroupAvt()}</div>}</>
 	);
 }
 export default GroupAvatar;

@@ -12,3 +12,26 @@
 .preview-link-wrapper:hover .preview-title {
     color: rgb(0, 89, 255)
 }
+
+.chat-item-namecard {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    direction: ltr;
+    justify-content: center;
+    background-color: rgb(3, 66, 161);
+    min-height: 1.8rem;
+    padding: 0.4rem 0.8rem;
+    margin-bottom: 0.4rem;
+    color: var(--text-primary);
+    border: 1px solid #d7d7d7;
+    border-radius: 10px;
+    max-width: 85%;
+    width: -moz-fit-content;
+    width: fit-content;
+    position: relative;
+}
+
+.chat-item-namecard .member * {
+    color: white;
+}

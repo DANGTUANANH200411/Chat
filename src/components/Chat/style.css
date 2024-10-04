@@ -101,7 +101,7 @@ body:is(.dark-theme) .chat-footer > * {
 	display: flex;
 	align-content: center;
 }
-.chat-item-wrapper.me {
+.chat-item-wrapper.me .chat-item-content-wrapper {
 	direction: rtl;
 }
 .chat-item-content {
@@ -428,16 +428,15 @@ body:is(.dark-theme) .chat-item-username {
 	left: -8px;
 	transform: rotateY(180deg);
 }
+
 .chat-item-selectbox {
 	align-self: flex-start;
 }
 .chat-item-selectbox .ant-checkbox-inner {
 	border-radius: 15px;
 }
-.chat-item-wrapper:not(.me) .chat-item-selectbox {
-	margin-right: 8px;
-}
-.chat-item-wrapper:is(.me) .chat-item-selectbox {
+
+.chat-item-wrapper.chat-item-selectbox {
 	margin-left: 8px;
 }
 

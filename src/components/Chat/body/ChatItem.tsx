@@ -1,17 +1,12 @@
 import { observer } from 'mobx-react';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { Message } from '../../../utils/type';
-import {  Row, Typography } from 'antd';
+import { Row } from 'antd';
 import ChatAction from './ChatAction';
-import ChatContent from './ChatContent';
-import Reaction from '../popup/Reaction';
-import { isImage, isUrl } from '../../../utils/helper';
-import ReplyContent from './ReplyContent';
-import ListReaction from './chat-item/ListReaction';
-import { PushpinFilled } from '@ant-design/icons';
-import ChatTime from './chat-item/ChatTime';
 import ChatSelectBox from './chat-item/ChatSelectBox';
 import UserAvatar from '../../common/UserAvatar';
+import ChatContentWrapper from './content-render/ChatContentWrapper';
+import NameCard from './content-render/NameCard';
 interface Props {
 	id: string;
 	isFirst: boolean;
@@ -24,12 +19,12 @@ interface Props {
 }
 function ChatItem(props: Props) {
 	const { id, isFirst, isLast, showTime, message, pinned, view, getUserName } = props;
-	const { sender, content, recalled, createDate, logs, isFile, fileSize, reply, attachment, data } = message;
+	const { sender, isNameCard, content, createDate } = message;
 	const [hover, setHover] = useState<boolean>(false);
-	const isShort = useMemo(() => (isFile && (isImage(content) || isUrl(content)) ? 'short' : ''), [content]);
 
 	return (
-		<>
+		<Row wrap={false} style={{ direction: 'ltr' }}>
+			<ChatSelectBox id={id} sender={sender} />
 			<Row
 				className='chat-item-content-wrapper'
 				wrap={false}
@@ -37,50 +32,32 @@ function ChatItem(props: Props) {
 				onMouseLeave={() => setHover(false)}
 			>
 				<Row style={{ width: 'fit-content', margin: '0 8px' }}>
-					<ChatSelectBox id={id} />
 					<div style={{ width: 40 }}>
 						{isFirst && <UserAvatar className='chat-item-avatar' id={sender} size={40} />}
 					</div>
 				</Row>
-				<div className={`chat-item-content ${recalled && 'recalled'} ${isShort}`} id={message.id}>
-					{isFirst && (
-						<Typography.Link className='chat-item-username small-text text-ellipsis' onClick={() => {}}>
-							{getUserName(sender)}
-						</Typography.Link>
-					)}
-					{reply && <ReplyContent replyMessage={reply} disableClick={view} />}
 
-					<Row className='chat-content'>
-						<ChatContent
-							id={message.id}
-							content={content}
-							recalled={recalled}
-							isFile={isFile}
-							data={data}
-							fileSize={fileSize}
-							attachment={attachment}
-						/>
-						{!recalled && !view && (
-							<>
-								<Reaction id={message.id} />
+				{!isNameCard ? (
+					<ChatContentWrapper
+						isFirst={isFirst}
+						isLast={isLast}
+						message={message}
+						showTime={showTime}
+						pinned={pinned}
+						getUserName={getUserName}
+						view={view}
+					/>
+				) : (
+					<NameCard id={content} createDate={createDate}/>
+				)}
 
-								{logs.length > 0 && <ListReaction logs={logs} />}
-
-								{pinned && <PushpinFilled className='chat-item-pin-icon' />}
-							</>
-						)}
-					</Row>
-
-					{(isLast || showTime) && <ChatTime view={view} date={createDate} />}
-				</div>
-
-				{(recalled || (!view && hover)) && (
+				{!view && hover && (
 					<div className='chat-item-action'>
 						<ChatAction message={message} />
 					</div>
 				)}
 			</Row>
-		</>
+		</Row>
 	);
 }
 

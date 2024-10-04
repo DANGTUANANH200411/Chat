@@ -8,9 +8,10 @@ import { IS_FIREFOX } from '../../../utils/constants';
 import { Message } from '../../../utils/type';
 import { useDropzone } from 'react-dropzone';
 import { DoubleRightOutlined } from '@ant-design/icons';
+import { notify } from '../../../utils/notify';
 
 function ChatBody() {
-	const { chatStore } = useStores();
+	const { chatStore, appStore: {$$} } = useStores();
 	const { activeRoom, activePin, RoomMessages, onGetMessage, setActivePin, onSendFile } = chatStore;
 	const [isEnd, setIsEnd] = useState<boolean>(false);
 	const [activeNode, setActiveNode] = useState<HTMLElement | null>(null);
@@ -29,6 +30,8 @@ function ChatBody() {
 			msg.classList.add('forcus');
 			setActiveNode(msg);
 			setActivePin(undefined);
+		} else {
+			notify($$('msg-notfound'))
 		}
 	}, [activePin]);
 

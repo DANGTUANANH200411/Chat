@@ -8,7 +8,7 @@ import { useStores } from '../../../stores/stores';
 import { observer } from 'mobx-react';
 interface Props {
 	id: string;
-	isFile: boolean;
+	isFile?: boolean;
 	content: string;
 	recalled: boolean;
 	fileSize?: number;

@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, ObservableMap } from 'mobx';
 import { I18n, Label, LangType, User } from '../utils/type';
 import { initI18n } from '../utils/i18n';
 import Mustache from 'mustache';
@@ -19,7 +19,7 @@ export default class AppStore {
 	menuOpen: boolean = true;
 	drawerOpen: boolean = false;
 	labels: Label[] = LABELS;
-	users: Map<string, User> = new Map<string, User>();
+	users: ObservableMap<string, User> = new ObservableMap<string, User>();
 
 	toggleAddFriend: boolean = false;
 	toggleAddToGroup: boolean = false;
@@ -34,6 +34,14 @@ export default class AppStore {
 	get Users() {
 		return Array.from(this.users.values()).filter((e) => e.id !== this.user.id);
 	}
+
+	get Friends() {
+		return Array.from(this.users.values()).filter((e) => e.id !== this.user.id && e.isFriend);
+	}
+
+	get CurrentUserId() {
+		return this.user.id
+	}
 	//#region GET
 	getUserById = (id: string) => {
 		return this.users.get(id);
@@ -41,12 +49,16 @@ export default class AppStore {
 
 	getUserName = (id: string | undefined, you: boolean = false) => {
 		if (!id) return 'Unknown';
-		if (you && id === this.user.id) return this.$$('you');
+		if (you && id === this.user.id) return this.$$('you').toLocaleLowerCase();
 		return this.users.get(id)?.userName ?? 'Unknown';
 	};
 	getLabel = (id: string | undefined) => {
 		if(!id) return undefined;
 		return this.labels.find(e=> e.id === id);
+	}
+
+	isFriendFn = (id: string) => {
+		return this.users.get(id)?.isFriend ?? false;
 	}
 	//#endregion GET
 
@@ -70,6 +82,13 @@ export default class AppStore {
 	searchUserByPhoneNumber = (phoneNumber: string | undefined) => {
 		if (!phoneNumber) return [];
 		return this.Users.filter(e=> e.phoneNumber.includes(phoneNumber))
+	}
+
+	setFriend = (id: string, isFriend?: boolean) => {
+		const user = this.users.get(id);
+		if (user) {
+			this.users.set(id, {...user, isFriend: !isFriend});
+		}
 	}
 	//#endregion
 

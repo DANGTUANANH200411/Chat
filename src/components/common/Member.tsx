@@ -45,7 +45,7 @@ function Member(props: Props) {
 					)}
 				</Row>
 				{suffix}
-				{action && <div className={`member-action ${primaryClass}`}>{action}</div>}
+				{!isMe && action && <div className={`member-action ${primaryClass}`}>{action}</div>}
 			</Row>
 		</div>
 	);

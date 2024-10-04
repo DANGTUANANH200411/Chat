@@ -2,14 +2,13 @@ import {
 	CopyOutlined,
 	DeleteOutlined,
 	DownloadOutlined,
-	EditFilled,
 	EnterOutlined,
 	InfoCircleOutlined,
 	MoreOutlined,
 	PushpinFilled,
 	PushpinOutlined,
 	ShareAltOutlined,
-	StarOutlined,
+	UndoOutlined,
 	UnorderedListOutlined,
 } from '@ant-design/icons';
 import { Dropdown, MenuProps, Tooltip } from 'antd';
@@ -25,12 +24,16 @@ interface Props {
 }
 function ChatAction({ message }: Props) {
 	const {
-		appStore: { $$ },
+		appStore: { $$, user },
 		chatStore,
 	} = useStores();
-	const { Room, onPinMessage, onDeleteMessage, setReplyMessage, setModalDetail, onSelectMessage } = chatStore;
+	const { Room, onPinMessage, onDeleteMessage, setReplyMessage, setModalDetail, onSelectMessage, onRecallMessage } =
+		chatStore;
 	const { id, sender, content, isFile, data, recalled } = message;
 	const isPinned = Room?.pinMessages.find((e) => e.id === id) ? true : false;
+
+	const isMe = user.id === sender;
+
 	const items: MenuProps['items'] = [
 		{
 			key: 'copy',
@@ -50,16 +53,16 @@ function ChatAction({ message }: Props) {
 			icon: isPinned ? <PushpinFilled /> : <PushpinOutlined />,
 			onClick: () => onPinMessage(message),
 		},
-		{
-			key: 'star',
-			label: $$('start-msg'),
-			icon: <StarOutlined />,
-		},
+		// {
+		// 	key: 'star',
+		// 	label: $$('start-msg'),
+		// 	icon: <StarOutlined />,
+		// },
 		{
 			key: 'select',
 			label: $$('select-msg'),
 			icon: <UnorderedListOutlined />,
-			onClick: () => onSelectMessage(message.id),
+			onClick: () => onSelectMessage(message.id, message.sender),
 		},
 		{
 			key: 'details',
@@ -77,13 +80,23 @@ function ChatAction({ message }: Props) {
 					},
 			  ]
 			: []),
-		{
-			key: 'other',
-			label: $$('other-options'),
-		},
+		// {
+		// 	key: 'other',
+		// 	label: $$('other-options'),
+		// },
 		{
 			type: 'divider',
 		},
+		...(isMe
+			? [
+					{
+						key: 'recall',
+						label: $$('recall-msg'),
+						icon: <UndoOutlined rotate={90} />,
+						onClick: () => onRecallMessage(id),
+					},
+			  ]
+			: []),
 		{
 			key: 'delete',
 			label: $$('delete-for-me'),
@@ -94,11 +107,12 @@ function ChatAction({ message }: Props) {
 	];
 	return recalled ? (
 		<>
-			<EditFilled
-				className='text-secondary hoverable-icon'
-				style={{background: 'white', padding: 2, borderRadius: 15}}
-				onClick={() => setReplyMessage({ id, sender, content, isFile, data })}
-			/>
+			<Tooltip title={$$('delete-for-me')} destroyTooltipOnHide>
+				<DeleteOutlined
+					className='text-secondary hoverable-icon icon-danger'
+					onClick={() => onDeleteMessage(id)}
+				/>
+			</Tooltip>
 		</>
 	) : (
 		<>

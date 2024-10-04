@@ -21,7 +21,7 @@ function Reaction(props: Props) {
 			open={open}
 			content={
 				<div className='reaction-selector'>
-					<EmojiPicker reactionsDefaultOpen emojiStyle={EmojiStyle.FACEBOOK} onReactionClick={onClickEmoji} onEmojiClick={onClickEmoji} />
+					<EmojiPicker reactionsDefaultOpen emojiStyle={EmojiStyle.APPLE} onReactionClick={onClickEmoji} onEmojiClick={onClickEmoji} />
 				</div>
 			}
 			trigger={['click']}

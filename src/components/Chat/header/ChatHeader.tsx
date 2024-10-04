@@ -12,6 +12,7 @@ import {
 import { LabelMenu } from '../../common/LabelMenu';
 import GroupAvatar from '../../common/GroupAvatar';
 import UserAvatar from '../../common/UserAvatar';
+import { GROUP_AVT_SIZE } from '../../../utils/constants';
 
 function ChatHeader() {
 	const {
@@ -24,7 +25,7 @@ function ChatHeader() {
 
 	return (
 		<Row className='header chat-header' align='middle'>
-			{isGroup ? <GroupAvatar image={image} members={members} /> : <UserAvatar id={id} size={40} />}
+			{isGroup ? <GroupAvatar image={image} members={members} /> : <UserAvatar id={id} size={GROUP_AVT_SIZE} />}
 			<Row className='flex-grow' wrap={false}>
 				<Row style={{overflow: 'hidden'}}>
 					<Row wrap={false}>

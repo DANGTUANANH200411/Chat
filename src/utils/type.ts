@@ -27,7 +27,7 @@ export interface Message {
 	groupId: string;
 	sender: string;
 	content: string;
-	isFile: boolean;
+	isFile?: boolean;
 	fileSize?: number;
 	createDate: string;
 	lastUpdateDate: string;
@@ -38,13 +38,18 @@ export interface Message {
 	data?: any; //tmp for display image only FE
 	attachment?: Attachment[];
 	error?: boolean;
+	announce?: {
+		userId?: string;
+		type: AnnouceType;
+	}
+	isNameCard?: boolean;
 }
 export interface ReplyMessage {
 	id: string;
 	sender: string;
 	content: string;
 	data?:any;
-	isFile: boolean;
+	isFile?: boolean;
 }
 export interface MessageLog {
 	userId: string;
@@ -77,6 +82,7 @@ export interface RoomMember extends User{
 	lastLogTime?: string;
 	isRemoved?: boolean;
 	invitedBy: string;
+	role: RoleType;
 }
 export interface Label {
 	id: string;
@@ -93,7 +99,7 @@ export interface ReactionPopupProps {
 
 export enum Role {
 	'Owner' = 0,
-	'Vice Leader' = 1,
+	'Admin' = 1,
 	'Member' = 2,
 }
 
@@ -114,3 +120,5 @@ export interface ModalDetailMsgProps {
 	visible: boolean;
 	message?: Message;
 }
+
+export type AnnouceType = 'Add' | 'Remove' | 'AppointAdmin' | 'RemoveAdmin' | 'Leave';

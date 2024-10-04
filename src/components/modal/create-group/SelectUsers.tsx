@@ -16,7 +16,7 @@ interface Props {
 
 function SelectUsers(props: Props) {
 	const {
-		appStore: { Users, $$, labels },
+		appStore: { Friends, $$, labels },
 		chatStore: { selectedUsers, setSelectedUsers },
 	} = useStores();
 	const { joined } = props;
@@ -57,8 +57,8 @@ function SelectUsers(props: Props) {
 		}
 	};
 	const searchedUser = useMemo(() => {
-		if (selectedLabel === 'all' && !searchText) return Users;
-		return Users.filter(
+		if (selectedLabel === 'all' && !searchText) return Friends;
+		return Friends.filter(
 			(e) => (selectedLabel === 'all' || e.label === selectedLabel) && matchSearch(searchText, e)
 		);
 	}, [searchText, selectedLabel]);

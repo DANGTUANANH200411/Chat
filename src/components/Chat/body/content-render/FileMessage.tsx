@@ -1,7 +1,8 @@
 import React from "react";
 import { getFileIcon, isImage } from "../../../../utils/helper";
-import { Row, Image, Typography} from "antd";
+import { Row, Typography} from "antd";
 import filesize from "filesize";
+import CustomImage from "../../../common/CustomImage";
 
 interface Props {
 	content: string;
@@ -12,7 +13,7 @@ interface Props {
 function FileMessage(props: Props) {
     const {content, fileSize, data, imgStyle} = props;
     if (isImage(content)) {
-        return <Image src={data ?? content} style={{ minHeight: 150, maxHeight: '40vh', padding: 2, ...imgStyle}}></Image>;
+        return <CustomImage antd src={data ?? content} style={{ minWidth: 150, minHeight: 150, maxHeight: '40vh', padding: 2, ...imgStyle}}/>
     }
     return (
         <Row align='middle'>

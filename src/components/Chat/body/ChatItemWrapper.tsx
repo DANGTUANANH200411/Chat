@@ -1,10 +1,11 @@
-import { Row } from 'antd';
+import { Row, Space } from 'antd';
 import dayjs from 'dayjs';
 import { observer } from 'mobx-react';
 import React from 'react';
 import { useStores } from '../../../stores/stores';
 import { Message } from '../../../utils/type';
 import ChatItem from './ChatItem';
+import AnnounceItem from './announce/AnnounceItem';
 
 interface Props {
 	view?: true;
@@ -13,10 +14,10 @@ interface Props {
 function ChatItemWrapper(props: Props) {
 	const {
 		appStore: { user, getUserName },
-		chatStore: {listIdPinned},
+		chatStore: { listIdPinned },
 	} = useStores();
-	const {view, messages} = props;
-	return (
+	const { view, messages } = props;
+	return !messages[0].announce ? (
 		<Row className={`chat-item-wrapper ${messages[0].sender === user.id && 'me'}`} wrap={false}>
 			<Row className='flex-grow'>
 				{messages.map((e, idx, arr) => (
@@ -37,6 +38,12 @@ function ChatItemWrapper(props: Props) {
 				))}
 			</Row>
 		</Row>
+	) : (
+		<Space direction='vertical'>
+			{messages.map((e, idx) => (
+				<AnnounceItem message={e} key={idx} />
+			))}
+		</Space>
 	);
 }
 

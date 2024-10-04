@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import ViewPinned from './body/ViewPinned';
 import ModalDetailMessage from './modal/ModalDetailMessage';
 import SelectingBar from './body/SelectingBar';
+import ModalNameCard from './modal/ModalNameCard';
 function ChatWrapper() {
 	const { chatStore } = useStores();
 	const { activeRoom, Selecting } = chatStore;
@@ -37,7 +38,7 @@ function ChatWrapper() {
 			</div>
 			<ModalReactionLog />
 			<ModalDetailMessage />
-			{/* <Reaction/> */}
+			<ModalNameCard />
 		</>
 	) : (
 		<Row>WELLCOME TO MY CHAT APP</Row>

@@ -21,22 +21,22 @@
     font-weight: 500;
     line-height: 1.5;
 }
-.custom-group-avt :first-child{
+.custom-group-avt .ant-avatar:first-child{
     position: absolute;
     top: 0;
     left: 0;
 }
-.custom-group-avt :nth-child(2){
+.custom-group-avt .ant-avatar:nth-child(2){
     position: absolute;
     top: 0;
     right: 0;
 }
-.custom-group-avt :nth-child(3){
+.custom-group-avt .ant-avatar:nth-child(3){
     position: absolute;
     bottom: 0;
     left: 0;
 }
-.custom-group-avt :last-child{
+.custom-group-avt .ant-avatar:last-child{
     position: absolute;
     bottom: 0;
     right: 0;

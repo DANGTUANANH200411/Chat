@@ -1,7 +1,8 @@
-import { Row, Typography } from 'antd';
+import { Row, Skeleton, Typography } from 'antd';
 import { getLinkPreview } from 'link-preview-js';
 import React, { useEffect, useMemo, useState } from 'react';
 import './style.css';
+import CustomImage from '../../../common/CustomImage';
 interface Props {
 	id: string;
 	url: string;
@@ -44,8 +45,8 @@ function UrlMessage(props: Props) {
 				e.preventDefault();
 				window.open(viewData.url, '_blank');
 			}}
-		>
-			<img src={viewData.image} width={'100%'} />
+		>	
+			<CustomImage src={viewData.image} style={{ width:'100%'}}/>
 			<Row className='flex-grow' style={{ padding: 4, marginBottom: 8 }}>
 				<Typography.Text strong ellipsis className='preview-title'>
 					{viewData.title}

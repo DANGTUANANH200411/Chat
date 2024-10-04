@@ -8,9 +8,10 @@ import '../style.css';
 import MembersAction from './MembersAction';
 function Members() {
 	const {
-		appStore: { $$, drawerOpen, user: currentUser, setToggleAddToGroup, getUserName },
-		chatStore: { Room, onCopyGroup },
+		appStore: { $$, drawerOpen, user: currentUser, setToggleAddToGroup, getUserName, setDrawerOpen },
+		chatStore: { Room, onCopyGroup, onLeaveGroup, getRole },
 	} = useStores();
+
 	useEffect(() => {
 		if (!drawerOpen) {
 			document.documentElement.style.setProperty('--drawer-w', '0px');
@@ -18,6 +19,7 @@ function Members() {
 			document.documentElement.style.setProperty('--drawer-w', '20vw');
 		}
 	}, [drawerOpen]);
+
 	return (
 		<div className='drawer drawer-members max-height'>
 			{!drawerOpen ? (
@@ -31,7 +33,11 @@ function Members() {
 					</Row>
 					<Row className='body' style={{ padding: '.8rem' }}>
 						<Space className='max-width drawer-members-buttom' direction='vertical'>
-							<Button className='max-width text-primary' icon={<UserAddOutlined />} onClick={setToggleAddToGroup}>
+							<Button
+								className='max-width text-primary'
+								icon={<UserAddOutlined />}
+								onClick={setToggleAddToGroup}
+							>
 								{$$('add-friends-to-group')}
 							</Button>
 							<Row justify='space-between'>
@@ -55,15 +61,47 @@ function Members() {
 						</Space>
 						<Space size={24} className='max-width drawer-members-list' direction='vertical'>
 							{Room &&
-								Room.members.map((user) => (
-									<Member
-										key={user.id}
-										user={user}
-										isMe={user.id === currentUser.id}
-										info={Room.creatorId === user.id ? $$('owner') : `${$$('add-by')} ${getUserName(user.invitedBy, true).toLowerCase()}`}
-										action={<MembersAction isFriend={user.isFriend} role='Owner' />}
-									/>
-								))}
+								Room.members.map((user) => {
+									const role = getRole(user.id);
+									let desctiption = "";
+									switch (role) {
+										case 'Owner':
+											desctiption = $$('owner');
+											break;
+										case 'Admin':
+											desctiption = $$('admin');
+											break;
+										default:
+											desctiption = $$('add-by', {name: getUserName(user.invitedBy, true)});
+											break;
+									}
+									return (
+										<Member
+											key={user.id}
+											user={user}
+											isMe={user.id === currentUser.id}
+											info={desctiption}
+											action={<MembersAction id={user.id} role={role} />}
+											suffix={
+												user.id === currentUser.id ? (
+													<Button
+														type='primary'
+														danger
+														size='small'
+														onClick={() => {
+															onLeaveGroup();
+															setDrawerOpen(false);
+														}}
+													>
+														{$$('leave')}
+													</Button>
+												) : (
+													<></>
+												)
+											}
+										/>
+									);
+								})}
 						</Space>
 					</Row>
 				</>

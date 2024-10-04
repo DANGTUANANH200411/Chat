@@ -8,6 +8,7 @@ import GroupAvatar from '../../common/GroupAvatar';
 import UserAvatar from '../../common/UserAvatar';
 import TimeFromNow from './TimeFromNow';
 import { TagFilled } from '@ant-design/icons';
+import { GROUP_AVT_SIZE } from '../../../utils/constants';
 
 interface Props {
 	onClick?: React.MouseEventHandler<HTMLDivElement>;
@@ -20,7 +21,7 @@ function PreviewChatItem(props: ChatRoom & Props) {
 
 	return (
 		<Row className='preview-chat-item' onClick={onClick} wrap={false}>
-			{isGroup ? <GroupAvatar image={image} members={members} /> : <UserAvatar id={id} size={40} />}
+			{isGroup ? <GroupAvatar image={image} members={members} /> : <UserAvatar id={id} size={GROUP_AVT_SIZE} />}
 			<Row className='flex-grow' align='middle'>
 				<Row wrap={false}>
 					<Row className='flex-grow' wrap={false} style={{paddingRight: '8px'}}>

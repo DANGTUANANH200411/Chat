@@ -1,0 +1,18 @@
+import { Modal, Space } from 'antd';
+import { observer } from 'mobx-react';
+import React from 'react';
+import { useStores } from '../../../stores/stores';
+import SelectUsers from '../../modal/create-group/SelectUsers';
+
+function ModalNameCard() {
+	const { chatStore, appStore } = useStores();
+	const { mdlNmCardVisible, toggleMdlNmCard } = chatStore;
+	const { $$ } = appStore;
+	return (
+		<Modal title={$$('send-namecard')} open={mdlNmCardVisible} onOk={() => {}} onCancel={toggleMdlNmCard}>
+			<SelectUsers />
+		</Modal>
+	);
+}
+
+export default React.memo(observer(ModalNameCard));
