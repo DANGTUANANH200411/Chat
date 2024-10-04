@@ -4,15 +4,29 @@ import React, { useEffect, useMemo, useState } from 'react';
 import './style.css';
 interface Props {
 	id: string;
-	content: string;
+	url: string;
 }
 function UrlMessage(props: Props) {
-	const { id, content } = props;
+	const { id, url } = props;
 
 	const [viewData, setViewData] = useState<any>(undefined);
 	useEffect(() => {
-		getLinkPreview(content).then((result: any) => setViewData(result));
-	}, [content]);
+		const existData = sessionStorage.getItem(url);
+		if (existData) {
+			setViewData(JSON.parse(existData))
+		} else {
+			getLinkPreview(url).then((result: any) => {
+				const params = {
+					url: result.url,
+					title: result.title,
+					image: result.images[0] ?? result.favicons[0],
+					description: result.description,
+				}
+				sessionStorage.setItem(url, JSON.stringify(params))
+				setViewData(params)
+			});
+		}
+	}, [url]);
 
 	useEffect(() => {
 		if (!viewData) return;
@@ -20,8 +34,8 @@ function UrlMessage(props: Props) {
 	}, [viewData]);
 
 	return !viewData ? (
-		<a href={content} target='_blank'>
-			{content}
+		<a href={url} target='_blank'>
+			{url}
 		</a>
 	) : (
 		<Row
@@ -31,7 +45,7 @@ function UrlMessage(props: Props) {
 				window.open(viewData.url, '_blank');
 			}}
 		>
-			<img src={viewData.images[0] ?? viewData.favicons[0]} width={'100%'} />
+			<img src={viewData.image} width={'100%'} />
 			<Row className='flex-grow' style={{ padding: 4, marginBottom: 8 }}>
 				<Typography.Text strong ellipsis className='preview-title'>
 					{viewData.title}

@@ -24,7 +24,7 @@ function ChatContent(props: Props) {
 	} else if (isFile) {
 		return <FileMessage content={content} fileSize={fileSize} data={data} />;
 	} else if (isUrl(content) && !isImage(content)) {
-		return <UrlMessage id={id} content={content} />;
+		return <UrlMessage id={id} url={content} />;
 	} else {
 		return <TextMessage content={content} attachment={attachment} />;
 	}
