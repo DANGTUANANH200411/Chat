@@ -37,7 +37,7 @@ function TextMessage(props: Props) {
 		str = str.replace(urlRegx, urlReplacer);
 		return str.replace(mentionRegex, replacer);
 	};
-	console.log(parseContent())
+	
 	return (
 		<Typography.Text
 			className='text-primary'

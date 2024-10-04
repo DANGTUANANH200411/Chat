@@ -23,7 +23,6 @@
 	bottom: 0;
 	transition: height .2s ease-in-out;
 	outline: none;
-	scroll-behavior: smooth;
 }
 .chat-header {
 	padding: 0 0.8rem;

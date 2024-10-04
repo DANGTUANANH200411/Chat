@@ -15,6 +15,7 @@ function ChatBody() {
 	const [isEnd, setIsEnd] = useState<boolean>(false);
 	const [activeNode, setActiveNode] = useState<HTMLElement | null>(null);
 	const [visible, setVisible] = useState<boolean>(false);
+	
 	useEffect(() => {
 		setIsEnd(false);
 	}, [activeRoom]);
@@ -29,28 +30,31 @@ function ChatBody() {
 			setActiveNode(msg);
 			setActivePin(undefined);
 		}
-	}, [activePin, RoomMessages]);
+	}, [activePin]);
 
-	const scrollToBottom = () => {
-		visible && document.querySelector('.chat-body-view')!.scrollTo(0, 0);
-	};
-	const handleScroll = async (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+	const scrollToBottom = useCallback(() => {
+		const view = document.querySelector('.chat-body-view') as HTMLElement;
+		if (!view || !visible) return;
+		view.style.scrollBehavior = 'smooth';
+		view.scrollTo(0, 0);
+		view.style.scrollBehavior = 'unset';
+	}, [visible]);
+
+	const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement, UIEvent>) => {
 		if (activeNode) {
 			activeNode.classList.remove('forcus');
 			setActiveNode(null);
 		}
-		if (isEnd) return;
 		const { scrollHeight, scrollTop, clientHeight } = e.target as HTMLElement;
 		if (scrollTop < -1000) {
 			setVisible(true);
 		} else {
 			setVisible(false);
 		}
-		if (scrollHeight + scrollTop - 100 < clientHeight) {
-			const res = await onGetMessage();
-			if (res && !res.length) setIsEnd(true);
+		if (!isEnd && scrollHeight + scrollTop - 100 < clientHeight) {
+			onGetMessage().then(res => res && !res.length && setIsEnd(true));
 		}
-	};
+	}, [isEnd, activeNode])
 
 	const onDrop = useCallback((acceptedFiles: any) => {
 		const reject = (file: any) => {
