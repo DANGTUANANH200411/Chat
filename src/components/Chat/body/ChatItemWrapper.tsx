@@ -33,6 +33,7 @@ function ChatItemWrapper(props: Props) {
 						}
 						getUserName={getUserName}
 						pinned={listIdPinned.includes(e.id)}
+						recalled={e.recalled}
 						view={view}
 					/>
 				))}

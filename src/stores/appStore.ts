@@ -1,5 +1,5 @@
 import { makeAutoObservable, ObservableMap } from 'mobx';
-import { I18n, Label, LangType, User } from '../utils/type';
+import { DrawerType, I18n, Label, LangType, User } from '../utils/type';
 import { initI18n } from '../utils/i18n';
 import Mustache from 'mustache';
 import * as locale from '../locales';
@@ -17,7 +17,7 @@ export default class AppStore {
 
 	user: User = USERS[0];
 	menuOpen: boolean = true;
-	drawerOpen: boolean = false;
+	drawerOpen: DrawerType = undefined;
 	labels: Label[] = LABELS;
 	users: ObservableMap<string, User> = new ObservableMap<string, User>();
 
@@ -30,6 +30,8 @@ export default class AppStore {
 		makeAutoObservable(this);
 		initI18n(this);
 		USERS.map((e) => this.users.set(e.id, e));
+		const lang = localStorage.getItem('LANGUAGE') as LangType;
+		this.lang = lang ?? 'en';
 	}
 	get Users() {
 		return Array.from(this.users.values()).filter((e) => e.id !== this.user.id);
@@ -65,7 +67,10 @@ export default class AppStore {
 	//#region SET
 	setToggleAddFiend = () => this.toggleAddFriend = !this.toggleAddFriend;
 	setToggleAddToGroup = () => this.toggleAddToGroup = !this.toggleAddToGroup;
-	setLang = (lang: LangType) => (this.lang = lang);
+	setLang = (lang: LangType) => {
+		this.lang = lang;
+		localStorage.setItem('LANGUAGE', lang);
+	};
 
 	toggleDarkTheme = () => {
 		this.setting.darkTheme = !this.setting.darkTheme;
@@ -75,7 +80,7 @@ export default class AppStore {
 
 	toggleLeftMenu = () => (this.menuOpen = !this.menuOpen);
 
-	setDrawerOpen = (open: boolean) => (this.drawerOpen = open);
+	setDrawerOpen = (open: DrawerType) => (this.drawerOpen = open);
 	//#endregion SET
 
 	//#region API

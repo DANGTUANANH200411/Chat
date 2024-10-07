@@ -6,3 +6,20 @@
     height: calc(100% - 4.8rem);
     overflow: auto;
 }
+
+.drawer-group-info .body{
+    background-color: var(--bg-second);
+}
+.drawer-group {
+    background-color: var(--background-color);
+    height: fit-content;
+    padding: 8px;
+    margin-bottom: 4px;
+}
+
+.action-bar-item {
+    cursor: pointer;
+}
+.action-bar-item:hover *{
+    color: var(--primary-color)
+}

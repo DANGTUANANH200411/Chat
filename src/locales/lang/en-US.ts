@@ -81,13 +81,25 @@ const en = {
 	'recall-msg': 'Recall message',
 	'recalled-msg': 'This message is recalled',
 	'msg-notfound': 'Message not found',
-	'ann-add': '{{user1}} is added by {{user2}}',
-	'ann-remove': '{{user1}} is removed by {{user2}}',
+	'ann-add': '{{user2}} is added by {{user1}}',
+	'ann-remove': '{{user2}} is removed by {{user1}}',
 	'ann-appointed': '{{user1}} have appointed {{user2}} as admin',
 	'ann-remove-admin': '{{user1}} removed the admin role from {{user2}}',
 	'ann-leave': '{{name}} leaved',
 	leave: 'Leave',
+	'namecard': 'Namecard',
 	'send-namecard': 'Send namecard',
+	call: 'Call',
+	message: 'Message',
+	'copy-phone': 'Copy phone number',
+	undo: 'Undo',
+	'noti-del-msg': 'Deleted {{count}} message{{#plural}}s{{/plural}}',
+	'mute-group': 'Mute',
+	'unmute-group': 'Unmute',
+	pin: 'Pin',
+	unpin: 'Unpin',
+	'manage-group': 'Manage group',
+
 };
 
 export type ILocale = typeof en;

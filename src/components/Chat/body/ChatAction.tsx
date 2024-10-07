@@ -27,7 +27,7 @@ function ChatAction({ message }: Props) {
 		appStore: { $$, user },
 		chatStore,
 	} = useStores();
-	const { Room, onPinMessage, onDeleteMessage, setReplyMessage, setModalDetail, onSelectMessage, onRecallMessage } =
+	const { Room, onPinMessage, onDeleteMessages, setReplyMessage, setModalDetail, onSelectMessage, onRecallMessage } =
 		chatStore;
 	const { id, sender, content, isFile, data, recalled } = message;
 	const isPinned = Room?.pinMessages.find((e) => e.id === id) ? true : false;
@@ -102,7 +102,7 @@ function ChatAction({ message }: Props) {
 			label: $$('delete-for-me'),
 			icon: <DeleteOutlined />,
 			danger: true,
-			onClick: () => onDeleteMessage(id),
+			onClick: () => onDeleteMessages([id]),
 		},
 	];
 	return recalled ? (
@@ -110,7 +110,7 @@ function ChatAction({ message }: Props) {
 			<Tooltip title={$$('delete-for-me')} destroyTooltipOnHide>
 				<DeleteOutlined
 					className='text-secondary hoverable-icon icon-danger'
-					onClick={() => onDeleteMessage(id)}
+					onClick={() => onDeleteMessages([id])}
 				/>
 			</Tooltip>
 		</>
@@ -119,7 +119,7 @@ function ChatAction({ message }: Props) {
 			<Tooltip title={$$('reply')} destroyTooltipOnHide>
 				<EnterOutlined
 					className='text-secondary hoverable-icon'
-					onClick={() => setReplyMessage({ id, sender, content, isFile, data })}
+					onClick={() => setReplyMessage(message)}
 				/>
 			</Tooltip>
 			<Tooltip title={$$('forwarding')} destroyTooltipOnHide>

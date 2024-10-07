@@ -16,10 +16,11 @@ import {
 	User,
 } from '../utils/type';
 import { CHAT_ROOMS, MESSAGES } from '../utils/constants';
-import { isEmpty, newGuid, toNormalize } from '../utils/helper';
+import { isEmpty, isImage, newGuid, toNormalize } from '../utils/helper';
 import { stores } from './stores';
 import { SYSTEM_NOW } from '../utils/dateHelper';
 import { notify } from '../utils/notify';
+import { openUndo } from '../utils/notification';
 
 type DateMessage = {
 	[key: string]: Message[][];
@@ -113,6 +114,12 @@ export default class ChatStore {
 	get Role() {
 		return this.getRole(stores.appStore.CurrentUserId);
 	}
+
+	get Images() {
+		if (!this.activeRoom) return [];
+		return this.messages.filter((e) => e.groupId === this.activeRoom && isImage(e.content));
+	}
+
 	constructor() {
 		makeAutoObservable(this);
 	}
@@ -162,7 +169,10 @@ export default class ChatStore {
 			? this.selectMessages.delete(msgId)
 			: this.selectMessages.set(msgId, stores.appStore.CurrentUserId === sender);
 
-	toggleMdlNmCard = () => (this.mdlNmCardVisible = !this.mdlNmCardVisible);
+	toggleMdlNmCard = () => {
+		this.mdlNmCardVisible = !this.mdlNmCardVisible;
+		this.clearSelectedUsers();
+	};
 	//#endregion SET
 
 	//#region FUNCTION
@@ -308,22 +318,28 @@ export default class ChatStore {
 		this.pushMessage(message);
 	};
 
-	onSendNameCard = (userId: string) => {
+	onSendNameCard = () => {
 		const activeRoom = this.activeRoom;
-		if (!activeRoom) return;
-		const message: Message = {
-			id: newGuid(),
-			groupId: activeRoom,
-			sender: stores.appStore.CurrentUserId,
-			content: userId,
-			createDate: SYSTEM_NOW(),
-			lastUpdateDate: SYSTEM_NOW(),
-			recalled: false,
-			deleted: false,
-			logs: [],
-			isNameCard: true,
-		};
-		this.pushMessage(message);
+		if (!activeRoom || !this.selectedUsers.size) {
+			this.toggleMdlNmCard();
+			return;
+		}
+		Array.from(this.selectedUsers.keys()).forEach((id) => {
+			const message: Message = {
+				id: newGuid(),
+				groupId: activeRoom,
+				sender: stores.appStore.CurrentUserId,
+				content: id,
+				createDate: SYSTEM_NOW(),
+				lastUpdateDate: SYSTEM_NOW(),
+				recalled: false,
+				deleted: false,
+				logs: [],
+				isNameCard: true,
+			};
+			this.pushMessage(message);
+		});
+		this.toggleMdlNmCard();
 	};
 
 	onCreateGroup = (group: ChatRoom) => {
@@ -368,16 +384,7 @@ export default class ChatStore {
 		const room = this.getActiveRoom(roomId);
 		room!.label = label;
 	};
-	addFriendToGroup = () => {
-		const room = this.getActiveRoom();
-		if (!room) return;
-		room.members = [
-			...room.members,
-			...Array.from(this.selectedUsers.values()).map(
-				(e): RoomMember => ({ ...e, invitedBy: stores.appStore.CurrentUserId, role: 'Member' })
-			),
-		];
-	};
+
 	handleReaction = (id: string, reaction: string) => {
 		const userId = stores.appStore.CurrentUserId;
 		const log: MessageLog = {
@@ -403,9 +410,20 @@ export default class ChatStore {
 		}
 	};
 
-	onDeleteMessage = (id: string) => {
-		const message = this.getMessage(id);
-		message!.deleted = true;
+	onDeleteMessages = (ids: string[]) => {
+		ids.forEach((id) => {
+			const message = this.getMessage(id);
+			message!.deleted = true;
+		});
+		openUndo({
+			count: ids.length,
+			callback: () => {
+				ids.forEach((id) => {
+					const message = this.getMessage(id);
+					message!.deleted = false;
+				});
+			},
+		});
 	};
 
 	onRecallMessage = (id: string) => (this.getMessage(id)!.recalled = true);
@@ -435,6 +453,17 @@ export default class ChatStore {
 		this.setActiveRoom('');
 	};
 
+	addFriendToGroup = () => {
+		const room = this.getActiveRoom();
+		if (!room) return;
+		room.members = [
+			...room.members,
+			...Array.from(this.selectedUsers.values()).map(
+				(e): RoomMember => ({ ...e, invitedBy: stores.appStore.CurrentUserId, role: 'Member' })
+			),
+		];
+		Array.from(this.selectedUsers.keys()).forEach((id) => this.createAnnouncement('Add', id));
+	};
 	onRemoveMember = (userId: string) => {
 		this.createAnnouncement('Remove', userId);
 		const room = this.getActiveRoom();

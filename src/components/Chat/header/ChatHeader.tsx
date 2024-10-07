@@ -1,4 +1,4 @@
-import { Col, Dropdown, Row, Typography } from 'antd';
+import { Dropdown, Row, Typography } from 'antd';
 import { observer } from 'mobx-react';
 import { useStores } from '../../../stores/stores';
 import {
@@ -37,7 +37,7 @@ function ChatHeader() {
 						<UserOutlined className='text-secondary' />
 						<Typography.Text ellipsis
 							className='hover-change-color text-secondary text-small'
-							onClick={() => setDrawerOpen(true)}
+							onClick={() => setDrawerOpen('Members')}
 						>{`${Room.members.length} ${$$('members')}`}</Typography.Text>
 						<Dropdown trigger={['click']} menu={{ items: LabelMenu(id) }} destroyPopupOnHide>
 							<TagFilled rotate={45} className='hover-change-color'  style={{color: getLabel(label)?.color ?? 'var(--text-secondary)'}} />
@@ -69,7 +69,7 @@ function ChatHeader() {
 						className='hoverable-icon'
 						title={$$('room-info')}
 						style={{ color: drawerOpen ? 'var(--primary-color)' : 'unset' }}
-						onClick={() => setDrawerOpen(!drawerOpen)}
+						onClick={() => setDrawerOpen(drawerOpen ? undefined : 'Info')}
 					/>
 				</div>
 			</Row>

@@ -14,14 +14,14 @@ interface Props {
 	message: Message;
 	showTime: boolean;
 	pinned: boolean;
+	recalled: boolean;
 	getUserName: (id: string) => string;
 	view?: boolean;
 }
 function ChatItem(props: Props) {
-	const { id, isFirst, isLast, showTime, message, pinned, view, getUserName } = props;
-	const { sender, isNameCard, content, createDate } = message;
+	const { id, isFirst, isLast, showTime, message, pinned, view, recalled, getUserName } = props;
+	const { sender, isNameCard, content, createDate, logs } = message;
 	const [hover, setHover] = useState<boolean>(false);
-
 	return (
 		<Row wrap={false} style={{ direction: 'ltr' }}>
 			<ChatSelectBox id={id} sender={sender} />
@@ -37,18 +37,19 @@ function ChatItem(props: Props) {
 					</div>
 				</Row>
 
-				{!isNameCard ? (
+				{!isNameCard || recalled ? (
 					<ChatContentWrapper
 						isFirst={isFirst}
 						isLast={isLast}
 						message={message}
 						showTime={showTime}
 						pinned={pinned}
+						recalled={recalled}
 						getUserName={getUserName}
 						view={view}
 					/>
 				) : (
-					<NameCard id={content} createDate={createDate}/>
+					<NameCard isFirst={isFirst} isLast={isLast} showTime={showTime} sender={sender} msgId={id} id={content} createDate={createDate} />
 				)}
 
 				{!view && hover && (

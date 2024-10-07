@@ -6,10 +6,10 @@ import SelectUsers from '../../modal/create-group/SelectUsers';
 
 function ModalNameCard() {
 	const { chatStore, appStore } = useStores();
-	const { mdlNmCardVisible, toggleMdlNmCard } = chatStore;
+	const { mdlNmCardVisible, toggleMdlNmCard, onSendNameCard} = chatStore;
 	const { $$ } = appStore;
 	return (
-		<Modal title={$$('send-namecard')} open={mdlNmCardVisible} onOk={() => {}} onCancel={toggleMdlNmCard}>
+		<Modal title={$$('send-namecard')} open={mdlNmCardVisible} onOk={()=> onSendNameCard()} onCancel={toggleMdlNmCard}>
 			<SelectUsers />
 		</Modal>
 	);

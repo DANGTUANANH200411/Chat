@@ -50,6 +50,7 @@ export interface ReplyMessage {
 	content: string;
 	data?:any;
 	isFile?: boolean;
+	isNameCard?: boolean;
 }
 export interface MessageLog {
 	userId: string;
@@ -122,3 +123,5 @@ export interface ModalDetailMsgProps {
 }
 
 export type AnnouceType = 'Add' | 'Remove' | 'AppointAdmin' | 'RemoveAdmin' | 'Leave';
+
+export type DrawerType = 'Info' | 'Members' | 'Storage' | undefined;

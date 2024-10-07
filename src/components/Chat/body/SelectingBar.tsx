@@ -3,11 +3,10 @@ import React, { CSSProperties } from 'react';
 import { useStores } from '../../../stores/stores';
 import { Button, Row } from 'antd';
 import { CloseOutlined, DeleteOutlined, UndoOutlined } from '@ant-design/icons';
-import { runInAction } from 'mobx';
 
 function SelectingBar() {
 	const {
-		chatStore: { selectMessages, clearListSelectedMsg, onDeleteMessage, onRecallMessage },
+		chatStore: { selectMessages, clearListSelectedMsg, onDeleteMessages, onRecallMessage },
 	} = useStores();
 
 	const disabled = [...selectMessages.values()].some((e) => !e);
@@ -24,25 +23,21 @@ function SelectingBar() {
 				type='text'
 				icon={<UndoOutlined rotate={90} style={style} />}
 				style={style}
-				onClick={() =>
-					runInAction(() => {
-						selectMessages.forEach((_, key) => onRecallMessage(key));
-						clearListSelectedMsg();
-					})
-				}
+				onClick={() => {
+					selectMessages.forEach((_, key) => onRecallMessage(key));
+					clearListSelectedMsg();
+				}}
 			>
-				Remove messages
+				Recall messages
 			</Button>
 			<Button
 				type='text'
 				danger
 				icon={<DeleteOutlined style={{ color: 'red' }} />}
-				onClick={() =>
-					runInAction(() => {
-						selectMessages.forEach((_, key) => onDeleteMessage(key));
-						clearListSelectedMsg();
-					})
-				}
+				onClick={() => {
+					onDeleteMessages([...selectMessages.keys()]);
+					clearListSelectedMsg();
+				}}
 			>
 				Remove messages
 			</Button>

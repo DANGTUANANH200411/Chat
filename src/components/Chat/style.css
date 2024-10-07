@@ -162,13 +162,20 @@ body:is(.dark-theme) .chat-footer > * {
 	left: 2.1rem;
     bottom: -8px;
 }
+.chat-item-namecard-wrapper .send-time {
+    background-color: rgb(194, 194, 194);
+	padding: 0px 8px;
+    border-radius: 15px;
+	width: fit-content;
+	color: white !important;
+}
 .chat-item-content:not(.recalled):is(.short) .send-time {
 	position: absolute;
     bottom: 0;
-    background-color: #ffffff;
+    background-color: rgb(194, 194, 194);
     padding: 0px 8px;
     border-radius: 15px;
-	border: 1px solid var(--border-color);
+	color: white !important;
 }
 
 body:is(.dark-theme) .chat-item-content {
@@ -208,6 +215,7 @@ body:is(.dark-theme) .chat-item-username {
 	padding: 0px 8px;
     background: white;
     border-radius: 20px;
+	margin-bottom: 4px;
 }
 .chat-item-action {
 	font-size: medium;

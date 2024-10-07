@@ -1,37 +1,69 @@
-import { Button, QRCode, Row, Skeleton } from 'antd';
+import { QRCode, Row, Skeleton, Typography } from 'antd';
 import React from 'react';
 import Member from '../../../common/Member';
 import { useStores } from '../../../../stores/stores';
 import ChatTime from '../chat-item/ChatTime';
-
+import { notify } from '../../../../utils/notify';
+import Reaction from '../../popup/Reaction';
+import { observer } from 'mobx-react';
 interface Props {
+	msgId: string;
 	id: string;
 	createDate: string;
+	isFirst: boolean;
+	isLast: boolean;
+	sender: string;
+	showTime: boolean;
 }
 function NameCard(props: Props) {
 	const {
-		appStore: { getUserById },
+		appStore: { $$, getUserById, getUserName },
 	} = useStores();
-	const { id, createDate } = props;
+	const { msgId, id, createDate, isFirst, isLast, showTime, sender } = props;
 	const user = getUserById(id);
 	return user ? (
-		<Row className='chat-item-namecard'>
-			<Member user={user} info={user.phoneNumber} />
-			<QRCode
-				value={id}
-				errorLevel='L'
-				size={56}
-				style={{ padding: 4, background: 'white', borderRadius: 'unset', alignSelf: 'end' }}
-			/>
-			{/* <Row>
-				<Button>Call</Button>
-				<Button>Message</Button>
-			</Row> */}
-			<ChatTime date={createDate}/>
-		</Row>
+		<div className='chat-item-namecard-wrapper'>
+			{isFirst && (
+				<Typography.Link className='chat-item-username small-text text-ellipsis alone' onClick={() => {}}>
+					{getUserName(sender)}
+				</Typography.Link>
+			)}
+			<div className='chat-item-namecard'>
+				<Row className='chat-item-namecard-data'>
+					<Member user={user} info={user.phoneNumber} />
+					<QRCode
+						value={'https://github.com/mk04-dev'}
+						errorLevel='L'
+						size={60}
+						style={{ padding: 4, background: 'white', borderRadius: 'unset', alignSelf: 'end' }}
+					/>
+				</Row>
+				<Row className='chat-item-namecard-btn'>
+					<div className='chat-item-namecard-btn-call' onClick={() => notify('Incomming')}>
+						{$$('call')}
+					</div>
+					<div className='chat-item-namecard-btn-msg' onClick={() => notify('Incomming')}>
+						{$$('message')}
+					</div>
+				</Row>
+			</div>
+			<div style={{ position: 'relative', marginBottom: 8 }}>
+				<Reaction id={msgId} />
+			</div>
+			<div
+				className='chat-item-namecard-copy'
+				onClick={() => {
+					navigator.clipboard.writeText(user.phoneNumber);
+					notify('Copied', 'success');
+				}}
+			>
+				{$$('copy-phone')}
+			</div>
+			{(isLast || showTime) && <ChatTime date={createDate} />}
+		</div>
 	) : (
 		<Skeleton.Node />
 	);
 }
 
-export default React.memo(NameCard);
+export default React.memo(observer(NameCard));

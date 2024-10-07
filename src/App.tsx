@@ -1,11 +1,11 @@
 import { useEffect, useLayoutEffect, useMemo } from 'react';
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, notification } from 'antd';
 import enUS from 'antd/locale/en_US';
 import viVN from 'antd/locale/vi_VN';
 import { useStores } from './stores/stores';
 import { observer } from 'mobx-react';
 import Main from './components/Main';
-import TopBar from './components/topbar/TopBar';
+
 function App() {
 	const { appStore } = useStores();
 	const { setting, lang } = appStore;
@@ -24,8 +24,11 @@ function App() {
 				return enUS;
 		}
 	}, [lang]);
+
+	const [api, contextHolder] = notification.useNotification();
 	return (
 		<ConfigProvider locale={locale}>
+			{contextHolder}
 			<Main />
 		</ConfigProvider>
 	);

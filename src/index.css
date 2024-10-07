@@ -7,6 +7,7 @@ html {
 	--shadow-color: #e7e7e7;
 	--color-white: #ffffff;
 	--background-color: #ebf0ff;
+	--bg-second: #b9b9b9;
 	--border-color: rgb(199 199 199);
 	--header-height: 4rem;
 	--side-bar-w: 3vw;
@@ -16,7 +17,7 @@ html {
 }
 body:is(.dark-theme) {
 	--text-color: #ffffff;
-	--background-color: var(--bg-dark);
+	--background-color: #0f153b;
 }
 body {
 	margin: 0;
@@ -107,6 +108,7 @@ code {
 .header {
 	height: var(--header-height);
 	border-bottom: 1px solid var(--border-color);
+	position: relative;
 }
 .header * {
 	font-size: 1.2rem;
@@ -156,4 +158,11 @@ code {
 }
 .fit-height {
 	height: fit-content !important;
+}
+.div-button {
+	cursor: pointer;
+}
+.div-button:hover,
+.div-button:hover * {
+	color: var(--primary-color);
 }

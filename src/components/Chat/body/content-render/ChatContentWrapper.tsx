@@ -3,7 +3,6 @@ import { Message } from '../../../../utils/type';
 import { Row, Typography } from 'antd';
 import ChatContent from '../ChatContent';
 import ReplyContent from '../ReplyContent';
-import ListReaction from '../chat-item/ListReaction';
 import { PushpinFilled } from '@ant-design/icons';
 import Reaction from '../../popup/Reaction';
 import { isImage, isUrl } from '../../../../utils/helper';
@@ -15,15 +14,14 @@ interface Props {
 	message: Message;
 	showTime: boolean;
 	pinned: boolean;
+	recalled: boolean;
 	getUserName: (id: string) => string;
 	view?: boolean;
 }
-function ChatContenWrapper(props: Props) {
-	const { isFirst, isLast, showTime, message, pinned, view, getUserName } = props;
-	const { sender, content, recalled, createDate, logs, isFile, fileSize, reply, attachment, data, isNameCard } =
-		message;
+function ChatContentWrapper(props: Props) {
+	const { isFirst, isLast, showTime, message, pinned, recalled, view, getUserName } = props;
+	const { id, sender, content, createDate, isFile, fileSize, reply, attachment, data } = message;
 	const isShort = useMemo(() => (isFile && (isImage(content) || isUrl(content)) ? 'short' : ''), [content]);
-
 	return (
 		<div className={`chat-item-content ${recalled && 'recalled'} ${isShort}`} id={message.id}>
 			{isFirst && (
@@ -35,20 +33,17 @@ function ChatContenWrapper(props: Props) {
 
 			<Row className='chat-content'>
 				<ChatContent
-					id={message.id}
+					id={id}
 					content={content}
 					recalled={recalled}
 					isFile={isFile}
 					data={data}
 					fileSize={fileSize}
 					attachment={attachment}
-					isNameCard={isNameCard}
 				/>
 				{!recalled && !view && (
 					<>
 						<Reaction id={message.id} />
-
-						{logs.length > 0 && <ListReaction logs={logs} />}
 
 						{pinned && <PushpinFilled className='chat-item-pin-icon' />}
 					</>
@@ -59,5 +54,4 @@ function ChatContenWrapper(props: Props) {
 		</div>
 	);
 }
-
-export default React.memo(ChatContenWrapper);
+export default React.memo(ChatContentWrapper);

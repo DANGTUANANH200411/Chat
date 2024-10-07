@@ -568,7 +568,7 @@ const MESSAGES: Message[] = [
 	{
 		id: newGuid(),
 		groupId: GROUP_ID[0],
-		sender: USERS[0].id,
+		sender: USERS[1].id,
 		content: USERS[0].id,
 		createDate: toSystemDate(dayjs().subtract(22, 'h')),
 		lastUpdateDate: toSystemDate(dayjs().subtract(22, 'h')),
