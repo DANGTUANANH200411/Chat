@@ -1,4 +1,3 @@
-
 .chat-view {
 	display: flex;
 	height: calc(100vh - var(--header-height));
@@ -21,7 +20,7 @@
 	display: flex;
 	flex-direction: column-reverse;
 	bottom: 0;
-	transition: height .2s ease-in-out;
+	transition: height 0.2s ease-in-out;
 	outline: none;
 }
 .chat-header {
@@ -116,7 +115,7 @@ body:is(.dark-theme) .chat-footer > * {
 	color: var(--text-primary);
 	border: 1px solid #d7d7d7;
 	border-radius: 10px;
-	max-width: 85%;
+	max-width: 70%;
 	width: fit-content;
 	position: relative;
 }
@@ -136,7 +135,7 @@ body:is(.dark-theme) .chat-footer > * {
 	padding-left: 0;
 	padding-right: 0;
 }
-.chat-item-content:not(.recalled):is(.short) .ant-image-img{
+.chat-item-content:not(.recalled):is(.short) .ant-image-img {
 	border-radius: 8px;
 }
 .chat-item-content:not(.recalled):is(.short) .chat-item-username {
@@ -147,34 +146,34 @@ body:is(.dark-theme) .chat-footer > * {
 }
 .chat-item-wrapper:not(.me) .chat-item-content:not(.recalled):is(.short) .reaction-action {
 	right: 0.8rem;
-    bottom: -8px;
+	bottom: -8px;
 }
 .chat-item-wrapper:not(.me) .chat-item-content:not(.recalled):is(.short) .list-reaction {
-    bottom: -8px;
+	bottom: -8px;
 	right: 2.1rem;
 }
 
 .chat-item-wrapper:is(.me) .chat-item-content:not(.recalled):is(.short) .reaction-action {
 	left: 0.8rem;
-    bottom: -8px;
+	bottom: -8px;
 }
 .chat-item-wrapper:is(.me) .chat-item-content:not(.recalled):is(.short) .list-reaction {
 	left: 2.1rem;
-    bottom: -8px;
+	bottom: -8px;
 }
 .chat-item-namecard-wrapper .send-time {
-    background-color: rgb(194, 194, 194);
+	background-color: rgb(194, 194, 194);
 	padding: 0px 8px;
-    border-radius: 15px;
+	border-radius: 15px;
 	width: fit-content;
 	color: white !important;
 }
 .chat-item-content:not(.recalled):is(.short) .send-time {
 	position: absolute;
-    bottom: 0;
-    background-color: rgb(194, 194, 194);
-    padding: 0px 8px;
-    border-radius: 15px;
+	bottom: 0;
+	background-color: rgb(194, 194, 194);
+	padding: 0px 8px;
+	border-radius: 15px;
 	color: white !important;
 }
 
@@ -213,8 +212,8 @@ body:is(.dark-theme) .chat-item-username {
 }
 .chat-item-username.alone {
 	padding: 0px 8px;
-    background: white;
-    border-radius: 20px;
+	background: white;
+	border-radius: 20px;
 	margin-bottom: 4px;
 }
 .chat-item-action {
@@ -223,14 +222,12 @@ body:is(.dark-theme) .chat-item-username {
 	flex-wrap: nowrap;
 	direction: ltr;
 	height: 100%;
-    align-items: center;
-	
+	align-items: center;
 }
 .chat-item-wrapper:not(.me) .chat-item-action {
 	margin-left: 2rem;
-
 }
-	.chat-item-wrapper:is(.me) .chat-item-action {
+.chat-item-wrapper:is(.me) .chat-item-action {
 	margin-right: 2rem;
 }
 
@@ -239,7 +236,7 @@ body:is(.dark-theme) .chat-item-username {
 	right: 0rem;
 	bottom: -0.6rem;
 	direction: rtl;
-    font-size: 14px;
+	font-size: 14px;
 	border: 1px solid #d7d7d7;
 	color: #757575;
 	padding: 2px;
@@ -255,24 +252,24 @@ body:is(.dark-theme) .chat-item-username {
 	color: black;
 }
 .list-reaction {
-    display: flex;
+	display: flex;
 	border-radius: 15px;
 	background-color: white;
 	border: 1px solid #d7d7d7;
-    position: absolute;
+	position: absolute;
 	right: 1.2rem;
 	bottom: -0.6rem;
-    padding: 1px;
+	padding: 1px;
 }
 .me .list-reaction {
 	right: unset;
 	left: 1.2rem;
 }
 .list-reaction img {
-	width: .8rem;
+	width: 0.8rem;
 	padding: 1px;
 }
-.reaction-icon{
+.reaction-icon {
 	font-size: x-small;
 }
 
@@ -284,7 +281,7 @@ body:is(.dark-theme) .chat-item-username {
 	border-bottom: 1px solid #d7d7d7;
 	padding: 0 1rem 0 0;
 	position: relative;
-	transition: height .2s ease-in-out;
+	transition: height 0.2s ease-in-out;
 	overflow: auto;
 }
 .chat-body-pin.expanded {
@@ -307,7 +304,7 @@ body:is(.dark-theme) .chat-item-username {
 	justify-content: center;
 }
 
-.chat-body-pin-preview { 
+.chat-body-pin-preview {
 	width: calc(100% - 8rem);
 }
 .chat-body-pin-more {
@@ -315,15 +312,15 @@ body:is(.dark-theme) .chat-item-username {
 }
 .chat-body-pin-close {
 	position: absolute;
-    bottom: 0px;
+	bottom: 0px;
 	font-size: 0.6rem;
 	width: 100%;
 	display: flex;
 	justify-content: center;
 }
 .chat-body-pin-close-btn {
-	padding: .2rem 1.4rem .1rem 1.4rem;
-    background: white;
+	padding: 0.2rem 1.4rem 0.1rem 1.4rem;
+	background: white;
 	color: var(--text-secondary);
 	border: 1px solid var(--border-color);
 	border-bottom: unset;
@@ -343,9 +340,9 @@ body:is(.dark-theme) .chat-item-username {
 	min-height: fit-content;
 }
 .reaction-selector {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 	justify-content: space-around;
 }
 .reaction-selector img {
@@ -357,10 +354,10 @@ body:is(.dark-theme) .chat-item-username {
 .reply-content {
 	border-left: 2px solid var(--primary-color);
 	direction: ltr;
-	padding-left: .4rem;
+	padding-left: 0.4rem;
 	display: flex;
-    column-gap: 0.8rem;
-    align-items: center;
+	column-gap: 0.8rem;
+	align-items: center;
 	cursor: pointer;
 }
 .chat-footer .preview-upload,
@@ -373,7 +370,7 @@ body:is(.dark-theme) .chat-item-username {
 	padding-left: 1rem;
 }
 
-.chat-footer .preview-upload > div{
+.chat-footer .preview-upload > div {
 	max-height: 20vh;
 	overflow: auto;
 }
@@ -389,30 +386,30 @@ body:is(.dark-theme) .chat-item-username {
 	overflow-y: auto;
 }
 
-.list-reaction{
+.list-reaction {
 	direction: rtl;
 }
-.me .list-reaction{
+.me .list-reaction {
 	direction: ltr;
 }
 
-.list-reaction .ant-avatar-string{
+.list-reaction .ant-avatar-string {
 	transform: scale(0.5) !important;
 	color: black;
 }
 
 /*override antd group gap*/
-.list-reaction .ant-avatar-group >*:not(:first-child) {
-    margin-inline-start: -4px;
+.list-reaction .ant-avatar-group > *:not(:first-child) {
+	margin-inline-start: -4px;
 }
 .drag-background {
 	background: #bce6ff80;
-    position: absolute;
-    z-index: 10;
-    display: flex;
-    border: 2px var(--primary-color) dashed;
-    font-size: 1.4rem;
-    color: black;
+	position: absolute;
+	z-index: 10;
+	display: flex;
+	border: 2px var(--primary-color) dashed;
+	font-size: 1.4rem;
+	color: black;
 	height: calc(100% - 4px); /*100% - border*/
 	width: calc(100% - 4px);
 }
@@ -452,5 +449,5 @@ body:is(.dark-theme) .chat-item-username {
 	position: absolute;
 	right: 2rem;
 	bottom: 2rem;
-	transition: opacity .5s ease-in-out;
+	transition: opacity 0.5s ease-in-out;
 }

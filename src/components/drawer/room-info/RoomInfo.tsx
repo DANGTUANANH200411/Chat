@@ -67,22 +67,20 @@ function RoomInfo() {
 				</Typography.Text>
 			</Row>
 			<div className='body'>
-				<div className='max-width drawer-group'>
-					<Flex vertical justify='center' align='center'>
-						{isGroup ? (
-							<GroupAvatar image={image} members={members} />
-						) : (
-							<UserAvatar id={id} size={GROUP_AVT_SIZE} />
-						)}
-						<Flex style={{ width: '80%' }} justify='center'>
-							<Typography.Text strong ellipsis>
-								{name}
-							</Typography.Text>
-							<EditOutlined />
-						</Flex>
+				<Flex vertical justify='center' align='center' className='max-width drawer-group'>
+					{isGroup ? (
+						<GroupAvatar image={image} members={members} />
+					) : (
+						<UserAvatar id={id} size={GROUP_AVT_SIZE} />
+					)}
+					<Flex style={{ width: '80%' }} justify='center'>
+						<Typography.Text strong ellipsis>
+							{name}
+						</Typography.Text>
+						<EditOutlined />
 					</Flex>
 					<ActionBar />
-				</div>
+				</Flex>
 				<Collapse bordered={false} items={items} defaultActiveKey={items.map((e) => e.key) as any}></Collapse>
 			</div>
 		</div>

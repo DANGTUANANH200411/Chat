@@ -10,7 +10,7 @@ function ActionBar() {
 		appStore: { $$ },
 	} = useStores();
 	return (
-		<Flex justify='space-between' gap='large' style={{ marginTop: 12 }}>
+		<Flex justify='space-between' gap='large' style={{ marginTop: 12, width: '90%' }}>
 			<Flex vertical align='center' className='action-bar-item'>
 				<FontAwesomeIcon icon={true ? faBell : faBellSlash} style={{ fontSize: 20 }} />
 				<span style={{ textAlign: 'center' }}>{$$(true ? 'mute-group' : 'unmute-group')}</span>

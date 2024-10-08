@@ -21,7 +21,7 @@ function TextMessage(props: Props) {
 	};
 
 	const urlReplacer = (matchString: string) => {
-		if (matchString.startsWith("https://cdn.jsdelivr.net")) return matchString;
+		if (matchString.startsWith('https://cdn.jsdelivr.net')) return matchString;
 		if (isImage(matchString)) {
 			listSrc.push(matchString);
 		}
@@ -37,7 +37,7 @@ function TextMessage(props: Props) {
 		str = str.replace(urlRegx, urlReplacer);
 		return str.replace(mentionRegex, replacer);
 	};
-	
+
 	return (
 		<Typography.Text
 			className='text-primary'
@@ -55,7 +55,7 @@ function TextMessage(props: Props) {
 					))}
 				</Image.PreviewGroup>
 			)}
-			{listSrc.length === 1 && <Image src={listSrc[0]} style={{ maxHeight: 200, padding: 2 }}></Image>}
+			{/* {listSrc.length === 1 && <Image src={listSrc[0]} style={{ maxHeight: 200, padding: 2 }}></Image>} */}
 		</Typography.Text>
 	);
 }

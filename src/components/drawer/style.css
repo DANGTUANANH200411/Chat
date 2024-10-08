@@ -1,25 +1,112 @@
 .drawer-members-buttom {
-    height: 4.8rem;
+	height: 4.8rem;
 }
 
 .drawer-members-list {
-    height: calc(100% - 4.8rem);
-    overflow: auto;
+	height: calc(100% - 4.8rem);
+	overflow: auto;
 }
 
-.drawer-group-info .body{
-    background-color: var(--bg-second);
-}
 .drawer-group {
-    background-color: var(--background-color);
-    height: fit-content;
-    padding: 8px;
-    margin-bottom: 4px;
+	background-color: var(--background-color);
+	height: fit-content;
+	padding: 8px;
 }
 
 .action-bar-item {
-    cursor: pointer;
+	cursor: pointer;
 }
-.action-bar-item:hover *{
-    color: var(--primary-color)
+.action-bar-item:hover * {
+	color: var(--primary-color);
+}
+
+.body .ant-tabs-nav {
+	margin: 0;
+	background-color: var(--background-color);
+	padding-left: 12px;
+}
+
+.body .ant-tabs-content,
+.body .ant-tabs-tabpane {
+	height: 100%;
+}
+
+.body .storage-item {
+	position: relative;
+}
+
+.body .storage-item-checkbox {
+	position: absolute;
+	top: 0;
+	left: 4px;
+	z-index: 1;
+}
+
+.body .storage-item-action {
+	position: absolute;
+	top: 0;
+	right: 0;
+	visibility: hidden;
+}
+
+.body .storage-item:hover .storage-item-action {
+	visibility: visible;
+}
+.body .storage-item .storage-item-icon {
+	background-color: white;
+}
+.drawer .header-button-left {
+	position: absolute;
+	left: 0;
+}
+.drawer .header-button-right {
+	position: absolute;
+	right: 0;
+	padding: 2px 12px;
+	font-size: small;
+	border-radius: 15px;
+	cursor: pointer;
+}
+.drawer .header-button-right:hover {
+	background-color: rgb(198, 196, 196);
+}
+
+.storage-tabs {
+	height: 100%;
+}
+.body:has(.selecting-bar) .storage-tabs {
+	height: calc(100% - 3rem);
+}
+
+.selecting-bar {
+	background-color: white;
+	border-top: 1px solid var(--border-color);
+	height: 3rem;
+	padding: 0 12px;
+}
+.selecting-bar .count {
+	background-color: rgb(226, 227, 255);
+	padding: 0 4px;
+	border-radius: 2px;
+}
+
+.selecting-bar .circle {
+	background-color: rgb(226, 227, 255);
+	padding: 6px;
+	border-radius: 15px;
+}
+.selecting-bar .circle.btn {
+	cursor: pointer;
+}
+
+.selecting-bar .circle:not(.danger).btn:hover {
+	background-color: rgb(155, 158, 251);
+}
+
+.selecting-bar .circle.danger {
+	color: red;
+	background-color: rgb(255, 226, 226);
+}
+.selecting-bar .circle:is(.danger).btn:hover {
+	background-color: rgb(255, 144, 144);
 }

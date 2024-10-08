@@ -16,11 +16,13 @@ interface Props {
 	attachment?: Attachment[];
 }
 function ChatContent(props: Props) {
-	const {appStore: {$$}} = useStores();
+	const {
+		appStore: { $$ },
+	} = useStores();
 	const { id, content, recalled, isFile, fileSize, attachment, data } = props;
-	
+
 	if (recalled) {
-		return <>{$$('recalled-msg')}</>
+		return <>{$$('recalled-msg')}</>;
 	} else if (isFile) {
 		return <FileMessage content={content} fileSize={fileSize} data={data} />;
 	} else if (isUrl(content) && !isImage(content)) {

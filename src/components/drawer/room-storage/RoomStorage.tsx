@@ -1,51 +1,67 @@
-import { Row, Typography, Image, Col, Divider } from 'antd';
-import React, { useMemo } from 'react';
-import { useStores } from '../../../stores/stores';
-import CustomImage from '../../common/CustomImage';
-import { Message } from '../../../utils/type';
-import { displayChatDate } from '../../../utils/dateHelper';
-import { observer } from 'mobx-react';
 import { CaretLeftOutlined } from '@ant-design/icons';
+import { Row, Tabs, Typography } from 'antd';
+import { observer } from 'mobx-react';
+import React, { useEffect, useState } from 'react';
+import { useStores } from '../../../stores/stores';
+import FileTab from './tabs/FileTab';
+import LinkTab from './tabs/LinkTab';
+import PhotoTab from './tabs/PhotoTab';
+import SelectingBar from './tabs/components/SelectingBar';
+import { StorageType } from '../../../utils/type';
 
 function RoomStorage() {
 	const {
 		appStore: { $$, setDrawerOpen },
-		chatStore: { Images },
+		chatStore: {
+			storageSelect: { selecting },
+			setStorageSelect,
+			clearStorageSelect,
+		},
 	} = useStores();
 
-	const groupByDate: { [date: string]: Message[] } = useMemo(() => {
-		return Images.reduce((rv: any, x) => {
-			const date = x.createDate.substring(0, 8);
-			(rv[date] = rv[date] || []).push(x);
-			return rv;
-		}, {});
-	}, [Images]);
+	useEffect(() => {
+		return () => {
+			clearStorageSelect();
+		};
+	}, []);
 
+	const [type, setType] = useState<StorageType>('File');
 	return (
 		<div className='drawer max-height'>
 			<Row className='header' justify='center' align='middle'>
 				<CaretLeftOutlined
-					className='hoverable-icon'
-					style={{ position: 'absolute', left: 0 }}
+					className='header-button-left hoverable-icon'
 					onClick={() => setDrawerOpen('Info')}
 				/>
 				<Typography.Text strong ellipsis>
-					Storage
+					{$$('media-storage')}
 				</Typography.Text>
+				<div
+					className='header-button-right'
+					onClick={() => (selecting ? clearStorageSelect() : setStorageSelect({ selecting: !selecting }))}
+				>
+					{$$(selecting ? 'cancel' : 'select')}
+				</div>
 			</Row>
-			<div className='body' style={{ padding: '0 .8rem', overflow: 'auto' }}>
-				<Image.PreviewGroup>
-					{Object.entries(groupByDate).map(([k, values]) => (
-						<Row gutter={[12, 12]} className='max-width'>
-							<Divider orientation='left'>{displayChatDate(k)}</Divider>
-							{values.map((e) => (
-								<Col span={6}>
-									<CustomImage antd key={e.id} src={e.data ?? e.content} />
-								</Col>
-							))}
-						</Row>
-					))}
-				</Image.PreviewGroup>
+			<div className='body'>
+				<Tabs
+					className='storage-tabs'
+					onChange={(key) => {
+						setType(key as StorageType);
+						clearStorageSelect();
+					}}
+				>
+					<Tabs.TabPane tab='Photos/Videos' key='Photo'>
+						<PhotoTab />
+					</Tabs.TabPane>
+					<Tabs.TabPane tab='Files' key='File'>
+						<FileTab />
+					</Tabs.TabPane>
+					<Tabs.TabPane tab='Links' key='Link'>
+						<LinkTab />
+					</Tabs.TabPane>
+				</Tabs>
+				{selecting && <SelectingBar type={type} />}
 			</div>
 		</div>
 	);

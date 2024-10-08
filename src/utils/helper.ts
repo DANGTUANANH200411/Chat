@@ -100,10 +100,12 @@ export const isServer = typeof window === 'undefined';
 
 export const isClient = !isServer;
 
-export const urlRegx = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
+export const urlRegx =
+	/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
 
 export function isUrl(path: string): boolean {
-	const reg = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/i;
+	const reg =
+		/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/i;
 	return reg.test(path);
 }
 
@@ -129,11 +131,11 @@ export function template(str: string, args: Record<string, any> = {}) {
 		return args[name] || '';
 	});
 }
-export const toNormalize = (str: string) =>
+export const toNormalize = (str?: string) =>
 	str
-		.normalize('NFD')
+		?.normalize('NFD')
 		.replace(/[\u0300-\u036f]/g, '')
-		.toLocaleLowerCase();
+		.toLocaleLowerCase() ?? '';
 
 export const newGuid = () => crypto.randomUUID();
 export const getMobileCode = (code: string) => COUNTRIES.find((e) => e.code === code)?.phone ?? '';
@@ -191,26 +193,26 @@ export function distictBy(arr: any[], key: (item: any) => unknown) {
 
 export function getExt(str: string) {
 	const match = str.match(/\.[0-9a-z]+$/i);
-    return match ? match[0].slice(1) : "";
+	return match ? match[0].slice(1) : '';
 }
 
-export function downloadUrl (url: string, fileName: string) {
+export function downloadUrl(url: string, fileName?: string) {
 	fetch(url)
-        .then((res) => res.blob())
+		.then((res) => res.blob())
 		.then((blob) => {
-            const link = document.createElement("a");
+			const link = document.createElement('a');
 			link.href = URL.createObjectURL(blob);
-			link.download = fileName;
+			link.download = fileName ?? url.split('/').at(-1) ?? '';
 			link.click();
-        })
+		})
 		.catch((error) => {
-            console.log(error)
-        });
+			console.log(error);
+		});
 }
 
-export function groupBy (arr: any[], key: string) {
-	return arr.reduce(function(rv, x) {
-	  (rv[x[key]] = rv[x[key]] || []).push(x);
-	  return rv;
+export function groupBy(arr: any[], key: string) {
+	return arr.reduce(function (rv, x) {
+		(rv[x[key]] = rv[x[key]] || []).push(x);
+		return rv;
 	}, {});
-  };
+}

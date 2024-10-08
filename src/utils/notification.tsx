@@ -16,11 +16,14 @@ export const openUndo = (props: Props) => {
 		placement: 'bottomLeft',
 		description: (
 			<>
-				<span>{$$('noti-del-msg', { count, plural: count > 1 })}</span>
-				<Button type='link' onClick={()=> {
-					callback();
-					notification.destroy(key)
-				}}>
+				<span>{$$('noti-del-msg', { number: count })}</span>
+				<Button
+					type='link'
+					onClick={() => {
+						callback();
+						notification.destroy(key);
+					}}
+				>
 					{$$('undo')}
 				</Button>
 			</>

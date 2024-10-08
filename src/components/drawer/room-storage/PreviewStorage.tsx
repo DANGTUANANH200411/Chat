@@ -3,7 +3,10 @@ import React from 'react';
 import { useStores } from '../../../stores/stores';
 
 function PreviewStorage() {
-    const {appStore: {setDrawerOpen}} = useStores();
+	const {
+		appStore: { $$, setDrawerOpen },
+	} = useStores();
+
 	return (
 		<>
 			<Image.PreviewGroup>
@@ -24,8 +27,15 @@ function PreviewStorage() {
 						))}
 				</Row>
 			</Image.PreviewGroup>
-			<Button className='max-width' color='default' variant='filled' style={{ marginTop: 8 }} size='small' onClick={() => setDrawerOpen('Storage')}>
-				View all
+			<Button
+				className='max-width'
+				color='default'
+				variant='filled'
+				style={{ marginTop: 8 }}
+				size='small'
+				onClick={() => setDrawerOpen('Storage')}
+			>
+				{$$('view-all')}
 			</Button>
 		</>
 	);

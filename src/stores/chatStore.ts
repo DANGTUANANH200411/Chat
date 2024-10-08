@@ -6,17 +6,17 @@ import {
 	Message,
 	MessageLog,
 	ModalDetailMsgProps,
-	ReactionPopupProps,
-	ReactionType,
 	ReactLogPopProps,
 	ReplyMessage,
 	RoleType,
 	RoomMember,
+	StorageFilter,
+	StorageSelect,
 	TabItemType,
 	User,
 } from '../utils/type';
 import { CHAT_ROOMS, MESSAGES } from '../utils/constants';
-import { isEmpty, isImage, newGuid, toNormalize } from '../utils/helper';
+import { isEmpty, isImage, isUrl, newGuid, toNormalize } from '../utils/helper';
 import { stores } from './stores';
 import { SYSTEM_NOW } from '../utils/dateHelper';
 import { notify } from '../utils/notify';
@@ -61,6 +61,12 @@ export default class ChatStore {
 
 	selectMessages: Map<string, boolean> = new Map();
 
+	storageFilter: StorageFilter = {};
+
+	storageSelect: StorageSelect = {
+		selecting: false,
+		selected: new Set(),
+	};
 	get Rooms() {
 		if (!this.searchRoom) return this.chatRooms;
 		return this.chatRooms.filter((e) => toNormalize(e.name).includes(toNormalize(this.searchRoom)));
@@ -117,7 +123,52 @@ export default class ChatStore {
 
 	get Images() {
 		if (!this.activeRoom) return [];
-		return this.messages.filter((e) => e.groupId === this.activeRoom && isImage(e.content));
+		const { sender, startTime, endTime } = this.storageFilter;
+		return this.messages.filter(
+			(e) =>
+				e.groupId === this.activeRoom &&
+				!e.recalled &&
+				!e.deleted &&
+				(!sender || e.sender === sender) &&
+				(!startTime || e.createDate >= startTime) &&
+				(!endTime || e.createDate <= endTime) &&
+				isImage(e.content)
+		);
+	}
+
+	get Files() {
+		if (!this.activeRoom) return [];
+		const { sender, startTime, endTime, searchText } = this.storageFilter;
+		const messages = this.messages.filter(
+			(e) =>
+				e.groupId === this.activeRoom &&
+				!e.recalled &&
+				!e.deleted &&
+				e.isFile &&
+				!isImage(e.content) &&
+				(!sender || e.sender === sender) &&
+				(!startTime || e.createDate >= startTime) &&
+				(!endTime || e.createDate <= endTime) &&
+				(!searchText || toNormalize(e.content).includes(toNormalize(searchText)))
+		);
+		return messages;
+	}
+
+	get Links() {
+		if (!this.activeRoom) return [];
+		const { startTime, endTime, searchText } = this.storageFilter;
+		const messages = this.messages.filter(
+			(e) =>
+				e.groupId === this.activeRoom &&
+				!e.recalled &&
+				!e.deleted &&
+				!e.isFile &&
+				isUrl(e.content) &&
+				(!startTime || e.createDate >= startTime) &&
+				(!endTime || e.createDate <= endTime) &&
+				(!searchText || toNormalize(e.content).includes(toNormalize(searchText)))
+		);
+		return messages;
 	}
 
 	constructor() {
@@ -172,6 +223,21 @@ export default class ChatStore {
 	toggleMdlNmCard = () => {
 		this.mdlNmCardVisible = !this.mdlNmCardVisible;
 		this.clearSelectedUsers();
+	};
+
+	setStorageFilter = (state: any) => Object.assign(this.storageFilter, state);
+
+	setStorageSelect = (state: any) => Object.assign(this.storageSelect, state);
+
+	clearStorageSelect = () =>
+		(this.storageSelect = {
+			selecting: false,
+			selected: new Set(),
+		});
+
+	onStorageItemSelect = (id: string) => {
+		const { selected } = this.storageSelect;
+		selected.has(id) ? selected.delete(id) : selected.add(id);
 	};
 	//#endregion SET
 

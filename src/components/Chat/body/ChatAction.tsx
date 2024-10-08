@@ -76,7 +76,7 @@ function ChatAction({ message }: Props) {
 						key: 'download',
 						label: 'save-file',
 						icon: <DownloadOutlined />,
-						onClick: () => downloadUrl(data ?? content, content.split('/').at(-1) ?? ''),
+						onClick: () => downloadUrl(data ?? content),
 					},
 			  ]
 			: []),
@@ -117,10 +117,7 @@ function ChatAction({ message }: Props) {
 	) : (
 		<>
 			<Tooltip title={$$('reply')} destroyTooltipOnHide>
-				<EnterOutlined
-					className='text-secondary hoverable-icon'
-					onClick={() => setReplyMessage(message)}
-				/>
+				<EnterOutlined className='text-secondary hoverable-icon' onClick={() => setReplyMessage(message)} />
 			</Tooltip>
 			<Tooltip title={$$('forwarding')} destroyTooltipOnHide>
 				<ShareAltOutlined className='text-secondary hoverable-icon' />

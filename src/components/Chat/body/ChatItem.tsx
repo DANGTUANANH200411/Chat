@@ -49,7 +49,15 @@ function ChatItem(props: Props) {
 						view={view}
 					/>
 				) : (
-					<NameCard isFirst={isFirst} isLast={isLast} showTime={showTime} sender={sender} msgId={id} id={content} createDate={createDate} />
+					<NameCard
+						isFirst={isFirst}
+						isLast={isLast}
+						showTime={showTime}
+						sender={sender}
+						msgId={id}
+						id={content}
+						createDate={createDate}
+					/>
 				)}
 
 				{!view && hover && (

@@ -5,7 +5,7 @@ interface Props {
 	src: string;
 	antd?: true;
 	style?: CSSProperties;
-    className?: string;
+	className?: string;
 }
 function CustomImage(props: Props) {
 	const { src, style, antd, className } = props;
@@ -16,7 +16,7 @@ function CustomImage(props: Props) {
 			{antd ? (
 				<Image
 					src={src}
-                    className={className}
+					className={className}
 					style={{ ...style, display: loading ? 'none' : style?.display ?? 'block' }}
 					onLoad={() => {
 						setLoading(false);
@@ -25,7 +25,7 @@ function CustomImage(props: Props) {
 			) : (
 				<img
 					src={src}
-                    className={className}
+					className={className}
 					style={{ ...style, display: loading ? 'none' : style?.display ?? 'block' }}
 					onLoad={() => {
 						setLoading(false);

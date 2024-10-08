@@ -14,17 +14,19 @@ function UrlMessage(props: Props) {
 	useEffect(() => {
 		const existData = sessionStorage.getItem(url);
 		if (existData) {
-			setViewData(JSON.parse(existData))
+			setViewData(JSON.parse(existData));
+			console.log(JSON.parse(existData));
 		} else {
 			getLinkPreview(url).then((result: any) => {
 				const params = {
 					url: result.url,
 					title: result.title,
-					image: result.images[0] ?? result.favicons[0],
+					image: result.images && result.images.length ? result.images[0] : result.favicons[0],
 					description: result.description,
-				}
-				sessionStorage.setItem(url, JSON.stringify(params))
-				setViewData(params)
+					mediaType: result.mediaType,
+				};
+				sessionStorage.setItem(url, JSON.stringify(params));
+				setViewData(params);
 			});
 		}
 	}, [url]);
@@ -34,7 +36,7 @@ function UrlMessage(props: Props) {
 		document.getElementById(id)!.classList.add('short');
 	}, [viewData]);
 
-	return !viewData ? (
+	return !viewData || viewData.mediaType === 'image' ? (
 		<a href={url} target='_blank'>
 			{url}
 		</a>
@@ -45,8 +47,8 @@ function UrlMessage(props: Props) {
 				e.preventDefault();
 				window.open(viewData.url, '_blank');
 			}}
-		>	
-			<CustomImage src={viewData.image} style={{ width:'100%'}}/>
+		>
+			<CustomImage src={viewData.image} style={{ width: '100%' }} />
 			<Row className='flex-grow' style={{ padding: 4, marginBottom: 8 }}>
 				<Typography.Text strong ellipsis className='preview-title'>
 					{viewData.title}
