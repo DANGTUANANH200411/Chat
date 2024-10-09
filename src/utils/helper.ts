@@ -6,6 +6,7 @@ import PPTX from '../resources/file/pptx.png';
 import ZIP from '../resources/file/zip.png';
 import TXT from '../resources/file/txt.png';
 import UNKNOWN from '../resources/file/unknown.png';
+import { User } from './type';
 const toString = Object.prototype.toString;
 
 export function is(val: unknown, type: string) {
@@ -215,4 +216,18 @@ export function groupBy(arr: any[], key: string) {
 		(rv[x[key]] = rv[x[key]] || []).push(x);
 		return rv;
 	}, {});
+}
+
+export function matchSearchUser (text: string, user: User) {
+	if (!text) return true;
+	if (!isNaN(Number(text))) {
+		if (text.startsWith('0')) text = text.replace('0', '');
+		return user.phoneNumber.includes(text);
+	} else {
+		return normalizeIncludes(user.userName, text);
+	}
+};
+
+export function normalizeIncludes (str: string, search: string) {
+	return toNormalize(str).includes(toNormalize(search));
 }

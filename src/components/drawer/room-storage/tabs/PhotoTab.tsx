@@ -1,4 +1,4 @@
-import { Col, Flex, Image, Row, Space, Typography } from 'antd';
+import { Col, Empty, Flex, Image, Row, Space, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { observer } from 'mobx-react';
 import React, { useMemo } from 'react';
@@ -36,26 +36,32 @@ function PhotoTab() {
 				</Row>
 			</div>
 			<div className='max-width' style={{ flex: '1', overflow: 'auto' }}>
-				<Flex vertical gap={8}>
-					<Image.PreviewGroup>
-						{Object.entries(groupByDate).map(([k, values]) => (
-							<div key={k} className='drawer-group'>
-								<Typography.Text ellipsis strong className='max-width'>
-									{dayjs(k).format('DD MMMM')}
-								</Typography.Text>
-								<Row gutter={[12, 12]}>
-									{values.map((e) => (
-										<Col span={8} key={e.id}>
-											<StorageItem id={e.id} type='Photo'>
-												<CustomImage antd src={e.data ?? e.content} />
-											</StorageItem>
-										</Col>
-									))}
-								</Row>
-							</div>
-						))}
-					</Image.PreviewGroup>
-				</Flex>
+				{Images.length ? (
+					<Flex vertical gap={8}>
+						<Image.PreviewGroup>
+							{Object.entries(groupByDate).map(([k, values]) => (
+								<div key={k} className='drawer-group'>
+									<Typography.Text ellipsis strong className='max-width'>
+										{dayjs(k).format('DD MMMM')}
+									</Typography.Text>
+									<Row gutter={[12, 12]}>
+										{values.map((e) => (
+											<Col span={8} key={e.id}>
+												<StorageItem id={e.id} type='Photo'>
+													<CustomImage antd src={e.data ?? e.content} />
+												</StorageItem>
+											</Col>
+										))}
+									</Row>
+								</div>
+							))}
+						</Image.PreviewGroup>
+					</Flex>
+				) : (
+					<Row className='max-width max-height' justify='center' align='middle' style={{background: 'white'}}>
+						<Empty/>
+					</Row>
+				)}
 			</div>
 		</Flex>
 	);

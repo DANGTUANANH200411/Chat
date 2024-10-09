@@ -27,8 +27,16 @@ function ChatAction({ message }: Props) {
 		appStore: { $$, user },
 		chatStore,
 	} = useStores();
-	const { Room, onPinMessage, onDeleteMessages, setReplyMessage, setModalDetail, onSelectMessage, onRecallMessage } =
-		chatStore;
+	const {
+		Room,
+		onPinMessage,
+		onDeleteMessages,
+		setReplyMessage,
+		setModalDetail,
+		onSelectMessage,
+		onRecallMessage,
+		toggleShareModal,
+	} = chatStore;
 	const { id, sender, content, isFile, data, recalled } = message;
 	const isPinned = Room?.pinMessages.find((e) => e.id === id) ? true : false;
 
@@ -120,7 +128,7 @@ function ChatAction({ message }: Props) {
 				<EnterOutlined className='text-secondary hoverable-icon' onClick={() => setReplyMessage(message)} />
 			</Tooltip>
 			<Tooltip title={$$('forwarding')} destroyTooltipOnHide>
-				<ShareAltOutlined className='text-secondary hoverable-icon' />
+				<ShareAltOutlined className='text-secondary hoverable-icon' onClick={() => toggleShareModal([message])} />
 			</Tooltip>
 			<Tooltip title={$$('more')} destroyTooltipOnHide>
 				<Dropdown menu={{ items: items }} trigger={['click']}>

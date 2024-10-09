@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import React, { useMemo } from 'react';
 import { useStores } from '../../../../stores/stores';
-import { Col, Flex, Row, Space, Typography } from 'antd';
+import { Col, Empty, Flex, Row, Space, Typography } from 'antd';
 import FilterSender from '../filter/FilterSender';
 import FilterTime from '../filter/FilterTime';
 import { Message } from '../../../../utils/type';
@@ -40,20 +40,31 @@ function FileTab() {
 				</Row>
 			</div>
 			<div className='max-width' style={{ flex: '1', overflow: 'auto' }}>
-				<Flex vertical gap={8}>
-					{Object.entries(groupByDate).map(([k, values]) => (
-						<div key={k} className='drawer-group'>
-							<Typography.Text ellipsis strong className='max-width'>
-								{dayjs(k).format('DD MMMM')}
-							</Typography.Text>
-							{values.map((e) => (
-								<StorageItem key={e.id} id={e.id} type='File'>
-									<FileMessage content={e.content} fileSize={e.fileSize} />
-								</StorageItem>
-							))}
-						</div>
-					))}
-				</Flex>
+				{Files.length ? (
+					<Flex vertical gap={8}>
+						{Object.entries(groupByDate).map(([k, values]) => (
+							<div key={k} className='drawer-group'>
+								<Typography.Text ellipsis strong className='max-width'>
+									{dayjs(k).format('DD MMMM')}
+								</Typography.Text>
+								{values.map((e) => (
+									<StorageItem key={e.id} id={e.id} type='File'>
+										<FileMessage content={e.content} fileSize={e.fileSize} />
+									</StorageItem>
+								))}
+							</div>
+						))}
+					</Flex>
+				) : (
+					<Row
+						className='max-width max-height'
+						justify='center'
+						align='middle'
+						style={{ background: 'white' }}
+					>
+						<Empty />
+					</Row>
+				)}
 			</div>
 		</Flex>
 	);

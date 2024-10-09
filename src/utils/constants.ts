@@ -658,6 +658,7 @@ const IS_FIREFOX = navigator.userAgent.toLowerCase().includes('firefox');
 
 const GROUP_AVT_SIZE = 48;
 
+const DELAY_INPUT = 400;
 export {
 	USERS,
 	CHAT_ROOMS,
@@ -672,4 +673,5 @@ export {
 	BROWSER_VERSION,
 	IS_FIREFOX,
 	GROUP_AVT_SIZE,
+	DELAY_INPUT,
 };

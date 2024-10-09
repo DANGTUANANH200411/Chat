@@ -1,28 +1,30 @@
-import { observer } from 'mobx-react';
-import { useStores } from '../../../stores/stores';
-import { Checkbox, Col, Input, Row, Space, Tag, Typography } from 'antd';
-import UserAvatar from '../../common/UserAvatar';
-import { useMemo, useState } from 'react';
-import ListSelected from './ListSelected';
-import { User } from '../../../utils/type';
-import { defaultText, toNormalize } from '../../../utils/helper';
-import React from 'react';
 import { SearchOutlined } from '@ant-design/icons';
+import { Checkbox, Input, Row, Space, Spin, Tag, Typography } from 'antd';
+import { observer } from 'mobx-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useStores } from '../../../stores/stores';
+import { defaultText, toNormalize } from '../../../utils/helper';
+import { User } from '../../../utils/type';
 import Member from '../../common/Member';
+import ListSelected from './ListSelected';
+import { DELAY_INPUT } from '../../../utils/constants';
 
 interface Props {
 	joined?: string[];
+	disableTag?: true;
 }
 
 function SelectUsers(props: Props) {
 	const {
-		appStore: { Friends, $$, labels },
-		chatStore: { selectedUsers, setSelectedUsers },
+		appStore: { $$, labels },
+		chatStore: { selectedUsers, setSelectedUsers, searchUser },
 	} = useStores();
-	const { joined } = props;
+	const { joined, disableTag } = props;
 
 	const [searchText, setSearchText] = useState<string>('');
 	const [selectedLabel, setSelectedLabel] = useState<string>('all');
+	const [searchedUser, setSearchedUser] = useState<User[]>([]);
+	const [loading, setLoading] = useState<boolean>(false);
 
 	const listLabel = useMemo(
 		() =>
@@ -47,20 +49,19 @@ function SelectUsers(props: Props) {
 			setSelectedUsers(new Map(selectedUsers.set(user.id, user)));
 		}
 	};
-	const matchSearch = (text: string, user: User) => {
-		if (!text) return true;
-		if (!isNaN(Number(text))) {
-			if (text.startsWith('0')) text = text.replace('0', '');
-			return user.phoneNumber.includes(text);
-		} else {
-			return toNormalize(user.userName).includes(toNormalize(searchText));
-		}
-	};
-	const searchedUser = useMemo(() => {
-		if (selectedLabel === 'all' && !searchText) return Friends;
-		return Friends.filter(
-			(e) => (selectedLabel === 'all' || e.label === selectedLabel) && matchSearch(searchText, e)
-		);
+
+	useEffect(() => {
+		setLoading(true);
+		
+		const timer = setTimeout(() => {
+			const res = searchUser(searchText, selectedLabel);
+			setSearchedUser(res);
+			setLoading(false);
+		}, DELAY_INPUT);
+
+		return () => {
+			clearTimeout(timer);
+		};
 	}, [searchText, selectedLabel]);
 
 	return (
@@ -68,6 +69,7 @@ function SelectUsers(props: Props) {
 			<Space direction='vertical'>
 				<Row>
 					<Input
+						allowClear
 						className='styled-input'
 						value={searchText}
 						placeholder={$$('search-place-holder')}
@@ -76,37 +78,43 @@ function SelectUsers(props: Props) {
 					/>
 				</Row>
 				<Row className='list-label' wrap={false}>
-					{listLabel}
+					{!disableTag && listLabel}
 				</Row>
-				<Row style={{ position: 'relative', height: '50vh' }}>
-					<Space
-						direction='vertical'
-						className={`select-user  ${selectedUsers.size > 0 && 'has-selected'} max-width flex-grow`}
-						style={{ position: 'relative' }}
-					>
-						{searchedUser.map((user) => {
-							const isJoined = joined?.includes(user.id);
-							return (
-								<Row
-									key={user.id}
-									onClick={() => {
-										!isJoined && onCheck(user);
-									}}
-									className={`user-row ${!isJoined && 'hover-change-color'}`}
-									style={{
-										paddingRight: '1rem',
-										cursor: isJoined ? 'unset' : 'pointer',
-									}}
-								>
-									<Checkbox checked={selectedUsers.has(user.id)} disabled={isJoined} />
-									<Member user={user} />
-									<Typography.Text type='secondary' style={{whiteSpace: 'nowrap'}}>{isJoined && $$('joined')}</Typography.Text>
-								</Row>
-							);
-						})}
-					</Space>
-					{selectedUsers.size > 0 && <ListSelected listChecked={selectedUsers} onUncheck={onCheck} />}
-				</Row>
+				<Spin spinning={loading}>
+					<Row style={{ position: 'relative', height: '50vh' }}>
+						<Space
+							direction='vertical'
+							className={`select-user  ${selectedUsers.size > 0 && 'has-selected'} max-width flex-grow`}
+							style={{ position: 'relative' }}
+						>
+							{searchedUser.map((user) => {
+								const isJoined = joined?.includes(user.id);
+								return (
+									<Row
+										key={user.id}
+										onClick={() => {
+											!isJoined && onCheck(user);
+										}}
+										className={`user-row ${!isJoined && 'hover-change-color'}`}
+										style={{
+											paddingRight: '1rem',
+											cursor: isJoined ? 'unset' : 'pointer',
+										}}
+									>
+										<Checkbox checked={selectedUsers.has(user.id)} disabled={isJoined} />
+										<Member user={user} />
+										{isJoined && (
+											<Typography.Text type='secondary' style={{ whiteSpace: 'nowrap' }}>
+												{$$('joined')}
+											</Typography.Text>
+										)}
+									</Row>
+								);
+							})}
+						</Space>
+						{selectedUsers.size > 0 && <ListSelected listChecked={selectedUsers} onUncheck={onCheck} />}
+					</Row>
+				</Spin>
 			</Space>
 		</>
 	);

@@ -10,13 +10,16 @@ import {
 	ReplyMessage,
 	RoleType,
 	RoomMember,
+	ShareModalProps,
+	ShareSelectItemProps,
 	StorageFilter,
 	StorageSelect,
+	StorageType,
 	TabItemType,
 	User,
 } from '../utils/type';
 import { CHAT_ROOMS, MESSAGES } from '../utils/constants';
-import { isEmpty, isImage, isUrl, newGuid, toNormalize } from '../utils/helper';
+import { isEmpty, isImage, isUrl, matchSearchUser, newGuid, normalizeIncludes, toNormalize } from '../utils/helper';
 import { stores } from './stores';
 import { SYSTEM_NOW } from '../utils/dateHelper';
 import { notify } from '../utils/notify';
@@ -29,6 +32,9 @@ type DateMessage = {
 export default class ChatStore {
 	tabItem: TabItemType = 'All';
 	chatRooms: ChatRoom[] = CHAT_ROOMS;
+
+	allMessage: Message[] = MESSAGES;
+
 	messages: Message[] = [];
 	activeRoom: string | undefined = undefined;
 
@@ -63,10 +69,18 @@ export default class ChatStore {
 
 	storageFilter: StorageFilter = {};
 
+	storageTab: StorageType = 'Photo';
+
 	storageSelect: StorageSelect = {
 		selecting: false,
 		selected: new Set(),
 	};
+
+	mdlShareProps: ShareModalProps = {
+		open: false,
+		items: [],
+	};
+
 	get Rooms() {
 		if (!this.searchRoom) return this.chatRooms;
 		return this.chatRooms.filter((e) => toNormalize(e.name).includes(toNormalize(this.searchRoom)));
@@ -124,50 +138,56 @@ export default class ChatStore {
 	get Images() {
 		if (!this.activeRoom) return [];
 		const { sender, startTime, endTime } = this.storageFilter;
-		return this.messages.filter(
-			(e) =>
-				e.groupId === this.activeRoom &&
-				!e.recalled &&
-				!e.deleted &&
-				(!sender || e.sender === sender) &&
-				(!startTime || e.createDate >= startTime) &&
-				(!endTime || e.createDate <= endTime) &&
-				isImage(e.content)
-		);
+		return this.messages
+			.filter(
+				(e) =>
+					e.groupId === this.activeRoom &&
+					!e.recalled &&
+					!e.deleted &&
+					(!sender || e.sender === sender) &&
+					(!startTime || e.createDate >= startTime) &&
+					(!endTime || e.createDate <= endTime) &&
+					isImage(e.content)
+			)
+			.sort((a, b) => Number(b.createDate) - Number(a.createDate));
 	}
 
 	get Files() {
 		if (!this.activeRoom) return [];
 		const { sender, startTime, endTime, searchText } = this.storageFilter;
-		const messages = this.messages.filter(
-			(e) =>
-				e.groupId === this.activeRoom &&
-				!e.recalled &&
-				!e.deleted &&
-				e.isFile &&
-				!isImage(e.content) &&
-				(!sender || e.sender === sender) &&
-				(!startTime || e.createDate >= startTime) &&
-				(!endTime || e.createDate <= endTime) &&
-				(!searchText || toNormalize(e.content).includes(toNormalize(searchText)))
-		);
+		const messages = this.messages
+			.filter(
+				(e) =>
+					e.groupId === this.activeRoom &&
+					!e.recalled &&
+					!e.deleted &&
+					e.isFile &&
+					!isImage(e.content) &&
+					(!sender || e.sender === sender) &&
+					(!startTime || e.createDate >= startTime) &&
+					(!endTime || e.createDate <= endTime) &&
+					(!searchText || toNormalize(e.content).includes(toNormalize(searchText)))
+			)
+			.sort((a, b) => Number(b.createDate) - Number(a.createDate));
 		return messages;
 	}
 
 	get Links() {
 		if (!this.activeRoom) return [];
 		const { startTime, endTime, searchText } = this.storageFilter;
-		const messages = this.messages.filter(
-			(e) =>
-				e.groupId === this.activeRoom &&
-				!e.recalled &&
-				!e.deleted &&
-				!e.isFile &&
-				isUrl(e.content) &&
-				(!startTime || e.createDate >= startTime) &&
-				(!endTime || e.createDate <= endTime) &&
-				(!searchText || toNormalize(e.content).includes(toNormalize(searchText)))
-		);
+		const messages = this.messages
+			.filter(
+				(e) =>
+					e.groupId === this.activeRoom &&
+					!e.recalled &&
+					!e.deleted &&
+					!e.isFile &&
+					isUrl(e.content) &&
+					(!startTime || e.createDate >= startTime) &&
+					(!endTime || e.createDate <= endTime) &&
+					(!searchText || toNormalize(e.content).includes(toNormalize(searchText)))
+			)
+			.sort((a, b) => Number(b.createDate) - Number(a.createDate));
 		return messages;
 	}
 
@@ -176,6 +196,8 @@ export default class ChatStore {
 	}
 	//#region GET
 	getActiveRoom = (room?: string) => this.chatRooms.find((e) => e.id === (room ?? this.activeRoom));
+
+	getRoom = (room: string) => this.chatRooms.find((e) => e.id === room);
 
 	getMessage = (id: string) => this.messages.find((e) => e.id === id);
 
@@ -229,6 +251,8 @@ export default class ChatStore {
 
 	setStorageSelect = (state: any) => Object.assign(this.storageSelect, state);
 
+	setStorageTab = (tab: StorageType)=> this.storageTab = tab;
+
 	clearStorageSelect = () =>
 		(this.storageSelect = {
 			selecting: false,
@@ -237,7 +261,19 @@ export default class ChatStore {
 
 	onStorageItemSelect = (id: string) => {
 		const { selected } = this.storageSelect;
-		selected.has(id) ? selected.delete(id) : selected.add(id);
+		if (selected.has(id)) {
+			selected.delete(id);
+			!selected.size && this.clearStorageSelect();
+		} else {
+			selected.add(id);
+		}
+	};
+
+	toggleShareModal = (items?: Message[]) => {
+		this.mdlShareProps = {
+			open: !this.mdlShareProps.open,
+			items: items ?? [],
+		};
 	};
 	//#endregion SET
 
@@ -257,9 +293,13 @@ export default class ChatStore {
 	};
 
 	pushMessage = (message: Message) => {
-		this.messages.push(message);
+		this.allMessage.push(message);
 
-		let room = this.getActiveRoom();
+		if (message.groupId === this.activeRoom) {
+			this.messages.push(message);
+		}
+
+		let room = this.getRoom(message.groupId);
 		if (room) room.previewMsg = message;
 		if (message.reply) this.replyMessage = undefined;
 		document.querySelector('.chat-body-view')?.scrollTo({ top: 0 });
@@ -268,7 +308,8 @@ export default class ChatStore {
 
 	//#region FAKE BACKEND
 	fakeFetchMessage = async (roomId: string, skip: number) => {
-		return MESSAGES.filter((e) => e.groupId === roomId)
+		return this.allMessage
+			.filter((e) => e.groupId === roomId)
 			.sort((a, b) => b.createDate.localeCompare(a.createDate))
 			.splice(skip, 20);
 	};
@@ -508,6 +549,53 @@ export default class ChatStore {
 		}
 	};
 
+	searchGroupAndUser = (text: string): ShareSelectItemProps[] => {
+		let friends = stores.appStore.Friends;
+		let rooms = this.chatRooms;
+
+		return [
+			...friends
+				.filter((e) => !text || matchSearchUser(text, e))
+				.map((e) => ({
+					id: e.id,
+					name: e.userName,
+					image: e.imageSrc,
+				})),
+			...rooms
+				.filter((e) => !text || normalizeIncludes(e.name, text))
+				.map((e) => ({
+					id: e.id,
+					name: e.name,
+					isGroup: e.isGroup,
+					members: e.members,
+					image: e.image,
+				})),
+		];
+	};
+
+	searchUser = (text: string, label?: string) => {
+		const Friends = stores.appStore.Friends;
+		const ignoreLabel = !label || label === 'all';
+
+		if (ignoreLabel && !text) return Friends;
+		return Friends.filter((e) => (ignoreLabel || e.label === label) && matchSearchUser(text, e));
+	};
+
+	forwardMessage = (rooms: string[]) => {
+		rooms.forEach((roomId) => {
+			this.mdlShareProps.items.forEach((e) => {
+				this.pushMessage({
+					...e,
+					id: newGuid(),
+					groupId: roomId,
+					sender: stores.appStore.CurrentUserId,
+					createDate: SYSTEM_NOW(),
+					lastUpdateDate: SYSTEM_NOW(),
+					logs: [],
+				});
+			});
+		});
+	};
 	//#region Group Member API
 	onLeaveGroup = () => {
 		// 1. Add an announce message

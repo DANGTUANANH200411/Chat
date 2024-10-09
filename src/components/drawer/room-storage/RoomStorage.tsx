@@ -13,6 +13,8 @@ function RoomStorage() {
 	const {
 		appStore: { $$, setDrawerOpen },
 		chatStore: {
+			storageTab,
+			setStorageTab,
 			storageSelect: { selecting },
 			setStorageSelect,
 			clearStorageSelect,
@@ -25,7 +27,6 @@ function RoomStorage() {
 		};
 	}, []);
 
-	const [type, setType] = useState<StorageType>('File');
 	return (
 		<div className='drawer max-height'>
 			<Row className='header' justify='center' align='middle'>
@@ -46,8 +47,9 @@ function RoomStorage() {
 			<div className='body'>
 				<Tabs
 					className='storage-tabs'
+					activeKey={storageTab}
 					onChange={(key) => {
-						setType(key as StorageType);
+						setStorageTab(key as StorageType);
 						clearStorageSelect();
 					}}
 				>
@@ -61,7 +63,7 @@ function RoomStorage() {
 						<LinkTab />
 					</Tabs.TabPane>
 				</Tabs>
-				{selecting && <SelectingBar type={type} />}
+				{selecting && <SelectingBar type={storageTab} />}
 			</div>
 		</div>
 	);

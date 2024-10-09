@@ -5,7 +5,6 @@ import { observer } from 'mobx-react';
 import React from 'react';
 import { useStores } from '../../../../../stores/stores';
 import { downloadUrl } from '../../../../../utils/helper';
-import { notify } from '../../../../../utils/notify';
 import { StorageType } from '../../../../../utils/type';
 
 interface Props {
@@ -16,7 +15,7 @@ function SelectingBar(props: Props) {
 		appStore: { $$ },
 		chatStore,
 	} = useStores();
-	const { storageSelect, clearStorageSelect, onDeleteMessages, getMessage } = chatStore;
+	const { storageSelect, clearStorageSelect, onDeleteMessages, getMessage, toggleShareModal} = chatStore;
 	const { selected } = storageSelect;
 	const { type } = props;
 	return (
@@ -31,7 +30,8 @@ function SelectingBar(props: Props) {
 				<ShareAltOutlined
 					className='circle btn'
 					onClick={() => {
-						notify('Incomming');
+						const messages = Array.from(selected).map(id => getMessage(id)).filter(e=> !!e);
+						toggleShareModal(messages as any);
 						clearStorageSelect();
 					}}
 				/>

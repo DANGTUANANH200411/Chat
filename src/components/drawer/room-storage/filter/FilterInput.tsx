@@ -3,6 +3,7 @@ import { Input } from 'antd';
 import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { useStores } from '../../../../stores/stores';
+import { DELAY_INPUT } from '../../../../utils/constants';
 
 function FilterInput() {
 	const {
@@ -15,7 +16,7 @@ function FilterInput() {
 	useEffect(() => {
 		const timer = setTimeout(() => {
 			setStorageFilter({ searchText: value });
-		}, 500);
+		}, DELAY_INPUT);
 
 		return () => clearTimeout(timer);
 	}, [value]);

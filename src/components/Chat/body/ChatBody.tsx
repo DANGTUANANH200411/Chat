@@ -9,6 +9,7 @@ import { Message } from '../../../utils/type';
 import { useDropzone } from 'react-dropzone';
 import { DoubleRightOutlined } from '@ant-design/icons';
 import { notify } from '../../../utils/notify';
+import React from 'react';
 
 function ChatBody() {
 	const { chatStore, appStore: {$$} } = useStores();
@@ -136,4 +137,4 @@ function DateMessageWrapper(props: DateMessageProps) {
 		</>
 	);
 }
-export default observer(ChatBody);
+export default React.memo(observer(ChatBody));

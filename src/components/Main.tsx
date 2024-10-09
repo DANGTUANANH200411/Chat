@@ -8,6 +8,7 @@ import React from 'react';
 import AddFriendModal from './modal/add-friend/AddFriendModal';
 import AddToGroupModal from './modal/add-friend-to-group/AddToGroupModal';
 import ChatDrawer from './drawer/ChatDrawer';
+import ShareModal from './modal/share/ShareModal';
 
 function Main() {
 	return (
@@ -23,6 +24,7 @@ function Main() {
 			<CreateGroup />
 			<AddFriendModal />
 			<AddToGroupModal />
+			<ShareModal/>
 		</Watermark>
 	);
 }

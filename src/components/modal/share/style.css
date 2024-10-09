@@ -1,0 +1,17 @@
+.mdlShare .share-item-wrapper {
+    border-radius: 4px;
+    padding: 0.4rem;
+    height: fit-content;
+    max-height: 6rem;
+    overflow: auto;
+}
+
+.mdlShare .share-item img:is(.ant-image-img) {
+    height: 4rem;
+}
+
+.mdlShare .cardname {
+    background-color: white;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+}

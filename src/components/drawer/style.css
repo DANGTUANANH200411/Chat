@@ -10,7 +10,7 @@
 .drawer-group {
 	background-color: var(--background-color);
 	height: fit-content;
-	padding: 8px;
+	padding: 0.6rem 0.4rem;
 }
 
 .action-bar-item {
@@ -109,4 +109,30 @@
 }
 .selecting-bar .circle:is(.danger).btn:hover {
 	background-color: rgb(255, 144, 144);
+}
+
+.group-info-sticky {
+	position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.div-button {
+	cursor: pointer;
+	padding: 0.4rem;
+	border-radius: 4px;
+	font-size: 1rem;
+}
+.div-button:hover:not(.danger),
+.div-button:hover:not(.danger) * {
+	color: var(--primary-color);
+	background-color: rgb(226, 226, 226);
+}
+.div-button:is(.danger),
+.div-button:is(.danger) * {
+	color: red;
+}
+.div-button:is(.danger):hover,
+.div-button:is(.danger):hover * {
+	background-color: rgb(255, 238, 238);
 }

@@ -139,3 +139,15 @@ export interface StorageSelect {
 	selecting: boolean;
 	selected: Set<string>;
 }
+
+export interface ShareModalProps {
+	open: boolean;
+	items: Message[];
+}
+export interface ShareSelectItemProps {
+	id: string;
+	name: string;
+	isGroup?: boolean;
+	members?: RoomMember[];
+	image?: string;
+}

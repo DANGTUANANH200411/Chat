@@ -8,6 +8,7 @@ import { useEffect, useMemo, useState } from 'react';
 import SearchList from './SearchList';
 import { User } from '../../../utils/type';
 import Member from '../../common/Member';
+import { DELAY_INPUT } from '../../../utils/constants';
 
 function AddFriendModal() {
 	const { appStore } = useStores();
@@ -29,7 +30,7 @@ function AddFriendModal() {
 			}
 
 			setListUsers(searchUserByPhoneNumber(text));
-		}, 500);
+		}, DELAY_INPUT);
 
 		return () => clearTimeout(timer);
 	}, [searchText, phoneCode]);

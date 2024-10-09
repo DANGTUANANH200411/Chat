@@ -17,7 +17,7 @@ function FileMessage(props: Props) {
 			<CustomImage
 				antd
 				src={data ?? content}
-				style={{ minWidth: 150, minHeight: 150, maxHeight: '40vh', padding: 2, ...imgStyle }}
+				style={{ maxHeight: '40vh', padding: 2, ...imgStyle }}
 			/>
 		);
 	}

@@ -2,13 +2,15 @@ import { Flex, Row, Typography } from 'antd';
 import { getLinkPreview } from 'link-preview-js';
 import React, { useEffect, useState } from 'react';
 import CustomImage from '../../../../common/CustomImage';
+import TimeFromNow from '../../../../left-menu/preview-chat/TimeFromNow';
 
 interface Props {
 	id: string;
 	url: string;
+	sendDate?: string;
 }
 function PreviewLink(props: Props) {
-	const { id, url } = props;
+	const { id, url, sendDate } = props;
 	const [viewData, setViewData] = useState<any>(undefined);
 	useEffect(() => {
 		const existData = sessionStorage.getItem(url);
@@ -34,12 +36,17 @@ function PreviewLink(props: Props) {
 		<Row className='flex-grow' style={{ columnGap: 8 }}>
 			<CustomImage src={viewData.image} style={{ width: '4rem' }} />
 			<Row className='flex-grow'>
-				<Typography.Text strong ellipsis className='max-width'>
+				<Typography.Text strong ellipsis>
 					{viewData.title ?? viewData.url}
 				</Typography.Text>
-				<Typography.Text type='secondary' ellipsis style={{ margin: 0 }}>
-					{new URL(viewData.url).origin}
-				</Typography.Text>
+				<Row justify='space-between' wrap={false}>
+					<Typography.Text type='secondary' ellipsis >
+						{new URL(viewData.url).origin}
+					</Typography.Text>
+					<Typography.Text type='secondary' ellipsis >
+						{sendDate && <TimeFromNow date={sendDate} />}
+					</Typography.Text>
+				</Row>
 			</Row>
 		</Row>
 	);

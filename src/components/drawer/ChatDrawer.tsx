@@ -15,7 +15,7 @@ function ChatDrawer() {
 		if (!drawerOpen) {
 			document.documentElement.style.setProperty('--drawer-w', '0px');
 		} else {
-			document.documentElement.style.setProperty('--drawer-w', '25vw');
+			document.documentElement.style.setProperty('--drawer-w', '20vw');
 		}
 	}, [drawerOpen]);
 

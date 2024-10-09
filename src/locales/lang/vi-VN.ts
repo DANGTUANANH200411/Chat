@@ -111,11 +111,17 @@ const vi: ILocale = {
 	forward: 'Chia sẻ',
 	select: 'Chọn',
 	selects: 'Chọn nhiều',
+	deselect: 'Bỏ chọn',
 	'jump-to-msg': 'Xem tin nhắn gốc',
 	'open-in-browser': 'Mở bằng trình duyệt',
 	'delete-only-me': 'Xóa ở phía tôi',
 	cancel: 'Hủy',
 	file: 'File{{#plural}}s{{/plural}}',
 	link: 'Link{{#plural}}s{{/plural}}',
+	share: 'Chia sẻ',
+	'group-chat': 'Nhóm trò chuyện',
+	'disappearing-msg': 'Tin nhắn tự xóa',
+	'hide-conversation': 'Ẩn cuộc trò chuyện',
+	'delete-chat-history': 'Xóa lịch sử trò chuyện'
 };
 export { vi };

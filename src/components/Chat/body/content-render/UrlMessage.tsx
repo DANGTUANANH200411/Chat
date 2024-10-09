@@ -15,7 +15,6 @@ function UrlMessage(props: Props) {
 		const existData = sessionStorage.getItem(url);
 		if (existData) {
 			setViewData(JSON.parse(existData));
-			console.log(JSON.parse(existData));
 		} else {
 			getLinkPreview(url).then((result: any) => {
 				const params = {

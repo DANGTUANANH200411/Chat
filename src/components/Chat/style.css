@@ -56,8 +56,7 @@
 	min-height: 8vh;
 	height: auto;
 	position: relative;
-	border: 1px solid var(--border-color);
-	border-left: none;
+	border-top: 1px solid var(--border-color);
 	width: 100%;
 	flex-direction: column;
 	flex-wrap: nowrap;
@@ -416,6 +415,7 @@ body:is(.dark-theme) .chat-item-username {
 
 .chat-content {
 	justify-content: left;
+	direction: ltr;
 }
 .chat-item-content:not(.recalled):is(.short) .chat-content {
 	position: relative;

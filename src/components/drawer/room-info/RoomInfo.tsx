@@ -2,7 +2,7 @@ import { Collapse, CollapseProps, Flex, Row, Typography } from 'antd';
 import React from 'react';
 import GroupAvatar from '../../common/GroupAvatar';
 import UserAvatar from '../../common/UserAvatar';
-import { EditOutlined, FileTextOutlined } from '@ant-design/icons';
+import { CaretRightOutlined, EditOutlined, EyeInvisibleOutlined, FileTextOutlined } from '@ant-design/icons';
 import ActionBar from './ActionBar';
 import { GROUP_AVT_SIZE } from '../../../utils/constants';
 import { useStores } from '../../../stores/stores';
@@ -10,52 +10,85 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserGroup } from '@fortawesome/free-solid-svg-icons';
 import { faClock } from '@fortawesome/free-regular-svg-icons';
 import { notify } from '../../../utils/notify';
-import PreviewStorage from '../room-storage/PreviewStorage';
+import PreviewPhotoStorage from '../room-storage/preview/PreviewPhotoStorage';
+import PreviewFileStorage from '../room-storage/preview/PreviewFileStorage';
+import PreviewLinkStorage from '../room-storage/preview/PreviewLinkStorage';
 
 const panelStyle: React.CSSProperties = {
-	marginBottom: 4,
+	marginTop: 4,
 	background: 'var(--background-color)',
 	borderRadius: 'none',
 	border: 'none',
+	borderTop: '4px solid var(--border-color)',
 };
 
 function RoomInfo() {
 	const {
 		appStore: { $$, setDrawerOpen },
-		chatStore: { Room },
+		chatStore: { Room, onLeaveGroup },
 	} = useStores();
 	if (!Room) return <></>;
-	const { id, name, isGroup, members, image, label } = Room;
+	const { id, name, isGroup, members, image } = Room;
 	const items: CollapseProps['items'] = [
 		{
-			key: '1',
+			key: 'members',
 			label: 'Group member',
 			children: (
 				<div className='div-button' onClick={() => setDrawerOpen('Members')}>
-					<FontAwesomeIcon icon={faUserGroup} style={{ fontSize: 16 }} /> {members.length} {$$('members')}
+					<FontAwesomeIcon icon={faUserGroup} /> {members.length} {$$('members')}
 				</div>
 			),
 			style: panelStyle,
 		},
 		{
-			key: '2',
+			key: 'board',
 			label: 'Group board',
 			children: (
 				<Flex vertical gap='small'>
 					<div className='div-button' onClick={() => notify('Incomming')}>
-						<FontAwesomeIcon icon={faClock} style={{ fontSize: 16 }} /> Reminer board
+						<FontAwesomeIcon icon={faClock} /> Reminer board
 					</div>
 					<div className='div-button' onClick={() => notify('Incomming')}>
-						<FileTextOutlined style={{ fontSize: 16 }} /> Note, pin, poll
+						<FileTextOutlined /> Note, pin, poll
 					</div>
 				</Flex>
 			),
 			style: panelStyle,
 		},
 		{
-			key: '3',
-			label: 'Photo/Video',
-			children: <PreviewStorage />,
+			key: 'photos',
+			label: 'Photos/Videos',
+			children: <PreviewPhotoStorage />,
+			style: panelStyle,
+		},
+		{
+			key: 'files',
+			label: 'Files',
+			children: <PreviewFileStorage />,
+			style: panelStyle,
+		},
+		{
+			key: 'links',
+			label: 'Links',
+			children: <PreviewLinkStorage />,
+			style: panelStyle,
+		},
+		{
+			key: 'privacy',
+			label: 'Privacy settings',
+			children: (
+				<Flex vertical gap='mall'>
+					<div className='div-button' onClick={() => notify('Incomming')}>
+						<EyeInvisibleOutlined /> {$$('disappearing-msg')}
+					</div>
+					<div className='div-button danger' onClick={() => notify('Incomming')}>
+						<FileTextOutlined /> {$$('delete-chat-history')}
+					</div>
+					<div className='div-button danger' onClick={() => onLeaveGroup()}>
+						<FileTextOutlined /> {$$('leave')}
+					</div>
+				</Flex>
+			),
 			style: panelStyle,
 		},
 	];
@@ -66,8 +99,8 @@ function RoomInfo() {
 					{$$('room-info')}
 				</Typography.Text>
 			</Row>
-			<div className='body'>
-				<Flex vertical justify='center' align='center' className='max-width drawer-group'>
+			<div className='body' style={{ overflow: 'auto' }}>
+				<Flex vertical justify='center' align='center' className='drawer-group group-info-sticky'>
 					{isGroup ? (
 						<GroupAvatar image={image} members={members} />
 					) : (
@@ -81,7 +114,13 @@ function RoomInfo() {
 					</Flex>
 					<ActionBar />
 				</Flex>
-				<Collapse bordered={false} items={items} defaultActiveKey={items.map((e) => e.key) as any}></Collapse>
+				<Collapse
+					items={items}
+					bordered={false}
+					expandIconPosition='end'
+					defaultActiveKey={items.map((e) => e.key) as any}
+					expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
+				></Collapse>
 			</div>
 		</div>
 	);

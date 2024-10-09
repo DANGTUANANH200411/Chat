@@ -73,7 +73,7 @@ const en = {
 	customer: 'Customer',
 	family: 'Family',
 	work: 'Work',
-	friend: 'Friend',
+	friend: 'Friend{{#plural}}s{{/plural}}',
 	'reply-later': 'Reply later',
 	'co-worker': 'Co-worker',
 	image: 'Image{{#plural}}s{{/plural}}',
@@ -110,12 +110,18 @@ const en = {
 	forward: 'Forward',
 	select: 'Select',
 	selects: 'Select',
+	deselect: 'Deselect',
 	'jump-to-msg': 'Jump to message',
 	'open-in-browser': 'Open in browser',
 	'delete-only-me': 'Delete only me',
 	cancel: 'Cancel',
 	file: 'File{{#plural}}s{{/plural}}',
 	link: 'Link{{#plural}}s{{/plural}}',
+	share: 'Share',
+	'group-chat': 'Group{{#plural}}s{{/plural}}',
+	'disappearing-msg': 'Disappearing messages',
+	'hide-conversation': 'Hide conversation',
+	'delete-chat-history': 'Delete chat history'
 };
 
 export type ILocale = typeof en;

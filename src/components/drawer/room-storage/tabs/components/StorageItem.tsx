@@ -18,9 +18,12 @@ function StorageItem(props: Props) {
 		appStore: { $$ },
 		chatStore: {
 			storageSelect: { selecting, selected },
+			setStorageSelect,
 			onStorageItemSelect,
 			onDeleteMessages,
 			scrollToMessage,
+			toggleShareModal,
+			getMessage,
 		},
 	} = useStores();
 
@@ -49,8 +52,9 @@ function StorageItem(props: Props) {
 		},
 		{
 			key: 'select',
-			label: $$('selects'),
-			onClick: () => {},
+			label: $$(!selecting ? 'selects' : 'deselect'),
+			onClick: () =>
+				!selecting ? setStorageSelect({ selecting: true, selected: new Set([id]) }) : onStorageItemSelect(id),
 		},
 		{
 			key: 'jump',
@@ -105,7 +109,11 @@ function StorageItem(props: Props) {
 				<>{children}</>
 			)}
 			<Flex gap={8} className='storage-item-action'>
-				<ShareAltOutlined className='storage-item-icon hoverable-icon' onClick={() => notify('Incomming')} />
+				<ShareAltOutlined className='storage-item-icon hoverable-icon' onClick={() => {
+					const msg = getMessage(id);
+					toggleShareModal(msg ? [msg] : []);
+
+				}} />
 
 				<Dropdown menu={{ items }} trigger={['click']} destroyPopupOnHide>
 					<MoreOutlined rotate={90} className='storage-item-icon hoverable-icon' />
