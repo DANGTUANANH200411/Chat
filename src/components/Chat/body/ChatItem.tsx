@@ -63,6 +63,7 @@ function ChatItem(props: Props) {
 					id={content}
 					createDate={createDate}
 					selecting={Selecting}
+					pinned={pinned}
 				/>
 			)}
 

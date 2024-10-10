@@ -3,6 +3,8 @@ import { Button, Dropdown, Row, Space, Typography } from 'antd';
 import { observer } from 'mobx-react';
 import React, { useState } from 'react';
 import { useStores } from '../../../stores/stores';
+import { Message } from '../../../utils/type';
+import { isImage } from '../../../utils/helper';
 
 function ViewPinned() {
 	const {
@@ -16,6 +18,19 @@ function ViewPinned() {
 	}
 	const messages = expanded ? [...Room.pinMessages] : [Room.pinMessages.at(-1)];
 
+	const displayContent = (message?: Message) => {
+		if (!message) return '';
+
+		if (message.isFile) {
+			return $$(isImage(message.content) ? 'image' : 'file')
+		}
+		
+		if (message.isNameCard) {
+			return `[${$$('namecard')}] ${getUserName(message.content)}`
+		}
+
+		return message.content;
+	}
 	return (
 		<Row className={`chat-body-pin ${expanded ? 'expanded' : ''}`} align='middle' justify='space-around'>
 			<Space className='chat-body-pin-item-wrapper' direction='vertical' size={8}>
@@ -30,7 +45,7 @@ function ViewPinned() {
 							</Row>
 							<Row>
 								<Typography.Text ellipsis type='secondary'>
-									{`${getUserName(message?.sender)}: ${message?.content}`}
+									{`${getUserName(message?.sender)}: ${displayContent(message)}`}
 								</Typography.Text>
 							</Row>
 						</div>

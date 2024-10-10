@@ -6,6 +6,7 @@ import ChatTime from '../chat-item/ChatTime';
 import { notify } from '../../../../utils/notify';
 import Reaction from '../../popup/Reaction';
 import { observer } from 'mobx-react';
+import { PushpinFilled } from '@ant-design/icons';
 interface Props {
 	msgId: string;
 	id: string;
@@ -15,13 +16,14 @@ interface Props {
 	sender: string;
 	showTime: boolean;
 	selecting: boolean;
+	pinned: boolean;
 }
 function NameCard(props: Props) {
 	const {
 		appStore: { $$, getUserById, getUserName },
 	} = useStores();
 
-	const { msgId, id, createDate, isFirst, isLast, showTime, sender, selecting } = props;
+	const { msgId, id, createDate, isFirst, isLast, showTime, sender, selecting, pinned } = props;
 	const user = getUserById(id);
 	return user ? (
 		<div className='chat-item-namecard-wrapper'>
@@ -30,25 +32,30 @@ function NameCard(props: Props) {
 					{getUserName(sender)}
 				</Typography.Link>
 			)}
-			<div className='chat-item-namecard'>
-				{selecting && <div className='selected-mark'></div>}
-				<Row className='chat-item-namecard-data'>
-					<Member user={user} info={user.phoneNumber} />
-					<QRCode
-						value={'https://github.com/mk04-dev'}
-						errorLevel='L'
-						size={60}
-						style={{ padding: 4, background: 'white', borderRadius: 'unset', alignSelf: 'end' }}
-					/>
-				</Row>
-				<Row className='chat-item-namecard-btn'>
-					<div className='chat-item-namecard-btn-call' onClick={() => notify('Incomming')}>
-						{$$('call')}
-					</div>
-					<div className='chat-item-namecard-btn-msg' onClick={() => notify('Incomming')}>
-						{$$('message')}
-					</div>
-				</Row>
+			<div style={{ position: 'relative' }}>
+				{pinned && <PushpinFilled className='chat-item-pin-icon' />}
+
+				<div className='chat-item-namecard'>
+					{selecting && <div className='selected-mark'></div>}
+					<Row className='chat-item-namecard-data'>
+						<Member user={user} info={user.phoneNumber} />
+						<QRCode
+							value={'https://github.com/mk04-dev'}
+							errorLevel='L'
+							size={60}
+							style={{ padding: 4, background: 'white', borderRadius: 'unset', alignSelf: 'end' }}
+						/>
+					</Row>
+
+					<Row className='chat-item-namecard-btn'>
+						<div className='chat-item-namecard-btn-call' onClick={() => notify('Incomming')}>
+							{$$('call')}
+						</div>
+						<div className='chat-item-namecard-btn-msg' onClick={() => notify('Incomming')}>
+							{$$('message')}
+						</div>
+					</Row>
+				</div>
 			</div>
 			{!selecting && (
 				<div style={{ position: 'relative', marginBottom: 8 }}>
