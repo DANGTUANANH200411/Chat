@@ -12,15 +12,13 @@ function PreviewPhotoStorage() {
 	if (!Images.length) return <Empty imageStyle={{ height: '2rem' }} />;
 	return (
 		<>
-			<Image.PreviewGroup>
-				<Row gutter={[12, 12]}>
-					{Images.slice(0, 8).map((e, idx) => (
-						<Col span={6}>
-							<Image key={idx} src={e.content} />
-						</Col>
-					))}
-				</Row>
-			</Image.PreviewGroup>
+			<Row align='middle' style={{columnGap: 12, rowGap: 12}}>
+				{Images.slice(0, 8).map((e, idx) => (
+					<Col span={5}>
+						<Image key={idx} src={e.data ?? e.content} preview={false} />
+					</Col>
+				))}
+			</Row>
 			<Button
 				className='max-width'
 				color='default'

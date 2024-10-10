@@ -13,6 +13,7 @@ import { notify } from '../../../utils/notify';
 import PreviewPhotoStorage from '../room-storage/preview/PreviewPhotoStorage';
 import PreviewFileStorage from '../room-storage/preview/PreviewFileStorage';
 import PreviewLinkStorage from '../room-storage/preview/PreviewLinkStorage';
+import { observer } from 'mobx-react';
 
 const panelStyle: React.CSSProperties = {
 	marginTop: 4,
@@ -32,7 +33,7 @@ function RoomInfo() {
 	const items: CollapseProps['items'] = [
 		{
 			key: 'members',
-			label: 'Group member',
+			label: $$('group-member'),
 			children: (
 				<div className='div-button' onClick={() => setDrawerOpen('Members')}>
 					<FontAwesomeIcon icon={faUserGroup} /> {members.length} {$$('members')}
@@ -75,7 +76,7 @@ function RoomInfo() {
 		},
 		{
 			key: 'privacy',
-			label: 'Privacy settings',
+			label: $$('privacy-setting'),
 			children: (
 				<Flex vertical gap='mall'>
 					<div className='div-button' onClick={() => notify('Incomming')}>
@@ -126,4 +127,4 @@ function RoomInfo() {
 	);
 }
 
-export default React.memo(RoomInfo);
+export default React.memo(observer(RoomInfo));

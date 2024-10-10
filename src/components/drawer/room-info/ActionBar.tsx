@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Flex, Typography } from 'antd';
 import React from 'react';
 import { useStores } from '../../../stores/stores';
+import { observer } from 'mobx-react';
 
 function ActionBar() {
 	const {
@@ -32,4 +33,4 @@ function ActionBar() {
 	);
 }
 
-export default React.memo(ActionBar);
+export default React.memo(observer(ActionBar));

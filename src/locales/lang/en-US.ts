@@ -111,6 +111,7 @@ const en = {
 	select: 'Select',
 	selects: 'Select',
 	deselect: 'Deselect',
+	selected: 'Selected',
 	'jump-to-msg': 'Jump to message',
 	'open-in-browser': 'Open in browser',
 	'delete-only-me': 'Delete only me',
@@ -121,7 +122,10 @@ const en = {
 	'group-chat': 'Group{{#plural}}s{{/plural}}',
 	'disappearing-msg': 'Disappearing messages',
 	'hide-conversation': 'Hide conversation',
-	'delete-chat-history': 'Delete chat history'
+	'delete-chat-history': 'Delete chat history',
+	'group-member': 'Group member',
+	'group-board': 'Group board',
+	'privacy-setting': 'Privacy setting',
 };
 
 export type ILocale = typeof en;

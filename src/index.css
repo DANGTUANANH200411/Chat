@@ -160,3 +160,37 @@ code {
 .fit-height {
 	height: fit-content !important;
 }
+
+.circle {
+	background-color: rgb(226, 227, 255);
+	padding: 6px;
+	border-radius: 15px;
+}
+.circle.btn {
+	cursor: pointer;
+}
+
+.circle:not(.danger).btn:hover {
+	background-color: rgb(155, 158, 251);
+}
+.circle.danger,
+.circle.danger .anticon {
+	color: red;
+}
+.circle.danger {
+	background-color: rgb(255, 226, 226);
+}
+.circle:is(.danger).btn:hover {
+	background-color: rgb(255, 144, 144);
+}
+
+.circle.warning,
+.circle.warning .anticon {
+	color: rgb(255, 145, 0);
+}
+.circle.warning {
+	background-color: rgb(255, 226, 187);
+}
+.circle:is(.warning).btn:hover {
+	background-color: rgb(255, 197, 121);
+}

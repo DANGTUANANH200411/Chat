@@ -65,7 +65,7 @@ export default class ChatStore {
 
 	mdlNmCardVisible: boolean = false;
 
-	selectMessages: Map<string, boolean> = new Map();
+	selectMessages: Map<string, Message> = new Map();
 
 	storageFilter: StorageFilter = {};
 
@@ -138,7 +138,7 @@ export default class ChatStore {
 	get Images() {
 		if (!this.activeRoom) return [];
 		const { sender, startTime, endTime } = this.storageFilter;
-		return this.messages
+		return this.allMessage
 			.filter(
 				(e) =>
 					e.groupId === this.activeRoom &&
@@ -155,7 +155,7 @@ export default class ChatStore {
 	get Files() {
 		if (!this.activeRoom) return [];
 		const { sender, startTime, endTime, searchText } = this.storageFilter;
-		const messages = this.messages
+		const messages = this.allMessage
 			.filter(
 				(e) =>
 					e.groupId === this.activeRoom &&
@@ -175,7 +175,7 @@ export default class ChatStore {
 	get Links() {
 		if (!this.activeRoom) return [];
 		const { startTime, endTime, searchText } = this.storageFilter;
-		const messages = this.messages
+		const messages = this.allMessage
 			.filter(
 				(e) =>
 					e.groupId === this.activeRoom &&
@@ -237,10 +237,10 @@ export default class ChatStore {
 
 	clearListSelectedMsg = () => this.selectMessages.clear();
 
-	onSelectMessage = (msgId: string, sender: string) =>
-		this.selectMessages.has(msgId)
-			? this.selectMessages.delete(msgId)
-			: this.selectMessages.set(msgId, stores.appStore.CurrentUserId === sender);
+	onSelectMessage = (message: Message) =>
+		this.selectMessages.has(message.id)
+			? this.selectMessages.delete(message.id)
+			: this.selectMessages.set(message.id, message);
 
 	toggleMdlNmCard = () => {
 		this.mdlNmCardVisible = !this.mdlNmCardVisible;

@@ -7,6 +7,7 @@ import { PushpinFilled } from '@ant-design/icons';
 import Reaction from '../../popup/Reaction';
 import { isImage, isUrl } from '../../../../utils/helper';
 import ChatTime from '../chat-item/ChatTime';
+import { observer } from 'mobx-react';
 
 interface Props {
 	isFirst: boolean;
@@ -17,13 +18,15 @@ interface Props {
 	recalled: boolean;
 	getUserName: (id: string) => string;
 	view?: boolean;
+	selecting?: boolean;
 }
 function ChatContentWrapper(props: Props) {
-	const { isFirst, isLast, showTime, message, pinned, recalled, view, getUserName } = props;
+	const { isFirst, isLast, showTime, message, pinned, recalled, view, selecting, getUserName } = props;
 	const { id, sender, content, createDate, isFile, fileSize, reply, attachment, data } = message;
 	const isShort = useMemo(() => (isFile && (isImage(content) || isUrl(content)) ? 'short' : ''), [content]);
 	return (
 		<div className={`chat-item-content ${recalled && 'recalled'} ${isShort}`} id={message.id}>
+			{selecting && <div className='selected-mark'></div>}
 			{isFirst && (
 				<Typography.Link className='chat-item-username small-text text-ellipsis' onClick={() => {}}>
 					{getUserName(sender)}
@@ -41,7 +44,7 @@ function ChatContentWrapper(props: Props) {
 					fileSize={fileSize}
 					attachment={attachment}
 				/>
-				{!recalled && !view && (
+				{!selecting && !recalled && !view && (
 					<>
 						<Reaction id={message.id} />
 

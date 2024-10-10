@@ -232,18 +232,6 @@ const USERS: User[] = [
 ];
 const GROUP_ID: string[] = [newGuid(), newGuid()];
 
-const TMP_MESSAGE = {
-	id: newGuid(),
-	groupId: GROUP_ID[0],
-	sender: USERS[4].id,
-	content: 'https://www.youtube.com/watch?v=uPAOcqmvzys',
-	isFile: false,
-	createDate: toSystemDate(NOW().subtract(49, 'hours')),
-	lastUpdateDate: toSystemDate(NOW().subtract(49, 'hours')),
-	recalled: false,
-	deleted: false,
-	logs: [],
-};
 const MESSAGES: Message[] = [
 	...Array(300)
 		.fill(0)
@@ -253,13 +241,48 @@ const MESSAGES: Message[] = [
 			sender: USERS[randomInt(USERS.length)].id,
 			content: index.toString(),
 			isFile: false,
-			createDate: toSystemDate(NOW().subtract(49 + index, 'hours')),
-			lastUpdateDate: toSystemDate(NOW().subtract(49 + index, 'hours')),
+			createDate: toSystemDate(NOW().subtract(49 + index, 'h')),
+			lastUpdateDate: toSystemDate(NOW().subtract(49 + index, 'h')),
 			recalled: false,
 			deleted: false,
 			logs: [],
 		})),
-	TMP_MESSAGE,
+		{
+			id: newGuid(),
+			groupId: GROUP_ID[0],
+			sender: USERS[14].id,
+			content: 'https://www.youtube.com/watch?v=Ak1lunhhxQM',
+			isFile: false,
+			createDate: toSystemDate(NOW().subtract(49, 'h').subtract(2, 'm')),
+			lastUpdateDate: toSystemDate(NOW().subtract(49, 'h').subtract(2, 'm')),
+			recalled: false,
+			deleted: false,
+			logs: [],
+		},
+	{
+		id: newGuid(),
+		groupId: GROUP_ID[0],
+		sender: USERS[7].id,
+		content: 'https://www.youtube.com/watch?v=PLIAp5nr0q0',
+		isFile: false,
+		createDate: toSystemDate(NOW().subtract(49, 'h').subtract(1, 'm')),
+		lastUpdateDate: toSystemDate(NOW().subtract(49, 'h').subtract(1, 'm')),
+		recalled: false,
+		deleted: false,
+		logs: [],
+	},
+	{
+		id: newGuid(),
+		groupId: GROUP_ID[0],
+		sender: USERS[4].id,
+		content: 'https://www.youtube.com/watch?v=uPAOcqmvzys',
+		isFile: false,
+		createDate: toSystemDate(NOW().subtract(49, 'h')),
+		lastUpdateDate: toSystemDate(NOW().subtract(49, 'h')),
+		recalled: false,
+		deleted: false,
+		logs: [],
+	},
 	{
 		id: newGuid(),
 		groupId: GROUP_ID[0],
@@ -429,9 +452,6 @@ const MESSAGES: Message[] = [
 		recalled: false,
 		deleted: false,
 		logs: [],
-		reply: {
-			...TMP_MESSAGE,
-		},
 	},
 	{
 		id: newGuid(),

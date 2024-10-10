@@ -70,7 +70,7 @@ function ChatAction({ message }: Props) {
 			key: 'select',
 			label: $$('select-msg'),
 			icon: <UnorderedListOutlined />,
-			onClick: () => onSelectMessage(message.id, message.sender),
+			onClick: (e) => onSelectMessage(message),
 		},
 		{
 			key: 'details',
@@ -108,34 +108,44 @@ function ChatAction({ message }: Props) {
 		{
 			key: 'delete',
 			label: $$('delete-for-me'),
-			icon: <DeleteOutlined />,
+			icon: <DeleteOutlined style={{color: 'red'}}/>,
 			danger: true,
 			onClick: () => onDeleteMessages([id]),
 		},
 	];
-	return recalled ? (
-		<>
-			<Tooltip title={$$('delete-for-me')} destroyTooltipOnHide>
-				<DeleteOutlined
-					className='text-secondary hoverable-icon icon-danger'
-					onClick={() => onDeleteMessages([id])}
-				/>
-			</Tooltip>
-		</>
-	) : (
-		<>
-			<Tooltip title={$$('reply')} destroyTooltipOnHide>
-				<EnterOutlined className='text-secondary hoverable-icon' onClick={() => setReplyMessage(message)} />
-			</Tooltip>
-			<Tooltip title={$$('forwarding')} destroyTooltipOnHide>
-				<ShareAltOutlined className='text-secondary hoverable-icon' onClick={() => toggleShareModal([message])} />
-			</Tooltip>
-			<Tooltip title={$$('more')} destroyTooltipOnHide>
-				<Dropdown menu={{ items: items }} trigger={['click']}>
-					<MoreOutlined className='text-secondary hoverable-icon' />
-				</Dropdown>
-			</Tooltip>
-		</>
+	return (
+		<div onClick={(e) => e.stopPropagation()}>
+			{recalled ? (
+				<>
+					<Tooltip title={$$('delete-for-me')} destroyTooltipOnHide>
+						<DeleteOutlined
+							className='text-secondary hoverable-icon icon-danger'
+							onClick={() => onDeleteMessages([id])}
+						/>
+					</Tooltip>
+				</>
+			) : (
+				<>
+					<Tooltip title={$$('reply')} destroyTooltipOnHide>
+						<EnterOutlined
+							className='text-secondary hoverable-icon'
+							onClick={() => setReplyMessage(message)}
+						/>
+					</Tooltip>
+					<Tooltip title={$$('forwarding')} destroyTooltipOnHide>
+						<ShareAltOutlined
+							className='text-secondary hoverable-icon'
+							onClick={() => toggleShareModal([message])}
+						/>
+					</Tooltip>
+					<Tooltip title={$$('more')} destroyTooltipOnHide>
+						<Dropdown menu={{ items: items }} trigger={['click']}>
+							<MoreOutlined className='text-secondary hoverable-icon' />
+						</Dropdown>
+					</Tooltip>
+				</>
+			)}
+		</div>
 	);
 }
 function propsAreEquals(prev: Props, next: Props) {

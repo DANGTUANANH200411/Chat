@@ -14,12 +14,14 @@ interface Props {
 	isLast: boolean;
 	sender: string;
 	showTime: boolean;
+	selecting: boolean;
 }
 function NameCard(props: Props) {
 	const {
 		appStore: { $$, getUserById, getUserName },
 	} = useStores();
-	const { msgId, id, createDate, isFirst, isLast, showTime, sender } = props;
+
+	const { msgId, id, createDate, isFirst, isLast, showTime, sender, selecting } = props;
 	const user = getUserById(id);
 	return user ? (
 		<div className='chat-item-namecard-wrapper'>
@@ -29,6 +31,7 @@ function NameCard(props: Props) {
 				</Typography.Link>
 			)}
 			<div className='chat-item-namecard'>
+				{selecting && <div className='selected-mark'></div>}
 				<Row className='chat-item-namecard-data'>
 					<Member user={user} info={user.phoneNumber} />
 					<QRCode
@@ -47,9 +50,11 @@ function NameCard(props: Props) {
 					</div>
 				</Row>
 			</div>
-			<div style={{ position: 'relative', marginBottom: 8 }}>
-				<Reaction id={msgId} />
-			</div>
+			{!selecting && (
+				<div style={{ position: 'relative', marginBottom: 8 }}>
+					<Reaction id={msgId} />
+				</div>
+			)}
 			<div
 				className='chat-item-namecard-copy'
 				onClick={() => {

@@ -13,7 +13,7 @@ import SelectingBar from './body/SelectingBar';
 import ModalNameCard from './modal/ModalNameCard';
 function ChatWrapper() {
 	const { chatStore } = useStores();
-	const { activeRoom, Selecting } = chatStore;
+	const { activeRoom } = chatStore;
 	useEffect(() => {
 		function onClickMention(e: MouseEvent) {
 			const target = e.target as HTMLElement;
@@ -31,7 +31,7 @@ function ChatWrapper() {
 			<div className='max-height'>
 				<ChatHeader />
 				<div className='chat-view'>
-					{Selecting ? <SelectingBar /> : <ViewPinned />}
+					<ViewPinned />
 					<ChatBody />
 					<ChatFooter />
 				</div>

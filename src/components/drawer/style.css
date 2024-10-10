@@ -90,27 +90,6 @@
 	border-radius: 2px;
 }
 
-.selecting-bar .circle {
-	background-color: rgb(226, 227, 255);
-	padding: 6px;
-	border-radius: 15px;
-}
-.selecting-bar .circle.btn {
-	cursor: pointer;
-}
-
-.selecting-bar .circle:not(.danger).btn:hover {
-	background-color: rgb(155, 158, 251);
-}
-
-.selecting-bar .circle.danger {
-	color: red;
-	background-color: rgb(255, 226, 226);
-}
-.selecting-bar .circle:is(.danger).btn:hover {
-	background-color: rgb(255, 144, 144);
-}
-
 .group-info-sticky {
 	position: sticky;
     top: 0;
@@ -135,4 +114,10 @@
 .div-button:is(.danger):hover,
 .div-button:is(.danger):hover * {
 	background-color: rgb(255, 238, 238);
+}
+
+.drawer .ant-collapse-header {
+	font-weight: 600;
+	font-size: 16px;
+	padding: 6px 12px !important;
 }

@@ -21,7 +21,7 @@ function SelectShare(props: Props) {
 		},
 	} = useStores();
 
-	const {selected, setSelected} = props;
+	const { selected, setSelected } = props;
 	const [searchText, setSearchText] = useState<string>('');
 	const [loading, setLoading] = useState<boolean>(false);
 	const [list, setList] = useState<ShareSelectItemProps[]>([]);
@@ -79,11 +79,9 @@ function SelectShare(props: Props) {
 					))}
 				</Space>
 			</Spin>
-			<Row className='share-item-wrapper' gutter={8} align='middle'>
+			<Row className='share-item-list' gutter={8} align='middle'>
 				{items.map((item) => (
-					<Col className='share-item' key={item.id}>
-						<ShareItem {...item} />
-					</Col>
+					<ShareItem key={item.id} {...item} />
 				))}
 			</Row>
 		</Flex>

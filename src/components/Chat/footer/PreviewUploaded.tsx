@@ -14,26 +14,24 @@ function PreviewUploaded(props: Props) {
 	return !uploaded.length ? (
 		<></>
 	) : (
-		<div className='preview-upload'>
-			<Row justify='space-between'>
-				<Col span={23}>
-					<Image.PreviewGroup>
-						{uploaded.map((file, idx) => {
-							return (
-								<FileMessage
-									key={idx}
-									content={file.name}
-									fileSize={file.size}
-									data={file.data}
-									imgStyle={{ height: '5vh' }}
-								/>
-							);
-						})}
-					</Image.PreviewGroup>
-				</Col>
-				<CloseOutlined className='text-secondary hoverable-icon btn-clear' onClick={() => setUploaded([])} />
-			</Row>
-		</div>
+		<Row className='preview-upload' justify='space-between'>
+			<div>
+				<Image.PreviewGroup>
+					{uploaded.map((file, idx) => {
+						return (
+							<FileMessage
+								key={idx}
+								content={file.name}
+								fileSize={file.size}
+								data={file.data}
+								imgStyle={{ height: '5vh' }}
+							/>
+						);
+					})}
+				</Image.PreviewGroup>
+			</div>
+			<CloseOutlined className='btn-clear circle btn' onClick={() => setUploaded([])} />
+		</Row>
 	);
 }
 function propsAreEquals(prev: Props, next: Props) {

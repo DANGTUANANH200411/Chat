@@ -1,7 +1,7 @@
 import { CloseOutlined } from '@ant-design/icons';
 import { Row } from 'antd';
 import { observer } from 'mobx-react';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useStores } from '../../../stores/stores';
 import ReplyContent from '../body/ReplyContent';
 import ChatFooterBar from './ChatFooterBar';
@@ -11,11 +11,12 @@ import { useDropzone } from 'react-dropzone';
 import PreviewUploaded from './PreviewUploaded';
 import { Attachment } from '../../../utils/type';
 import PreviewGIF from './PreviewGIF';
+import SelectingBar from '../body/SelectingBar';
 
 function ChatFooter() {
 	const { chatStore, appStore } = useStores();
 	const [text, setText] = useState<string>('');
-	const { replyMessage, onSendMessage, setReplyMessage, listGIF} = chatStore;
+	const { replyMessage, onSendMessage, setReplyMessage} = chatStore;
 	const { Users } = appStore;
 	const [uploaded, setUploaded] = useState<Attachment[]>([]);
 	const mentionsList = useMemo(() => {
@@ -75,11 +76,14 @@ function ChatFooter() {
 					<label style={{ margin: 'auto' }}>Drop over here</label>
 				</div>
 			)}
+
+			<SelectingBar />
+
 			{replyMessage && (
 				<Row className='chat-footer-reply-wrapper' align='middle' justify='space-between'>
 					<ReplyContent replyMessage={replyMessage} />
 					<CloseOutlined
-						className='text-secondary hoverable-icon btn-clear'
+						className='btn-clear circle btn'
 						onClick={() => setReplyMessage(undefined)}
 					/>
 				</Row>

@@ -18,6 +18,7 @@ function FileMessage(props: Props) {
 				antd
 				src={data ?? content}
 				style={{ maxHeight: '40vh', padding: 2, ...imgStyle }}
+				className='image-message'
 			/>
 		);
 	}

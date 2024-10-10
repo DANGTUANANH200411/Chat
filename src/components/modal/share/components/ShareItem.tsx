@@ -11,18 +11,18 @@ function ShareItem(props: Message) {
 	const {
 		appStore: { $$, getUserById },
 	} = useStores();
-	const { id, content, recalled, isFile, fileSize, attachment, data, isNameCard } = props;
+	const { content, isFile, fileSize, data, isNameCard } = props;
 
 	if (isFile) {
 		return (
-			<Flex className='cardname'>
+			<Flex className='share-item'>
 				<FileMessage content={content} fileSize={fileSize} data={data} />
 			</Flex>
 		);
 	} else if (isNameCard) {
 		const user = getUserById(content);
 		return (
-			<Flex vertical className='cardname'>
+			<Flex vertical className='share-item'>
 				<Typography.Text strong ellipsis>
 					Forward namecard
 				</Typography.Text>
@@ -39,7 +39,7 @@ function ShareItem(props: Message) {
 		);
 	}
 	return (
-		<Flex vertical className='cardname'>
+		<Flex vertical className='share-item max-width'>
 			<Typography.Text strong ellipsis>
 				Forward message
 			</Typography.Text>

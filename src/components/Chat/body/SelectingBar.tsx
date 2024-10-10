@@ -1,46 +1,73 @@
+import { CloseOutlined, DeleteOutlined, DownloadOutlined, ShareAltOutlined, UndoOutlined } from '@ant-design/icons';
+import { Flex, Row, Space, Tooltip, Typography } from 'antd';
 import { observer } from 'mobx-react';
-import React, { CSSProperties } from 'react';
+import React from 'react';
 import { useStores } from '../../../stores/stores';
-import { Button, Row } from 'antd';
-import { CloseOutlined, DeleteOutlined, UndoOutlined } from '@ant-design/icons';
+import { downloadUrl } from '../../../utils/helper';
 
 function SelectingBar() {
 	const {
-		chatStore: { selectMessages, clearListSelectedMsg, onDeleteMessages, onRecallMessage },
+		appStore: { $$, CurrentUserId },
+		chatStore: {
+			selectMessages,
+			clearListSelectedMsg,
+			onDeleteMessages,
+			onRecallMessage,
+			toggleShareModal,
+		},
 	} = useStores();
 
-	const disabled = [...selectMessages.values()].some((e) => !e);
-	const style: CSSProperties = {
-		color: !disabled ? 'orange' : 'gray',
-	};
+	if (!selectMessages.size) return <></>;
 	return (
-		<Row className='chat-body-pin'>
-			<Button type='text' icon={<CloseOutlined />} onClick={clearListSelectedMsg}>
-				Selected: {selectMessages.size}
-			</Button>
-			<Button
-				disabled={disabled}
-				type='text'
-				icon={<UndoOutlined rotate={90} style={style} />}
-				style={style}
-				onClick={() => {
-					selectMessages.forEach((_, key) => onRecallMessage(key));
-					clearListSelectedMsg();
-				}}
-			>
-				Recall messages
-			</Button>
-			<Button
-				type='text'
-				danger
-				icon={<DeleteOutlined style={{ color: 'red' }} />}
-				onClick={() => {
-					onDeleteMessages([...selectMessages.keys()]);
-					clearListSelectedMsg();
-				}}
-			>
-				Remove messages
-			</Button>
+		<Row className='chat-selecting-bar' justify='space-between' align='middle'>
+			<Flex align='center' gap={8} style={{ fontSize: 'large' }}>
+				<span className='color-primary count'>{selectMessages.size}</span>
+				<Typography.Text ellipsis>{$$('selected')}</Typography.Text>
+			</Flex>
+			<Space size={24}>
+				<Tooltip title={$$('forward')} destroyTooltipOnHide>
+					<ShareAltOutlined
+						className='circle btn'
+						onClick={() => {
+							toggleShareModal([...selectMessages.values()]);
+							clearListSelectedMsg();
+						}}
+					/>
+				</Tooltip>
+				{[...selectMessages.values()].every((e) => e.isFile) && (
+					<DownloadOutlined
+						className='circle btn'
+						onClick={() => {
+							[...selectMessages.values()].forEach((msg) => downloadUrl(msg.content));
+							clearListSelectedMsg();
+						}}
+					/>
+				)}
+				{[...selectMessages.values()].every((e) => e.sender === CurrentUserId) && (
+					<Tooltip title={$$('recall-msg')} destroyTooltipOnHide>
+						<UndoOutlined
+							rotate={90}
+							className={`circle btn warning`}
+							onClick={() => {
+								selectMessages.forEach((msg) => onRecallMessage(msg.id));
+								clearListSelectedMsg();
+							}}
+						/>
+					</Tooltip>
+				)}
+				<Tooltip title={$$('delete-only-me')} destroyTooltipOnHide>
+					<DeleteOutlined
+						className='circle btn danger'
+						onClick={() => {
+							onDeleteMessages([...selectMessages.keys()]);
+							clearListSelectedMsg();
+						}}
+					/>
+				</Tooltip>
+				<Tooltip title={$$('cancel')} destroyTooltipOnHide>
+					<CloseOutlined className='circle btn' onClick={clearListSelectedMsg} />
+				</Tooltip>
+			</Space>
 		</Row>
 	);
 }

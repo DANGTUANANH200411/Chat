@@ -44,10 +44,10 @@ function UrlMessage(props: Props) {
 			className='preview-link-wrapper'
 			onClick={(e) => {
 				e.preventDefault();
-				window.open(viewData.url, '_blank');
+				window.open(viewData.url ?? url, '_blank');
 			}}
 		>
-			<CustomImage src={viewData.image} style={{ width: '100%' }} />
+			<CustomImage src={viewData.image} style={{ width: '100%'}} />
 			<Row className='flex-grow' style={{ padding: 4, marginBottom: 8 }}>
 				<Typography.Text strong ellipsis className='preview-title'>
 					{viewData.title}

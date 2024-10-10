@@ -112,6 +112,7 @@ const vi: ILocale = {
 	select: 'Chọn',
 	selects: 'Chọn nhiều',
 	deselect: 'Bỏ chọn',
+	selected: 'Đã chọn',
 	'jump-to-msg': 'Xem tin nhắn gốc',
 	'open-in-browser': 'Mở bằng trình duyệt',
 	'delete-only-me': 'Xóa ở phía tôi',
@@ -122,6 +123,9 @@ const vi: ILocale = {
 	'group-chat': 'Nhóm trò chuyện',
 	'disappearing-msg': 'Tin nhắn tự xóa',
 	'hide-conversation': 'Ẩn cuộc trò chuyện',
-	'delete-chat-history': 'Xóa lịch sử trò chuyện'
+	'delete-chat-history': 'Xóa lịch sử trò chuyện',
+	'group-member': 'Thành viên nhóm',
+	'group-board': 'Bảng nhóm',
+	'privacy-setting': 'Thiết lập quyền riêng tư',
 };
 export { vi };
