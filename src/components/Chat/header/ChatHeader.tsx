@@ -1,4 +1,4 @@
-import { Dropdown, Row, Typography } from 'antd';
+import { Dropdown, Flex, Row, Typography } from 'antd';
 import { observer } from 'mobx-react';
 import { useStores } from '../../../stores/stores';
 import {
@@ -27,22 +27,27 @@ function ChatHeader() {
 		<Row className='header chat-header' align='middle'>
 			{isGroup ? <GroupAvatar image={image} members={members} /> : <UserAvatar id={id} size={GROUP_AVT_SIZE} />}
 			<Row className='flex-grow' wrap={false}>
-				<Row style={{overflow: 'hidden'}}>
+				<Row style={{ overflow: 'hidden' }}>
 					<Row wrap={false}>
 						<Typography.Text ellipsis strong>
 							{name}
 						</Typography.Text>
 					</Row>
-					<Row wrap={false} >
-						<UserOutlined className='text-secondary' />
-						<Typography.Text ellipsis
-							className='hover-change-color text-secondary text-small'
-							onClick={() => setDrawerOpen('Members')}
-						>{`${Room.members.length} ${$$('members')}`}</Typography.Text>
+					<Flex gap={4}>
+						<Flex gap='inherit' className='hover-change-color' onClick={() => setDrawerOpen('Members')}>
+							<UserOutlined className='text-secondary ' />
+							<Typography.Text ellipsis className='text-small text-secondary'>
+								{`${Room.members.length} ${$$('members')}`}
+							</Typography.Text>
+						</Flex>
 						<Dropdown trigger={['click']} menu={{ items: LabelMenu(id) }} destroyPopupOnHide>
-							<TagFilled rotate={45} className='hover-change-color'  style={{color: getLabel(label)?.color ?? 'var(--text-secondary)'}} />
+							<TagFilled
+								rotate={45}
+								className='hover-change-color'
+								style={{ color: getLabel(label)?.color ?? 'var(--text-secondary)' }}
+							/>
 						</Dropdown>
-					</Row>
+					</Flex>
 				</Row>
 				<div
 					style={{

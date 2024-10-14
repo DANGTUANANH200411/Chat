@@ -49,7 +49,7 @@ function ViewPinned() {
 								</Typography.Text>
 							</Row>
 						</div>
-						{!expanded && Room.pinMessages.length - 1 !== 0 && (
+						{!expanded && Room.pinMessages && Room.pinMessages.length - 1 !== 0 && (
 							<Row className='chat-body-pin-more'>
 								<Button
 									ghost

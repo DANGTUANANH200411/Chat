@@ -621,6 +621,7 @@ const CHAT_ROOMS: ChatRoom[] = [
 		pinMessages: [MESSAGES[MESSAGES.length - 4], MESSAGES[100], MESSAGES[299]],
 		creatorId: USERS[0].id,
 		image: 'https://yt3.googleusercontent.com/P_qIGe_-Jt5V4JT_UtIuURsq9RBRDIZ88tvFJx1AzACWzsuRIrrOfb6jDH2OnoukFdS06AN5nQ=s900-c-k-c0x00ffffff-no-rj',
+		pinned: true,
 	},
 	{
 		id: GROUP_ID[1],
@@ -642,7 +643,6 @@ const CHAT_ROOMS: ChatRoom[] = [
 			})),
 		],
 		previewMsg: MESSAGES.findLast((e) => e.groupId === GROUP_ID[1]),
-		pinMessages: [],
 		creatorId: USERS[15].id,
 		label: LABELS[2].id,
 	},
@@ -651,8 +651,6 @@ const CHAT_ROOMS: ChatRoom[] = [
 		name: ROOM_MEMBER.at(-1)!.userName,
 		isGroup: false,
 		members: [],
-		previewMsg: MESSAGES.findLast((e) => e.groupId === USERS[3].id),
-		pinMessages: [],
 		label: LABELS[4].id,
 	},
 ];

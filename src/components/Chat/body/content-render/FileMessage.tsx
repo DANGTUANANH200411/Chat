@@ -1,6 +1,6 @@
 import React from 'react';
 import { getFileIcon, isImage } from '../../../../utils/helper';
-import { Row, Typography } from 'antd';
+import { Flex, Row, Typography } from 'antd';
 import filesize from 'filesize';
 import CustomImage from '../../../common/CustomImage';
 
@@ -9,13 +9,14 @@ interface Props {
 	fileSize?: number;
 	data?: any;
 	imgStyle?: React.CSSProperties;
+	preview?: boolean; //Preview antd image
 }
 function FileMessage(props: Props) {
-	const { content, fileSize, data, imgStyle } = props;
+	const { content, fileSize, data, imgStyle, preview } = props;
 	if (isImage(content)) {
 		return (
 			<CustomImage
-				antd
+				antd={!/[\/.]gif$/i.test(content)}
 				src={data ?? content}
 				style={{ maxHeight: '40vh', padding: 2, ...imgStyle }}
 				className='image-message'
@@ -29,17 +30,13 @@ function FileMessage(props: Props) {
 				alt='file-icon'
 				style={{ width: '2rem', height: '2rem', marginRight: '.4rem' }}
 			/>
-			<Row className='flex-grow'>
-				<Row>
+			<Row className='flex-grow' style={{flexDirection: 'column'}}>
 					<Typography.Link ellipsis download>
 						{content}
 					</Typography.Link>
-				</Row>
-				<Row>
-					<Typography.Text type='secondary' className='text-small'>
+					<Typography.Text type='secondary' className='text-small' ellipsis>
 						{filesize(fileSize ?? 0)}
 					</Typography.Text>
-				</Row>
 			</Row>
 		</Row>
 	);

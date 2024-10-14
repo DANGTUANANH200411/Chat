@@ -6,6 +6,7 @@ import React from 'react';
 import { useStores } from '../../../../../stores/stores';
 import { downloadUrl } from '../../../../../utils/helper';
 import { StorageType } from '../../../../../utils/type';
+import Confirm from '../../../../common/Confirm';
 
 interface Props {
 	type: StorageType;
@@ -15,7 +16,7 @@ function SelectingBar(props: Props) {
 		appStore: { $$ },
 		chatStore,
 	} = useStores();
-	const { storageSelect, clearStorageSelect, onDeleteMessages, getMessage, toggleShareModal} = chatStore;
+	const { storageSelect, clearStorageSelect, onDeleteMessages, getMessage, toggleShareModal } = chatStore;
 	const { selected } = storageSelect;
 	const { type } = props;
 	return (
@@ -30,7 +31,9 @@ function SelectingBar(props: Props) {
 				<ShareAltOutlined
 					className='circle btn'
 					onClick={() => {
-						const messages = Array.from(selected).map(id => getMessage(id)).filter(e=> !!e);
+						const messages = Array.from(selected)
+							.map((id) => getMessage(id))
+							.filter((e) => !!e);
 						toggleShareModal(messages as any);
 						clearStorageSelect();
 					}}
@@ -50,13 +53,18 @@ function SelectingBar(props: Props) {
 						}}
 					/>
 				)}
-				<DeleteOutlined
-					className='circle btn danger'
-					onClick={() => {
+				<Confirm
+					danger
+					title={$$('delete-n-msg-4me', {number: selected.size})}
+					okText={$$('delete')}
+					onOk={() => {
 						onDeleteMessages(Array.from(selected));
 						clearStorageSelect();
 					}}
-				/>
+				>
+					<DeleteOutlined className='circle btn danger' />
+				</Confirm>
+
 				<CloseOutlined className='circle btn' onClick={clearStorageSelect} />
 			</Flex>
 		</Row>

@@ -1,8 +1,8 @@
-import { Collapse, CollapseProps, Flex, Row, Typography } from 'antd';
+import { Collapse, CollapseProps, Flex, Popconfirm, Row, Typography } from 'antd';
 import React from 'react';
 import GroupAvatar from '../../common/GroupAvatar';
 import UserAvatar from '../../common/UserAvatar';
-import { CaretRightOutlined, EditOutlined, EyeInvisibleOutlined, FileTextOutlined } from '@ant-design/icons';
+import { CaretRightOutlined, DeleteOutlined, EditOutlined, EyeInvisibleOutlined, FileTextOutlined, LogoutOutlined } from '@ant-design/icons';
 import ActionBar from './ActionBar';
 import { GROUP_AVT_SIZE } from '../../../utils/constants';
 import { useStores } from '../../../stores/stores';
@@ -14,6 +14,7 @@ import PreviewPhotoStorage from '../room-storage/preview/PreviewPhotoStorage';
 import PreviewFileStorage from '../room-storage/preview/PreviewFileStorage';
 import PreviewLinkStorage from '../room-storage/preview/PreviewLinkStorage';
 import { observer } from 'mobx-react';
+import Confirm from '../../common/Confirm';
 
 const panelStyle: React.CSSProperties = {
 	marginTop: 4,
@@ -26,7 +27,7 @@ const panelStyle: React.CSSProperties = {
 function RoomInfo() {
 	const {
 		appStore: { $$, setDrawerOpen },
-		chatStore: { Room, onLeaveGroup },
+		chatStore: { Room, onLeaveGroup, onDeleteChatHistory },
 	} = useStores();
 	if (!Room) return <></>;
 	const { id, name, isGroup, members, image } = Room;
@@ -82,12 +83,23 @@ function RoomInfo() {
 					<div className='div-button' onClick={() => notify('Incomming')}>
 						<EyeInvisibleOutlined /> {$$('disappearing-msg')}
 					</div>
-					<div className='div-button danger' onClick={() => notify('Incomming')}>
-						<FileTextOutlined /> {$$('delete-chat-history')}
-					</div>
-					<div className='div-button danger' onClick={() => onLeaveGroup()}>
-						<FileTextOutlined /> {$$('leave')}
-					</div>
+					<Confirm danger title={$$('delete-chat-history')} okText={$$('delete')} onOk={() => onDeleteChatHistory()}>
+						<div className='div-button danger'>
+							<DeleteOutlined /> {$$('delete-chat-history')}
+						</div>
+					</Confirm>
+
+					<Confirm
+						danger
+						title='Leave group'
+						description='Leave and delete this conversation?'
+						okText={$$('leave')}
+						onOk={() => onLeaveGroup()}
+					>
+						<div className='div-button danger'>
+							<LogoutOutlined  /> {$$('leave')}
+						</div>
+					</Confirm>
 				</Flex>
 			),
 			style: panelStyle,

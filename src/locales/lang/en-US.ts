@@ -8,6 +8,7 @@ const en = {
 	'create-group-chat': 'Create group chat',
 	// Chat room menu
 	'pin-chatroom': 'Pin this conversation',
+	'unpin-chatroom': 'Unpin this conversation',
 	label: 'Label',
 	'label-customer': 'Customer',
 	'label-family': 'Family',
@@ -126,6 +127,8 @@ const en = {
 	'group-member': 'Group member',
 	'group-board': 'Group board',
 	'privacy-setting': 'Privacy setting',
+	'delete': 'Delete',
+	'delete-n-msg-4me': 'Delete {{number}} message{{#plural}}s{{/plural}} only me'
 };
 
 export type ILocale = typeof en;

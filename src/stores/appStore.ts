@@ -16,7 +16,7 @@ export default class AppStore {
 	};
 	i18n!: I18n;
 
-	user: User = USERS[0];
+	user: User = USERS[1];
 	menuOpen: boolean = true;
 	drawerOpen: DrawerType = undefined;
 	labels: Label[] = LABELS;
@@ -112,8 +112,8 @@ export default class AppStore {
 		let msg = langObject[name as any] || '';
 		if (args) {
 			if (args['number'] && args['number'] > 1) args['plural'] = true;
-			msg = Mustache.render(msg, args);
 		}
+		msg = Mustache.render(msg, args ?? {});
 		return msg;
 	}
 	bindLocale<T extends Record<LangType, Record<string, string>>>(locale: T) {

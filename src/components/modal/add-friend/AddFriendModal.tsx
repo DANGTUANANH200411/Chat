@@ -1,14 +1,13 @@
-import { Col, Input, InputNumber, Modal, Row, Select, Space, Typography } from 'antd';
+import { Col, Input, Modal, Row, Select, Space, Typography } from 'antd';
 import { observer } from 'mobx-react';
-import { useStores } from '../../../stores/stores';
-import ReactCountryFlag from 'react-country-flag';
-import { getMobileCode } from '../../../utils/helper';
-import { COUNTRIES, Country } from '../../../utils/countries';
 import { useEffect, useMemo, useState } from 'react';
-import SearchList from './SearchList';
+import ReactCountryFlag from 'react-country-flag';
+import { useStores } from '../../../stores/stores';
+import { DELAY_INPUT } from '../../../utils/constants';
+import { COUNTRIES, Country } from '../../../utils/countries';
+import { getMobileCode } from '../../../utils/helper';
 import { User } from '../../../utils/type';
 import Member from '../../common/Member';
-import { DELAY_INPUT } from '../../../utils/constants';
 
 function AddFriendModal() {
 	const { appStore } = useStores();
@@ -91,7 +90,7 @@ function AddFriendModal() {
 				</Row>
 				<Space direction='vertical' className='grow-list' style={{ marginTop: 16 }} size={12}>
 					{listUsers.map((user) => (
-						<Member user={user} />
+						<Member key={user.id} user={user} />
 					))}
 				</Space>
 			</div>

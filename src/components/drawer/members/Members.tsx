@@ -5,6 +5,7 @@ import { useStores } from '../../../stores/stores';
 import Member from '../../common/Member';
 import '../style.css';
 import MembersAction from './MembersAction';
+import Confirm from '../../common/Confirm';
 function Members() {
 	const {
 		appStore: { $$, user: currentUser, setToggleAddToGroup, getUserName, setDrawerOpen },
@@ -77,17 +78,17 @@ function Members() {
 										action={<MembersAction id={user.id} role={role} />}
 										suffix={
 											user.id === currentUser.id ? (
-												<Button
-													type='primary'
+												<Confirm
 													danger
-													size='small'
-													onClick={() => {
-														onLeaveGroup();
-														setDrawerOpen(undefined);
-													}}
+													title='Leave group'
+													description='Leave and delete this conversation?'
+													okText={$$('leave')}
+													onOk={() => onLeaveGroup()}
 												>
-													{$$('leave')}
-												</Button>
+													<Button type='primary' danger size='small'>
+														{$$('leave')}
+													</Button>
+												</Confirm>
 											) : (
 												<></>
 											)

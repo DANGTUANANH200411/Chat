@@ -15,7 +15,7 @@ function PreviewPhotoStorage() {
 		<>
 			<Flex vertical gap={8}>
 				{Links.slice(0, 4).map((e) => (
-                    <PreviewLink id={e.id} url={e.content} sendDate={e.createDate} />
+                    <PreviewLink key={e.id} id={e.id} url={e.content} sendDate={e.createDate} />
 				))}
 			</Flex>
 			<Button

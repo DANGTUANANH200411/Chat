@@ -13,9 +13,9 @@ function PreviewPhotoStorage() {
 	return (
 		<>
 			<Row align='middle' style={{columnGap: 12, rowGap: 12}}>
-				{Images.slice(0, 8).map((e, idx) => (
-					<Col span={5}>
-						<Image key={idx} src={e.data ?? e.content} preview={false} />
+				{Images.slice(0, 8).map((e) => (
+					<Col span={5} key={e.id}>
+						<Image src={e.data ?? e.content} preview={false} />
 					</Col>
 				))}
 			</Row>

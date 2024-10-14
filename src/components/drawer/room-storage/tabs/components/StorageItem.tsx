@@ -47,7 +47,10 @@ function StorageItem(props: Props) {
 		{
 			key: 'forward',
 			label: $$('forward'),
-			onClick: () => notify('Incomming'),
+			onClick: () => {
+				const msg = getMessage(id);
+				toggleShareModal(msg ? [msg] : []);
+			},
 			tabs: ['Photo', 'Link'],
 		},
 		{
@@ -112,7 +115,6 @@ function StorageItem(props: Props) {
 				<ShareAltOutlined className='storage-item-icon hoverable-icon' onClick={() => {
 					const msg = getMessage(id);
 					toggleShareModal(msg ? [msg] : []);
-
 				}} />
 
 				<Dropdown menu={{ items }} trigger={['click']} destroyPopupOnHide>

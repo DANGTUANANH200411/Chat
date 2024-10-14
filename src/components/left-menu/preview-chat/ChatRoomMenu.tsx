@@ -1,25 +1,26 @@
-import { MoreOutlined, TagFilled } from '@ant-design/icons';
+import { MoreOutlined } from '@ant-design/icons';
 import { Dropdown, MenuProps } from 'antd';
 import { useStores } from '../../../stores/stores';
 import { observer } from 'mobx-react';
 import { LabelMenu } from '../../common/LabelMenu';
-import { useLayoutEffect } from 'react';
 
 interface Props {
 	roomId: string;
+	pinned?: boolean;
 }
 function ChatRoomMenu(props: Props) {
 	const {
 		appStore: { $$ },
+		chatStore: {onPinConversation},
 	} = useStores();
 
-	const { roomId } = props;
+	const { roomId, pinned } = props;
 
 	const items: MenuProps['items'] = [
 		{
 			key: 'pin',
-			label: $$('pin-chatroom'),
-			onClick: () => {},
+			label: $$(pinned ? 'unpin-chatroom' : 'pin-chatroom'),
+			onClick: () => onPinConversation(roomId),
 		},
 		{
 			type: 'divider',

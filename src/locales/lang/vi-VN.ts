@@ -10,6 +10,7 @@ const vi: ILocale = {
 	'create-group-chat': 'Tạo nhóm chat',
 	// Chat room menu
 	'pin-chatroom': 'Ghim hội thoại',
+	'unpin-chatroom': 'Bỏ Ghim hội thoại',
 	label: 'Phân loại',
 	'label-customer': 'Khách hàng',
 	'label-family': 'Gia đình',
@@ -127,5 +128,7 @@ const vi: ILocale = {
 	'group-member': 'Thành viên nhóm',
 	'group-board': 'Bảng nhóm',
 	'privacy-setting': 'Thiết lập quyền riêng tư',
+	'delete': 'Xóa',
+	'delete-n-msg-4me': 'Xóa {{number}} tin nhắn ở phía tôi'
 };
 export { vi };

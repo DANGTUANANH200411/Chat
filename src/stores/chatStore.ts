@@ -52,6 +52,7 @@ export default class ChatStore {
 		logs: [],
 	};
 
+	nextGIF: string = '';
 	listGIF: {
 		id: string;
 		previewSrc: string;
@@ -85,6 +86,7 @@ export default class ChatStore {
 		if (!this.searchRoom) return this.chatRooms;
 		return this.chatRooms.filter((e) => toNormalize(e.name).includes(toNormalize(this.searchRoom)));
 	}
+
 	get Room() {
 		return this.getActiveRoom();
 	}
@@ -124,7 +126,7 @@ export default class ChatStore {
 	}
 
 	get listIdPinned() {
-		return this.Room?.pinMessages.map((e) => e.id) ?? [];
+		return this.Room?.pinMessages?.map((e) => e.id) ?? [];
 	}
 
 	get Selecting() {
@@ -251,7 +253,7 @@ export default class ChatStore {
 
 	setStorageSelect = (state: any) => Object.assign(this.storageSelect, state);
 
-	setStorageTab = (tab: StorageType)=> this.storageTab = tab;
+	setStorageTab = (tab: StorageType) => (this.storageTab = tab);
 
 	clearStorageSelect = () =>
 		(this.storageSelect = {
@@ -275,6 +277,11 @@ export default class ChatStore {
 			items: items ?? [],
 		};
 	};
+
+	resetGIF = () => {
+		this.nextGIF = '';
+		this.listGIF = [];
+	}
 	//#endregion SET
 
 	//#region FUNCTION
@@ -300,9 +307,28 @@ export default class ChatStore {
 		}
 
 		let room = this.getRoom(message.groupId);
-		if (room) room.previewMsg = message;
+		if (room) {
+			room.previewMsg = message;
+		} else {
+			//Create room
+			this.openPersonalRoom(message.groupId);
+			room = this.getRoom(message.groupId);
+			room!.previewMsg = message;
+		}
 		if (message.reply) this.replyMessage = undefined;
 		document.querySelector('.chat-body-view')?.scrollTo({ top: 0 });
+	};
+
+	openPersonalRoom = (userId: string, active?: boolean) => {
+		if (!this.chatRooms.find((e) => e.id === userId)) {
+			this.chatRooms.push({
+				id: userId,
+				name: stores.appStore.getUserName(userId),
+				isGroup: false,
+				members: [],
+			});
+		}
+		active && this.setActiveRoom(userId);
 	};
 	//#endregion FUNCTION
 
@@ -345,22 +371,36 @@ export default class ChatStore {
 	//#endregion FAKE BACKEND
 
 	//#region API
-	onSearchGIF = async (searchTxt: string) => {
-		const apikey = 'LIVDSRZULELA';
-		const lmt = 30;
-		const url = `https://g.tenor.com/v1/search?q=${searchTxt}&key=${apikey}&limit=${lmt}`;
+	onSearchGIF = async (searchTxt: string, next?: string) => {
+		const searchParams = new URLSearchParams({
+			q: searchTxt,
+			key: 'LIVDSRZULELA',
+			limit: '50',
+		});
 
-		await fetch(url, { headers: { method: 'GET' } })
-			.then((res) => res.json())
-			.then(
-				(res) =>
-					(this.listGIF = res.results?.map((e: any) => ({
-						id: e.id,
-						previewSrc: e.media[0].nanogif.url,
-						src: e.media[0].tinygif.url,
-					})))
-			);
+		if (next) searchParams.append('pos', next);
+
+		const url = `https://g.tenor.com/v1/search?${searchParams.toString()}`;
+		try {
+			const res = await fetch(url, { headers: { method: 'GET' } }).then((res) => res.json());
+
+			this.nextGIF = res.next;
+			const parsed = res.results?.map((e: any) => ({
+				id: e.id,
+				previewSrc: e.media[0].nanogif.url,
+				src: e.media[0].tinygif.url,
+			}));
+			if (next) {
+				this.listGIF.push(...parsed)
+			} else {
+				this.listGIF = parsed
+			}
+			
+		} catch (err) {
+			console.debug(err);
+		}
 	};
+	
 	onGetMessage = async (roomId?: string) => {
 		const room = roomId ?? this.activeRoom;
 		if (this.fetching || !room || this.activePin) return;
@@ -478,7 +518,7 @@ export default class ChatStore {
 	onPinMessage = (message: Message) => {
 		const room = this.getActiveRoom();
 		if (!room) return;
-		if (room.pinMessages.find((e) => e.id === message.id)) {
+		if (room.pinMessages?.find((e) => e.id === message.id)) {
 			//Unpin
 			room.pinMessages = room.pinMessages.filter((e) => e.id !== message.id);
 		} else {
@@ -596,6 +636,24 @@ export default class ChatStore {
 			});
 		});
 	};
+
+	onCall = () => {
+		notify('Incomming');
+	};
+
+	onDeleteChatHistory = () => {
+		if (!this.activeRoom) return;
+		this.messages = this.messages.map((e) => (e.groupId === this.activeRoom ? { ...e, deleted: true } : e));
+		const room = this.getActiveRoom();
+		room!.previewMsg = undefined;
+	};
+
+	//#region GROUP
+	onPinConversation = (id: string) => {
+		const room = this.getRoom(id);
+		room!.pinned = !room!.pinned;
+	}
+	//#endregion GROUP
 	//#region Group Member API
 	onLeaveGroup = () => {
 		// 1. Add an announce message

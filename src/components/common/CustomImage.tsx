@@ -3,7 +3,7 @@ import React, { CSSProperties, useState } from 'react';
 
 interface Props {
 	src: string;
-	antd?: true;
+	antd?: true | boolean;
 	style?: CSSProperties;
 	className?: string;
 }

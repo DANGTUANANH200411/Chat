@@ -75,8 +75,9 @@ export interface ChatRoom {
 	image?: string;
 	members: RoomMember[];
 	previewMsg?: Message;
-	pinMessages: Message[];
+	pinMessages?: Message[];
 	creatorId?: string;
+	pinned?: boolean;
 }
 
 export interface RoomMember extends User {

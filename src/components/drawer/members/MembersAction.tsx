@@ -4,7 +4,9 @@ import {
 	AuditOutlined,
 	DeleteOutlined,
 	ExceptionOutlined,
+	MessageOutlined,
 	MoreOutlined,
+	PhoneOutlined,
 	StopOutlined,
 	UserAddOutlined,
 	UserDeleteOutlined,
@@ -26,19 +28,33 @@ function MembersAction(props: Props) {
 		chatStore,
 	} = useStores();
 	const { id, role } = props;
-	const { Role, onRemoveMember, appointAdmin, removeAdmin } = chatStore;
+	const { Role, onRemoveMember, appointAdmin, removeAdmin, openPersonalRoom, onCall } = chatStore;
 
-	const isFriend = isFriendFn(id)
-	
-	const friendItem: ItemType = {
-		key: 'add-remove-friend',
-		label: $$(isFriend ? 'unfriend' : 'add-friend'),
-		icon: isFriend ? <UserDeleteOutlined /> : <UserAddOutlined />,
-		onClick: () => setFriend(id, isFriend),
-	};
+	const isFriend = isFriendFn(id);
+
+	const defaultItems: ItemType[] = [
+		{
+			key: 'add-remove-friend',
+			label: $$(isFriend ? 'unfriend' : 'add-friend'),
+			icon: isFriend ? <UserDeleteOutlined /> : <UserAddOutlined />,
+			onClick: () => setFriend(id, isFriend),
+		},
+		{
+			key: 'call',
+			label: $$('call'),
+			icon: <PhoneOutlined />,
+			onClick: () => onCall(),
+		},
+		{
+			key: 'message',
+			label: $$('message'),
+			icon: <MessageOutlined />,
+			onClick: () => openPersonalRoom(id, true),
+		},
+	];
 
 	const items: ItemType[] = [
-		friendItem,
+		...defaultItems,
 		{
 			key: 'profile',
 			label: $$('view-profile'),
@@ -51,7 +67,7 @@ function MembersAction(props: Props) {
 						key: 'appointed',
 						label: $$(role === 'Admin' ? 'remove-admin' : 'appoint-admin'),
 						icon: role === 'Admin' ? <ExceptionOutlined /> : <AuditOutlined />,
-						onClick: () => role === 'Admin' ? removeAdmin(id) : appointAdmin(id),
+						onClick: () => (role === 'Admin' ? removeAdmin(id) : appointAdmin(id)),
 					},
 			  ]
 			: []),
@@ -83,7 +99,17 @@ function MembersAction(props: Props) {
 				</Dropdown>
 			);
 		default:
-			return isFriend ? <></> : <UserAddOutlined className='hoverable-icon' onClick={() => () => setFriend(id)} />;
+			return isFriend ? (
+				<Dropdown trigger={['click']} menu={{ items: defaultItems }} destroyPopupOnHide arrow>
+					<MoreOutlined rotate={90} className='hoverable-icon' onClick={(e) => e.stopPropagation()} />
+				</Dropdown>
+			) : (
+				<UserAddOutlined
+					className='hoverable-icon'
+					onClick={() => setFriend(id, isFriend)}
+					style={{ visibility: 'visible' }}
+				/>
+			);
 	}
 }
 

@@ -102,6 +102,7 @@ function ChatFooter() {
 				onChange={setText}
 				shouldConvertEmojiToImage
 				onEnter={(text) => {
+					if(text.startsWith("@GIF ") || text.startsWith("@[GIF]")) return;
 					onSendMessage(text.trim(), false, uploaded);
 					setText('');
 					setUploaded([]);

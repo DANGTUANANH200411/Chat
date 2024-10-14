@@ -10,14 +10,16 @@ import {
 	ShareAltOutlined,
 	UndoOutlined,
 	UnorderedListOutlined,
+	WarningOutlined,
 } from '@ant-design/icons';
-import { Dropdown, MenuProps, Tooltip } from 'antd';
+import { Dropdown, Flex, MenuProps, Modal, Tooltip } from 'antd';
 import { useStores } from '../../../stores/stores';
 import { Message } from '../../../utils/type';
 import { observer } from 'mobx-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { notify } from '../../../utils/notify';
 import { downloadUrl } from '../../../utils/helper';
+import Confirm from '../../common/Confirm';
 
 interface Props {
 	message: Message;
@@ -37,9 +39,11 @@ function ChatAction({ message }: Props) {
 		onRecallMessage,
 		toggleShareModal,
 	} = chatStore;
-	const { id, sender, content, isFile, data, recalled } = message;
-	const isPinned = Room?.pinMessages.find((e) => e.id === id) ? true : false;
 
+	const { id, sender, content, isFile, data, recalled } = message;
+	const isPinned = Room?.pinMessages?.find((e) => e.id === id) ? true : false;
+
+	const [openDelete, setOpenDelete] = useState<boolean>(false);
 	const isMe = user.id === sender;
 
 	const items: MenuProps['items'] = [
@@ -82,7 +86,7 @@ function ChatAction({ message }: Props) {
 			? [
 					{
 						key: 'download',
-						label: 'save-file',
+						label: $$('download'),
 						icon: <DownloadOutlined />,
 						onClick: () => downloadUrl(data ?? content),
 					},
@@ -108,9 +112,9 @@ function ChatAction({ message }: Props) {
 		{
 			key: 'delete',
 			label: $$('delete-for-me'),
-			icon: <DeleteOutlined style={{color: 'red'}}/>,
+			icon: <DeleteOutlined style={{ color: 'red' }} />,
 			danger: true,
-			onClick: () => onDeleteMessages([id]),
+			onClick: () => setOpenDelete(true),
 		},
 	];
 	return (
@@ -120,7 +124,7 @@ function ChatAction({ message }: Props) {
 					<Tooltip title={$$('delete-for-me')} destroyTooltipOnHide>
 						<DeleteOutlined
 							className='text-secondary hoverable-icon icon-danger'
-							onClick={() => onDeleteMessages([id])}
+							onClick={() => setOpenDelete(true)}
 						/>
 					</Tooltip>
 				</>
@@ -145,6 +149,23 @@ function ChatAction({ message }: Props) {
 					</Tooltip>
 				</>
 			)}
+			<Modal
+				centered
+				destroyOnClose
+				open={openDelete}
+				title={
+					<Flex gap={12} align='center'>
+						<WarningOutlined style={{background: 'orange', padding: 6, borderRadius: '50%'}}/>
+						{$$('delete-n-msg-4me', { number: 1 })}
+					</Flex>
+				}
+				okText={$$('delete')}
+				okButtonProps={{ color: 'danger', variant: 'filled' }}
+				onCancel={() => setOpenDelete(false)}
+				onOk={() => {
+					onDeleteMessages([id]);
+				}}
+			/>
 		</div>
 	);
 }

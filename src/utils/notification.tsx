@@ -10,7 +10,7 @@ export const openUndo = (props: Props) => {
 	const { $$ } = stores.appStore;
 	const { count, callback } = props;
 	const key = newGuid();
-	notification.open({
+	notification.info({
 		key: key,
 		message: $$('undo'),
 		placement: 'bottomLeft',

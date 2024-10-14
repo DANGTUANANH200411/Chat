@@ -4,17 +4,12 @@ import { observer } from 'mobx-react';
 import React from 'react';
 import { useStores } from '../../../stores/stores';
 import { downloadUrl } from '../../../utils/helper';
+import Confirm from '../../common/Confirm';
 
 function SelectingBar() {
 	const {
 		appStore: { $$, CurrentUserId },
-		chatStore: {
-			selectMessages,
-			clearListSelectedMsg,
-			onDeleteMessages,
-			onRecallMessage,
-			toggleShareModal,
-		},
+		chatStore: { selectMessages, clearListSelectedMsg, onDeleteMessages, onRecallMessage, toggleShareModal },
 	} = useStores();
 
 	if (!selectMessages.size) return <></>;
@@ -55,15 +50,20 @@ function SelectingBar() {
 						/>
 					</Tooltip>
 				)}
-				<Tooltip title={$$('delete-only-me')} destroyTooltipOnHide>
-					<DeleteOutlined
-						className='circle btn danger'
-						onClick={() => {
-							onDeleteMessages([...selectMessages.keys()]);
-							clearListSelectedMsg();
-						}}
-					/>
-				</Tooltip>
+				<Confirm
+					danger
+					title={$$('delete-n-msg-4me', { number: selectMessages.size })}
+					okText={$$('delete')}
+					onOk={() => {
+						onDeleteMessages([...selectMessages.keys()]);
+						clearListSelectedMsg();
+					}}
+				>
+					<Tooltip title={$$('delete-only-me')} destroyTooltipOnHide>
+						<DeleteOutlined className='circle btn danger' onClick={() => {}} />
+					</Tooltip>
+				</Confirm>
+
 				<Tooltip title={$$('cancel')} destroyTooltipOnHide>
 					<CloseOutlined className='circle btn' onClick={clearListSelectedMsg} />
 				</Tooltip>
