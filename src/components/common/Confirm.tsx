@@ -4,12 +4,12 @@ import React, { isValidElement, cloneElement, useState } from 'react';
 
 interface Props extends ModalProps {
 	children: React.ReactNode;
-	description?: React.ReactNode;
+	body?: React.ReactNode;
 	danger?: true;
 }
 function Confirm(props: Props) {
 	const [open, setOpen] = useState<boolean>(false);
-	const { danger, description, children, title, onCancel, onOk, ...rest } = props;
+	const { danger, body, children, title, onCancel, onOk, ...rest } = props;
 
 	return (
 		<>
@@ -45,7 +45,7 @@ function Confirm(props: Props) {
 					type: 'text',
 				}}
 			>
-				{description}
+				{body}
 			</Modal>
 		</>
 	);

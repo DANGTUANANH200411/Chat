@@ -129,6 +129,11 @@ const vi: ILocale = {
 	'group-board': 'Bảng nhóm',
 	'privacy-setting': 'Thiết lập quyền riêng tư',
 	'delete': 'Xóa',
-	'delete-n-msg-4me': 'Xóa {{number}} tin nhắn ở phía tôi'
+	'delete-n-msg-4me': 'Xóa {{number}} tin nhắn ở phía tôi',
+	'create-group-with-n': 'Tạo nhóm với {{name}}',
+	'add-n-to-groups': 'Thêm {{name}} vào nhóm',
+	'view-groups-in-common': 'Xem nhóm chung',
+	'change-alias-name': 'Thay đổi tên bí danh',
+	'add-to-group': 'Thêm vào nhóm',
 };
 export { vi };

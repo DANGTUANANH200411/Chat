@@ -21,15 +21,19 @@ function ShareModal() {
     }, [open])
     return (
 		<Modal
-			title={$$('share')}
-			className='mdlShare'
 			centered
 			open={open}
+			destroyOnClose
+			title={$$('share')}
+			className='mdlShare'
 			onOk={() => {
                 forwardMessage(Array.from(selected));
                 toggleShareModal();
             }}
 			onCancel={() => toggleShareModal()}
+			okButtonProps={{
+				disabled: !selected.size
+			}}
 		>
 			<SelectShare selected={selected} setSelected={setSelected} />
 		</Modal>

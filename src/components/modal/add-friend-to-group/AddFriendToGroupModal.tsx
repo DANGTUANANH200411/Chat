@@ -4,21 +4,21 @@ import { useStores } from '../../../stores/stores';
 import SelectUsers from '../create-group/SelectUsers';
 import { observer } from 'mobx-react';
 
-function AddToGroupModal() {
+function AddFriendToGroupModal() {
 	const {
-		appStore: { $$, toggleAddToGroup, setToggleAddToGroup },
+		appStore: { $$, toggleAddFriendToGroup, setToggleAddFriendToGroup },
 		chatStore: { Room, addFriendToGroup, clearSelectedUsers },
 	} = useStores();
 
     const onClose = () => {
-        setToggleAddToGroup();
+        setToggleAddFriendToGroup();
         clearSelectedUsers();
     }
 	return (
 		<Modal
-			open={toggleAddToGroup}
 			centered
 			destroyOnClose
+			open={toggleAddFriendToGroup}
 			title={$$('add-friends-to-group')}
 			onOk={()=> {
                 addFriendToGroup();
@@ -31,4 +31,4 @@ function AddToGroupModal() {
 	);
 }
 
-export default React.memo(observer(AddToGroupModal));
+export default React.memo(observer(AddFriendToGroupModal));

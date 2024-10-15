@@ -5,6 +5,7 @@ import Mustache from 'mustache';
 import * as locale from '../locales';
 import { LABELS, USERS } from '../utils/constants';
 import dayjs from 'dayjs';
+import { stores } from './stores';
 interface Setting {
 	darkTheme: boolean;
 }
@@ -16,14 +17,21 @@ export default class AppStore {
 	};
 	i18n!: I18n;
 
-	user: User = USERS[1];
+	user: User = USERS[0];
 	menuOpen: boolean = true;
 	drawerOpen: DrawerType = undefined;
 	labels: Label[] = LABELS;
 	users: ObservableMap<string, User> = new ObservableMap<string, User>();
 
 	toggleAddFriend: boolean = false;
-	toggleAddToGroup: boolean = false;
+	toggleAddFriendToGroup: boolean = false;
+	mdlAddToGroupProps: {
+		visible: boolean;
+		memberId?: string;
+	} = {
+		visible: false,
+		memberId: undefined,
+	}
 	get DarkTheme() {
 		return this.setting.darkTheme;
 	}
@@ -54,7 +62,8 @@ export default class AppStore {
 	getUserName = (id: string | undefined, you: boolean = false) => {
 		if (!id) return 'Unknown';
 		if (you && id === this.user.id) return this.$$('you').toLocaleLowerCase();
-		return this.users.get(id)?.userName ?? 'Unknown';
+		const user = this.users.get(id);
+		return !!user ? (user.alias ?? user.userName) : 'Unknown';
 	};
 	getLabel = (id: string | undefined) => {
 		if (!id) return undefined;
@@ -68,7 +77,14 @@ export default class AppStore {
 
 	//#region SET
 	setToggleAddFiend = () => (this.toggleAddFriend = !this.toggleAddFriend);
-	setToggleAddToGroup = () => (this.toggleAddToGroup = !this.toggleAddToGroup);
+	
+	setToggleAddFriendToGroup = () => (this.toggleAddFriendToGroup = !this.toggleAddFriendToGroup);
+	
+	toggleAddToGroup = (memberId?: string) => {
+		this.mdlAddToGroupProps.memberId = memberId;
+		this.mdlAddToGroupProps.visible = !this.mdlAddToGroupProps.visible
+	};
+
 	setLang = (lang: LangType) => {
 		this.lang = lang;
 		localStorage.setItem('LANGUAGE', lang);
@@ -98,6 +114,11 @@ export default class AppStore {
 			this.users.set(id, { ...user, isFriend: !isFriend });
 		}
 	};
+
+	onChangeAliasName = (id: string, alias: string) => {
+		const user = this.users.get(id);
+		user!.alias = alias;
+	}
 	//#endregion
 
 	//#region Translate

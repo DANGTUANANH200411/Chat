@@ -20,6 +20,7 @@ export interface User {
 	imageSrc?: string;
 	phoneNumber: string;
 	isFriend?: boolean;
+	alias?: string;
 }
 
 export interface Message {

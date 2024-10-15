@@ -6,9 +6,10 @@ import CreateGroup from './modal/create-group/CreateGroup';
 import './style.css';
 import React from 'react';
 import AddFriendModal from './modal/add-friend/AddFriendModal';
-import AddToGroupModal from './modal/add-friend-to-group/AddToGroupModal';
+import AddFriendToGroupModal from './modal/add-friend-to-group/AddFriendToGroupModal';
 import ChatDrawer from './drawer/ChatDrawer';
 import ShareModal from './modal/share/ShareModal';
+import AddToGroupModal from './modal/add-to-group/AddToGroupModal';
 
 function Main() {
 	return (
@@ -23,8 +24,9 @@ function Main() {
 			</Row>
 			<CreateGroup />
 			<AddFriendModal />
-			<AddToGroupModal />
+			<AddFriendToGroupModal />
 			<ShareModal/>
+			<AddToGroupModal/>
 		</Watermark>
 	);
 }

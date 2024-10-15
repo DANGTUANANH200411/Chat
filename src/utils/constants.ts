@@ -647,8 +647,8 @@ const CHAT_ROOMS: ChatRoom[] = [
 		label: LABELS[2].id,
 	},
 	{
-		id: USERS.at(-1)!.id,
-		name: ROOM_MEMBER.at(-1)!.userName,
+		id: USERS[1].id,
+		name: USERS[1].userName,
 		isGroup: false,
 		members: [],
 		label: LABELS[4].id,

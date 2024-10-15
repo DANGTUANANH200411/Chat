@@ -281,7 +281,13 @@ export default class ChatStore {
 	resetGIF = () => {
 		this.nextGIF = '';
 		this.listGIF = [];
-	}
+	};
+
+	setRoomName = (id: string, name: string) => {
+		const room = this.getRoom(id);
+		room!.name = name;
+		console.log('hahaha');
+	};
 	//#endregion SET
 
 	//#region FUNCTION
@@ -347,13 +353,13 @@ export default class ChatStore {
 		return listMsg.splice(skip, Math.min(idx + 20 - skip, listMsg.length));
 	};
 
-	createAnnouncement = (type: AnnouceType, toUser: string) => {
+	createAnnouncement = (type: AnnouceType, toUser: string, roomId?: string) => {
 		//this feature should be in backend
-		const activeRoom = this.activeRoom;
-		if (!activeRoom) return;
+		const room = roomId ?? this.activeRoom;
+		if (!room) return;
 		const announce: Message = {
 			id: newGuid(),
-			groupId: activeRoom,
+			groupId: room,
 			sender: stores.appStore.CurrentUserId,
 			content: '',
 			createDate: SYSTEM_NOW(),
@@ -391,16 +397,15 @@ export default class ChatStore {
 				src: e.media[0].tinygif.url,
 			}));
 			if (next) {
-				this.listGIF.push(...parsed)
+				this.listGIF.push(...parsed);
 			} else {
-				this.listGIF = parsed
+				this.listGIF = parsed;
 			}
-			
 		} catch (err) {
 			console.debug(err);
 		}
 	};
-	
+
 	onGetMessage = async (roomId?: string) => {
 		const room = roomId ?? this.activeRoom;
 		if (this.fetching || !room || this.activePin) return;
@@ -590,10 +595,10 @@ export default class ChatStore {
 	};
 
 	searchGroupAndUser = (text: string): ShareSelectItemProps[] => {
-		let friends = stores.appStore.Friends;
-		let rooms = this.chatRooms;
+		const friends = stores.appStore.Friends;
+		const rooms = this.chatRooms;
 
-		return [
+		const arr = [
 			...friends
 				.filter((e) => !text || matchSearchUser(text, e))
 				.map((e) => ({
@@ -611,6 +616,24 @@ export default class ChatStore {
 					image: e.image,
 				})),
 		];
+		return [...new Map(arr.map((e) => [e.id, e])).values()];
+	};
+
+	searchGroup = (text: string): ShareSelectItemProps[] => {
+		const rooms = this.chatRooms;
+		return rooms
+			.filter(
+				(e) =>
+					e.isGroup &&
+					(!text || normalizeIncludes(e.name, text))			)
+			.map((e) => ({
+				id: e.id,
+				name: e.name,
+				isGroup: e.isGroup,
+				members: e.members,
+				image: e.image,
+			}))
+			.sort((a, b) => a.name.localeCompare(b.name));
 	};
 
 	searchUser = (text: string, label?: string) => {
@@ -652,7 +675,7 @@ export default class ChatStore {
 	onPinConversation = (id: string) => {
 		const room = this.getRoom(id);
 		room!.pinned = !room!.pinned;
-	}
+	};
 	//#endregion GROUP
 	//#region Group Member API
 	onLeaveGroup = () => {
@@ -676,6 +699,20 @@ export default class ChatStore {
 		];
 		Array.from(this.selectedUsers.keys()).forEach((id) => this.createAnnouncement('Add', id));
 	};
+
+	addFriendToGroups = (memberId: string, groupIds: string[]) => {
+		const user = stores.appStore.getUserById(memberId);
+		if (!user) return;
+
+		groupIds.forEach((groupId) => {
+			const room = this.getRoom(groupId);
+			if (room ) {
+				room.members = [...room.members, { ...user, role: 'Member', invitedBy: stores.appStore.CurrentUserId }];
+				this.createAnnouncement('Add', memberId, groupId);
+			}
+		});
+	};
+
 	onRemoveMember = (userId: string) => {
 		this.createAnnouncement('Remove', userId);
 		const room = this.getActiveRoom();

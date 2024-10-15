@@ -17,7 +17,7 @@ import { GROUP_AVT_SIZE } from '../../../utils/constants';
 function ChatHeader() {
 	const {
 		chatStore,
-		appStore: { $$, drawerOpen, setDrawerOpen, setToggleAddToGroup, getLabel },
+		appStore: { $$, drawerOpen, setDrawerOpen, setToggleAddFriendToGroup, getLabel },
 	} = useStores();
 	const { Room } = chatStore;
 	if (!Room) return <></>;
@@ -34,12 +34,14 @@ function ChatHeader() {
 						</Typography.Text>
 					</Row>
 					<Flex gap={4}>
-						<Flex gap='inherit' className='hover-change-color' onClick={() => setDrawerOpen('Members')}>
-							<UserOutlined className='text-secondary ' />
-							<Typography.Text ellipsis className='text-small text-secondary'>
-								{`${Room.members.length} ${$$('members')}`}
-							</Typography.Text>
-						</Flex>
+						{isGroup && (
+							<Flex gap='inherit' className='hover-change-color' onClick={() => setDrawerOpen('Members')}>
+								<UserOutlined className='text-secondary ' />
+								<Typography.Text ellipsis className='text-small text-secondary'>
+									{`${Room.members.length} ${$$('members')}`}
+								</Typography.Text>
+							</Flex>
+						)}
 						<Dropdown trigger={['click']} menu={{ items: LabelMenu(id) }} destroyPopupOnHide>
 							<TagFilled
 								rotate={45}
@@ -58,7 +60,7 @@ function ChatHeader() {
 					<UsergroupAddOutlined
 						className='hoverable-icon'
 						title={$$('add-friends-to-group')}
-						onClick={setToggleAddToGroup}
+						onClick={setToggleAddFriendToGroup}
 					/>
 					<SearchOutlined
 						className='hoverable-icon'

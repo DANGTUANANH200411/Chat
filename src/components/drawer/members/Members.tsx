@@ -8,7 +8,7 @@ import MembersAction from './MembersAction';
 import Confirm from '../../common/Confirm';
 function Members() {
 	const {
-		appStore: { $$, user: currentUser, setToggleAddToGroup, getUserName, setDrawerOpen },
+		appStore: { $$, user: currentUser, setToggleAddFriendToGroup, getUserName, setDrawerOpen },
 		chatStore: { Room, onCopyGroup, onLeaveGroup, getRole },
 	} = useStores();
 
@@ -30,7 +30,7 @@ function Members() {
 						<Button
 							className='max-width text-primary'
 							icon={<UserAddOutlined />}
-							onClick={setToggleAddToGroup}
+							onClick={setToggleAddFriendToGroup}
 						>
 							{$$('add-friends-to-group')}
 						</Button>
@@ -81,7 +81,7 @@ function Members() {
 												<Confirm
 													danger
 													title='Leave group'
-													description='Leave and delete this conversation?'
+													body='Leave and delete this conversation?'
 													okText={$$('leave')}
 													onOk={() => onLeaveGroup()}
 												>
