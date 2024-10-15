@@ -6,7 +6,7 @@ import { useStores } from '../../../stores/stores';
 import ReplyContent from '../body/ReplyContent';
 import ChatFooterBar from './ChatFooterBar';
 import InputEmoji from 'react-input-emoji';
-import { toNormalize } from '../../../utils/helper';
+import { newGuid, toNormalize } from '../../../utils/helper';
 import { useDropzone } from 'react-dropzone';
 import PreviewUploaded from './PreviewUploaded';
 import { Attachment } from '../../../utils/type';
@@ -48,6 +48,7 @@ function ChatFooter() {
 					reader.onload = () => {
 						try {
 							resolve({
+								id: newGuid(),
 								name: file.name,
 								data: reader.result,
 								size: file.size,

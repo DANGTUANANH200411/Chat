@@ -231,3 +231,7 @@ export function matchSearchUser (text: string, user: User) {
 export function normalizeIncludes (str: string, search: string) {
 	return toNormalize(str).includes(toNormalize(search));
 }
+
+export function dummyUploadAction ({onSuccess}: any) {
+	setTimeout(() => onSuccess && onSuccess('ok'), 0)
+}

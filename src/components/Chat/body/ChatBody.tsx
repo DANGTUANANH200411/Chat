@@ -64,6 +64,7 @@ function ChatBody() {
 		const reject = (file: any) => {
 			onSendFile(
 				{
+					id: file.id,
 					name: file.name,
 					data: '',
 					size: file.size,
@@ -82,6 +83,7 @@ function ChatBody() {
 			reader.onload = () => {
 				try {
 					onSendFile({
+						id: file.id,
 						name: file.name,
 						data: reader.result as string,
 						size: file.size,

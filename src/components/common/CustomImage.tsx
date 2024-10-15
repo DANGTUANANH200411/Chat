@@ -26,7 +26,7 @@ function CustomImage(props: Props) {
 				<img
 					src={src}
 					className={className}
-					style={{ ...style, display: loading ? 'none' : style?.display ?? 'block' }}
+					style={{ ...style, display: loading ? 'none' : style?.display ?? 'inline-block' }}
 					onLoad={() => {
 						setLoading(false);
 					}}

@@ -4,6 +4,7 @@ import React from 'react';
 import { isImage } from '../../../utils/helper';
 import { Attachment } from '../../../utils/type';
 import FileMessage from '../body/content-render/FileMessage';
+import FileWrapper from '../../common/FileWrapper';
 
 interface Props {
 	uploaded: Attachment[];
@@ -15,20 +16,24 @@ function PreviewUploaded(props: Props) {
 		<></>
 	) : (
 		<Row className='preview-upload' justify='space-between'>
-			<div>
-				<Image.PreviewGroup>
-					{uploaded.map((file, idx) => {
-						return (
+			<div className='flex-grow'>
+				{uploaded.map((file) => {
+					return (
+						<FileWrapper
+							key={file.id}
+							onRemove={() => setUploaded(uploaded.filter((e) => e.id !== file.id))}
+							previewSrc={file.data ?? file.name}
+						>
 							<FileMessage
-								key={idx}
+								antd={false}
 								content={file.name}
 								fileSize={file.size}
 								data={file.data}
-								imgStyle={{ height: '5vh' }}
+								imgStyle={{ height: '6vh' }}
 							/>
-						);
-					})}
-				</Image.PreviewGroup>
+						</FileWrapper>
+					);
+				})}
 			</div>
 			<CloseOutlined className='btn-clear circle btn' onClick={() => setUploaded([])} />
 		</Row>

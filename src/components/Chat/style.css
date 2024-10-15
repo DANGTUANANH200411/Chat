@@ -381,13 +381,18 @@ body:is(.dark-theme) .chat-item-username {
 }
 
 .chat-footer .preview-upload > div {
-	max-height: 20vh;
+	max-height: 12vh;
 	overflow: auto;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	column-gap: 8px;
+	row-gap: 8px;
 }
 .chat-footer-reply-wrapper .btn-clear,
 .chat-footer .preview-upload .btn-clear {
 	position: absolute;
-	right: 1.4rem;
+	right: 3rem;
 	font-size: 14px;
 	top: calc(50% - 7px);
 }

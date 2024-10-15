@@ -9,14 +9,14 @@ interface Props {
 	fileSize?: number;
 	data?: any;
 	imgStyle?: React.CSSProperties;
-	preview?: boolean; //Preview antd image
+	antd?: boolean; //Preview antd image
 }
 function FileMessage(props: Props) {
-	const { content, fileSize, data, imgStyle, preview } = props;
+	const { content, fileSize, data, imgStyle, antd } = props;
 	if (isImage(content)) {
 		return (
 			<CustomImage
-				antd={!/[\/.]gif$/i.test(content)}
+				antd={antd ?? !/[\/.]gif$/i.test(content)}
 				src={data ?? content}
 				style={{ maxHeight: '40vh', padding: 2, ...imgStyle }}
 				className='image-message'

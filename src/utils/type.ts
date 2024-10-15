@@ -113,6 +113,7 @@ export interface ReactLogPopProps {
 }
 
 export interface Attachment {
+	id: string;
 	name: string;
 	data: string; //tmp for display image only FE
 	size: number;

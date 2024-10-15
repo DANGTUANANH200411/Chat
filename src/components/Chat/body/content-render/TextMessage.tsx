@@ -38,7 +38,7 @@ function TextMessage(props: Props) {
 		return str.replace(mentionRegex, replacer);
 	};
 
-	return (
+	const contentElement = (
 		<Typography.Text
 			className='text-primary'
 			style={{
@@ -48,16 +48,23 @@ function TextMessage(props: Props) {
 			}}
 		>
 			<div dangerouslySetInnerHTML={{ __html: parseContent() }}></div>
-			{attachment && (
-				<Image.PreviewGroup>
-					{attachment.map((file, idx) => (
-						<FileMessage key={idx} content={file.name} fileSize={file.size} data={file.data} />
-					))}
-				</Image.PreviewGroup>
-			)}
-			{/* {listSrc.length === 1 && <Image src={listSrc[0]} style={{ maxHeight: 200, padding: 2 }}></Image>} */}
 		</Typography.Text>
 	);
+	if (attachment) {
+		return (
+			<div>
+				{contentElement}
+				{attachment && (
+					<Image.PreviewGroup>
+						{attachment.map((file, idx) => (
+							<FileMessage key={idx} content={file.name} fileSize={file.size} data={file.data} />
+						))}
+					</Image.PreviewGroup>
+				)}
+			</div>
+		);
+	}
+	return contentElement
 }
 
 export default React.memo(TextMessage);
