@@ -676,6 +676,10 @@ export default class ChatStore {
 		const room = this.getRoom(id);
 		room!.pinned = !room!.pinned;
 	};
+
+	getGroupsInCommon = (userId: string) => {
+		return this.chatRooms.filter(e=> e.members.some(e=> e.id === userId) && e.members.some(e=> e.id === userId));
+	}
 	//#endregion GROUP
 	//#region Group Member API
 	onLeaveGroup = () => {

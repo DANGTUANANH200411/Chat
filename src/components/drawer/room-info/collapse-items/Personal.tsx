@@ -6,11 +6,10 @@ import { EditOutlined, TeamOutlined, UserAddOutlined, UsergroupAddOutlined } fro
 import { User } from '../../../../utils/type';
 import Confirm from '../../../common/Confirm';
 
-
 function Personal() {
 	const {
-		appStore: { $$, getUserById, onChangeAliasName, toggleAddToGroup },
-		chatStore: {Room, setSelectedUsers, toggleCreateGroup, setRoomName },
+		appStore: { $$, getUserById, onChangeAliasName, toggleAddToGroup, toggleGrpsInComm },
+		chatStore: { Room, setSelectedUsers, toggleCreateGroup, setRoomName },
 	} = useStores();
 
 	const { id, name } = Room!;
@@ -56,10 +55,10 @@ function Personal() {
 			<Typography.Text ellipsis className='div-button' onClick={onCreateGroupWith}>
 				<UsergroupAddOutlined /> {$$('create-group-with-n', { name })}
 			</Typography.Text>
-			<Typography.Text ellipsis className='div-button' onClick={()=> toggleAddToGroup(id)}>
+			<Typography.Text ellipsis className='div-button' onClick={() => toggleAddToGroup(id)}>
 				<UserAddOutlined /> {$$('add-n-to-groups', { name })}
 			</Typography.Text>
-			<Typography.Text ellipsis className='div-button'>
+			<Typography.Text ellipsis className='div-button' onClick={() => toggleGrpsInComm(id)}>
 				<TeamOutlined /> {$$('view-groups-in-common')}
 			</Typography.Text>
 		</Flex>

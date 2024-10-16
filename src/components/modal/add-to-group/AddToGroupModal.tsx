@@ -14,7 +14,7 @@ function AddToGroupModal() {
 		chatStore: { searchGroup, addFriendToGroups },
 	} = useStores();
 
-	const { visible, memberId } = mdlAddToGroupProps;
+	const { visible, id } = mdlAddToGroupProps;
 	const [selected, setSelected] = useState<Set<string>>(new Set());
 	const [searchText, setSearchText] = useState<string>('');
 	const [loading, setLoading] = useState<boolean>(false);
@@ -36,7 +36,7 @@ function AddToGroupModal() {
 		return () => {
 			clearTimeout(timer);
 		};
-	}, [searchText, memberId]);
+	}, [searchText, id]);
 
 	return (
 		<Modal
@@ -45,7 +45,7 @@ function AddToGroupModal() {
 			open={visible}
 			title={$$('add-to-group')}
 			onOk={() => {
-				addFriendToGroups(memberId ?? '', [...selected]);
+				addFriendToGroups(id ?? '', [...selected]);
 				toggleAddToGroup();
 			}}
 			onCancel={() => toggleAddToGroup()}
@@ -71,7 +71,7 @@ function AddToGroupModal() {
 						style={{ position: 'relative', height: '40vh', overflow: 'auto' }}
 					>
 						{list.map((item) => {
-							const joined = item.members?.some((e) => e.id === memberId);
+							const joined = item.members?.some((e) => e.id === id);
 							return (
 								<Row
 									key={item.id}

@@ -1,5 +1,5 @@
 import { makeAutoObservable, ObservableMap } from 'mobx';
-import { DrawerType, I18n, Label, LangType, User } from '../utils/type';
+import { CommonModalProps, DrawerType, I18n, Label, LangType, User } from '../utils/type';
 import { initI18n } from '../utils/i18n';
 import Mustache from 'mustache';
 import * as locale from '../locales';
@@ -25,12 +25,15 @@ export default class AppStore {
 
 	toggleAddFriend: boolean = false;
 	toggleAddFriendToGroup: boolean = false;
-	mdlAddToGroupProps: {
-		visible: boolean;
-		memberId?: string;
-	} = {
+
+	mdlAddToGroupProps: CommonModalProps = {
 		visible: false,
-		memberId: undefined,
+		id: undefined,
+	}
+
+	mdlGrpsInComm: CommonModalProps = {
+		visible: false,
+		id: undefined,
 	}
 	get DarkTheme() {
 		return this.setting.darkTheme;
@@ -81,8 +84,13 @@ export default class AppStore {
 	setToggleAddFriendToGroup = () => (this.toggleAddFriendToGroup = !this.toggleAddFriendToGroup);
 	
 	toggleAddToGroup = (memberId?: string) => {
-		this.mdlAddToGroupProps.memberId = memberId;
+		this.mdlAddToGroupProps.id = memberId;
 		this.mdlAddToGroupProps.visible = !this.mdlAddToGroupProps.visible
+	};
+
+	toggleGrpsInComm = (memberId?: string) => {
+		this.mdlGrpsInComm.id = memberId;
+		this.mdlGrpsInComm.visible = !this.mdlGrpsInComm.visible
 	};
 
 	setLang = (lang: LangType) => {

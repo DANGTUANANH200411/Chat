@@ -10,6 +10,7 @@ import AddFriendToGroupModal from './modal/add-friend-to-group/AddFriendToGroupM
 import ChatDrawer from './drawer/ChatDrawer';
 import ShareModal from './modal/share/ShareModal';
 import AddToGroupModal from './modal/add-to-group/AddToGroupModal';
+import GroupsInCommonModal from './modal/GroupsInCommonModal';
 
 function Main() {
 	return (
@@ -27,6 +28,7 @@ function Main() {
 			<AddFriendToGroupModal />
 			<ShareModal/>
 			<AddToGroupModal/>
+			<GroupsInCommonModal/>
 		</Watermark>
 	);
 }

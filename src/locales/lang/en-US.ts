@@ -131,7 +131,8 @@ const en = {
 	'delete-n-msg-4me': 'Delete {{number}} message{{#plural}}s{{/plural}} only me',
 	'create-group-with-n': 'Create group with {{name}}',
 	'add-n-to-groups': 'Add {{name}} to groups',
-	'view-groups-in-common': 'View group in common',
+	'view-groups-in-common': 'View groups in common',
+	'groups-in-common': 'Groups in common',
 	'change-alias-name': 'Change alias name',
 	'add-to-group': 'Add to group',
 };

@@ -154,3 +154,8 @@ export interface ShareSelectItemProps {
 	members?: RoomMember[];
 	image?: string;
 }
+
+export interface CommonModalProps {
+	visible: boolean;
+	id?: string;
+}

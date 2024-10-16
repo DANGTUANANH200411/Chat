@@ -133,6 +133,7 @@ const vi: ILocale = {
 	'create-group-with-n': 'Tạo nhóm với {{name}}',
 	'add-n-to-groups': 'Thêm {{name}} vào nhóm',
 	'view-groups-in-common': 'Xem nhóm chung',
+	'groups-in-common': 'Nhóm chung',
 	'change-alias-name': 'Thay đổi tên bí danh',
 	'add-to-group': 'Thêm vào nhóm',
 };
