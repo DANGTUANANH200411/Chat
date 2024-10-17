@@ -32,6 +32,7 @@ type DateMessage = {
 export default class ChatStore {
 	tabItem: TabItemType = 'All';
 	chatRooms: ChatRoom[] = CHAT_ROOMS;
+	tmpRoom: ChatRoom | undefined = undefined;
 
 	allMessage: Message[] = MESSAGES;
 
@@ -88,7 +89,7 @@ export default class ChatStore {
 	}
 
 	get Room() {
-		return this.getActiveRoom();
+		return this.tmpRoom ?? this.getActiveRoom();
 	}
 
 	get RoomMessages() {
@@ -226,10 +227,11 @@ export default class ChatStore {
 		!this.openCreateGroup && this.clearSelectedUsers();
 	};
 	setTabItem = (tab: TabItemType) => (this.tabItem = tab);
-	setActiveRoom = (room: string) => {
+	setActiveRoom = (room: string, removeTmpRoom: boolean = true) => {
 		if (this.activeRoom === room) return;
 		this.activeRoom = room;
 		this.onGetMessage(room);
+		if (removeTmpRoom) this.tmpRoom = undefined;
 	};
 	setActivePin = (id: string | undefined) => (this.activePin = id);
 
@@ -317,7 +319,7 @@ export default class ChatStore {
 			room.previewMsg = message;
 		} else {
 			//Create room
-			this.openPersonalRoom(message.groupId);
+			this.openPersonalRoom(message.groupId, true);
 			room = this.getRoom(message.groupId);
 			room!.previewMsg = message;
 		}
@@ -325,16 +327,26 @@ export default class ChatStore {
 		document.querySelector('.chat-body-view')?.scrollTo({ top: 0 });
 	};
 
-	openPersonalRoom = (userId: string, active?: boolean) => {
+	openPersonalRoom = (userId: string, create?: boolean) => {
 		if (!this.chatRooms.find((e) => e.id === userId)) {
-			this.chatRooms.push({
-				id: userId,
-				name: stores.appStore.getUserName(userId),
-				isGroup: false,
-				members: [],
-			});
+			if (create) {
+				this.chatRooms.push({
+					id: userId,
+					name: stores.appStore.getUserName(userId),
+					isGroup: false,
+					members: [],
+				});
+				this.tmpRoom = undefined;
+			} else {
+				this.tmpRoom = {
+					id: userId,
+					name: stores.appStore.getUserName(userId),
+					isGroup: false,
+					members: [],
+				};
+			}
 		}
-		active && this.setActiveRoom(userId);
+		this.setActiveRoom(userId, false);
 	};
 	//#endregion FUNCTION
 

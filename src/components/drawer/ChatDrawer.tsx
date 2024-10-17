@@ -7,7 +7,7 @@ import RoomStorage from './room-storage/RoomStorage';
 
 function ChatDrawer() {
 	const {
-		appStore: { drawerOpen },
+		appStore: { drawerOpen, setDrawerOpen },
 		chatStore: { Room },
 	} = useStores();
 
@@ -18,6 +18,10 @@ function ChatDrawer() {
 			document.documentElement.style.setProperty('--drawer-w', '20vw');
 		}
 	}, [drawerOpen]);
+
+	useEffect(() => {
+		!Room?.isGroup && drawerOpen === 'Members' && setDrawerOpen('Info')
+	}, [Room, drawerOpen, setDrawerOpen])
 
 	if (!drawerOpen || !Room) return <></>;
 

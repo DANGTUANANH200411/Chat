@@ -49,7 +49,7 @@ function MembersAction(props: Props) {
 			key: 'message',
 			label: $$('message'),
 			icon: <MessageOutlined />,
-			onClick: () => openPersonalRoom(id, true),
+			onClick: () => openPersonalRoom(id),
 		},
 	];
 

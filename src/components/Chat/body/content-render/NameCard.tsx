@@ -52,7 +52,7 @@ function NameCard(props: Props) {
 						<div className='chat-item-namecard-btn-call' onClick={() => onCall()}>
 							{$$('call')}
 						</div>
-						<div className='chat-item-namecard-btn-msg' onClick={() => openPersonalRoom(id, true)}>
+						<div className='chat-item-namecard-btn-msg' onClick={() => openPersonalRoom(id)}>
 							{$$('message')}
 						</div>
 					</Row>
