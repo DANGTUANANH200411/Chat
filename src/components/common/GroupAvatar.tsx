@@ -16,28 +16,23 @@ function GroupAvatar(props: Props) {
 	const childSize = useMemo(() => (size ? size / 2 : GROUP_AVT_SIZE / 2), [size]);
 
 	const generateGroupAvt = () =>
-		members.slice(0, 4).map((user, idx) =>
-			members.length > 4 && idx === 3 ? (
-				<Avatar
-					key={members.length}
-					className='child-avt'
+		members
+			.slice(0, 4)
+			.map((user, idx) => (
+				<UserAvatar
+					key={user.id}
+					id={user.id}
+					size={members.length === 3 && idx === 2 ? groupSize : childSize}
 					shape='square'
-					size={childSize}
-					style={{ backgroundColor: 'var(--primary-color)', fontSize: 'medium' }}
-				>
-					{`+${members.length - 3}`}
-				</Avatar>
-			) : (
-				<UserAvatar key={user.id} id={user.id} size={childSize} shape='square' className='child-avt' />
-			)
-		);
+					className='child-avt'
+				/>
+			));
 	return (
 		<>
 			{image ? (
 				<Avatar src={image} size={groupSize} />
 			) : (
 				<div className='max-height custom-group-avt' style={{ width: groupSize, height: groupSize }}>
-					{' '}
 					{generateGroupAvt()}
 				</div>
 			)}

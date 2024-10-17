@@ -194,3 +194,10 @@ code {
 .circle:is(.warning).btn:hover {
 	background-color: rgb(255, 197, 121);
 }
+
+.toggle {
+	display: none;
+}
+.toggle-wrapper:hover .toggle{
+	display: block;
+}

@@ -1,5 +1,5 @@
 import { makeAutoObservable, ObservableMap } from 'mobx';
-import { CommonModalProps, DrawerType, I18n, Label, LangType, User } from '../utils/type';
+import { CommonModalProps, DrawerType, I18n, Label, LangType, Message, User } from '../utils/type';
 import { initI18n } from '../utils/i18n';
 import Mustache from 'mustache';
 import * as locale from '../locales';
@@ -150,6 +150,23 @@ export default class AppStore {
 			return this.getLocale(name, locale, args);
 		};
 		return bindGet;
+	}
+
+	getAnnounceContent = (message: Message) => {
+		const { sender, announce } = message;
+		const params = { user1: this.getUserName(sender), user2: this.getUserName(announce?.userId) };
+		switch (announce?.type) {
+			case 'Add':
+				return this.$$('ann-add', params);
+			case 'Remove':
+				return this.$$('ann-remove', params);
+			case 'AppointAdmin':
+				return this.$$('ann-appointed', params);
+			case 'RemoveAdmin':
+				return this.$$('ann-remove-admin', params);
+			default:
+				return '';
+		}
 	}
 	//#endregion Translate
 }

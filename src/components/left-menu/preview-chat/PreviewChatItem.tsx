@@ -12,13 +12,19 @@ import { GROUP_AVT_SIZE } from '../../../utils/constants';
 
 function PreviewChatItem(props: ChatRoom) {
 	const {
-		appStore: { $$, users, getLabel, getUserName },
+		appStore: { $$, getLabel, getUserName, getAnnounceContent },
 		chatStore: { setActiveRoom },
 	} = useStores();
 	const { id, name, members, isGroup, previewMsg, image, label, pinned } = props;
 
 	const displayContent = (msg: Message) => {
-		return msg.isNameCard ? `[${$$('namecard')}] ${getUserName(msg.content)}` : msg.content;
+		if (msg.isNameCard) {
+			return `${getUserName(msg.sender)}: [${$$('namecard')}] ${getUserName(msg.content)}`;
+		}
+		if (msg.announce) {
+			return getAnnounceContent(msg);
+		}
+		return `${getUserName(msg.sender)}: ${msg.content}`;
 	};
 	return (
 		<Row className='preview-chat-item' onClick={() => setActiveRoom(id)} wrap={false}>
@@ -38,9 +44,9 @@ function PreviewChatItem(props: ChatRoom) {
 					</span>
 				</Row>
 				{previewMsg && (
-					<Typography.Text ellipsis type='secondary' className='text-small'>{`${
-						users.get(previewMsg.sender)?.userName ?? ''
-					}: ${displayContent(previewMsg)}`}</Typography.Text>
+					<Typography.Text ellipsis type='secondary' className='text-small'>
+						{displayContent(previewMsg)}
+					</Typography.Text>
 				)}
 			</Row>
 		</Row>

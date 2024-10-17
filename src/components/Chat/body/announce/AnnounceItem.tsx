@@ -9,30 +9,13 @@ interface Props {
 }
 function AnnounceItem(props: Props) {
 	const {
-		appStore: { $$, getUserName },
+		appStore: { getAnnounceContent },
 	} = useStores();
 	const { message } = props;
-	const { sender, announce } = message;
 
-	const announceContent = useCallback(() => {
-		if(!announce) return '';
-		const params = { user1: getUserName(sender), user2: getUserName(announce.userId) };
-		switch (announce?.type) {
-			case 'Add':
-				return $$('ann-add', params);
-			case 'Remove':
-				return $$('ann-remove', params);
-			case 'AppointAdmin':
-				return $$('ann-appointed', params);
-			case 'RemoveAdmin':
-				return $$('ann-remove-admin', params);
-			default:
-				return '';
-		}
-	}, [announce, $$]);
 	return (
 		<Row justify='center' className='text-secondary'>
-			{announceContent()}
+			{getAnnounceContent(message)}
 		</Row>
 	);
 }

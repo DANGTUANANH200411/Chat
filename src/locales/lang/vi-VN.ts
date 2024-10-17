@@ -136,5 +136,7 @@ const vi: ILocale = {
 	'groups-in-common': 'Nhóm chung',
 	'change-alias-name': 'Thay đổi tên bí danh',
 	'add-to-group': 'Thêm vào nhóm',
+	'view-this-conversation': 'Mở cuộc trò chuyện này',
+	'chat-w-gr-owner': 'nhắn với trưởng nhóm',
 };
 export { vi };

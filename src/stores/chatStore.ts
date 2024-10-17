@@ -495,7 +495,7 @@ export default class ChatStore {
 	};
 
 	onCreateGroup = (group: ChatRoom) => {
-		const { $$ } = stores.appStore;
+		const { $$, user, CurrentUserId } = stores.appStore;
 		try {
 			if (!group.name) {
 				notify($$('invalid-group-name'), 'warning');
@@ -504,11 +504,14 @@ export default class ChatStore {
 				notify($$('invalid-group-members'), 'warning');
 				return;
 			}
-			group.members = Array.from(this.selectedUsers.values()).map((e) => ({
-				...e,
-				invitedBy: stores.appStore.CurrentUserId,
-				role: 'Member',
-			}));
+			group.members = [
+				{ ...user, invitedBy: CurrentUserId, role: 'Owner' },
+				...Array.from(this.selectedUsers.values()).map((e): RoomMember => ({
+					...e,
+					invitedBy: CurrentUserId,
+					role: 'Member',
+				})),
+			];
 			// Call API
 			//then
 
@@ -622,10 +625,7 @@ export default class ChatStore {
 	searchGroup = (text: string): ShareSelectItemProps[] => {
 		const rooms = this.chatRooms;
 		return rooms
-			.filter(
-				(e) =>
-					e.isGroup &&
-					(!text || normalizeIncludes(e.name, text))			)
+			.filter((e) => e.isGroup && (!text || normalizeIncludes(e.name, text)))
 			.map((e) => ({
 				id: e.id,
 				name: e.name,
@@ -677,9 +677,6 @@ export default class ChatStore {
 		room!.pinned = !room!.pinned;
 	};
 
-	getGroupsInCommon = (userId: string) => {
-		return this.chatRooms.filter(e=> e.members.some(e=> e.id === userId) && e.members.some(e=> e.id === userId));
-	}
 	//#endregion GROUP
 	//#region Group Member API
 	onLeaveGroup = () => {
@@ -710,18 +707,19 @@ export default class ChatStore {
 
 		groupIds.forEach((groupId) => {
 			const room = this.getRoom(groupId);
-			if (room ) {
+			if (room) {
 				room.members = [...room.members, { ...user, role: 'Member', invitedBy: stores.appStore.CurrentUserId }];
 				this.createAnnouncement('Add', memberId, groupId);
 			}
 		});
+		this.chatRooms = [...this.chatRooms];
 	};
 
-	onRemoveMember = (userId: string) => {
-		this.createAnnouncement('Remove', userId);
-		const room = this.getActiveRoom();
+	onRemoveMember = (userId: string, roomId?: string) => {
+		const room = this.getActiveRoom(roomId);
 		if (!room) return;
 		room.members = room.members.filter((e) => e.id !== userId);
+		this.createAnnouncement('Remove', userId, roomId);
 	};
 
 	appointAdmin = (userId: string) => {

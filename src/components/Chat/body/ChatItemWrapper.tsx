@@ -5,7 +5,6 @@ import React from 'react';
 import { useStores } from '../../../stores/stores';
 import { Message } from '../../../utils/type';
 import ChatItem from './ChatItem';
-import AnnounceItem from './announce/AnnounceItem';
 
 interface Props {
 	view?: true;
@@ -13,7 +12,7 @@ interface Props {
 }
 function ChatItemWrapper(props: Props) {
 	const {
-		appStore: { user, getUserName },
+		appStore: { user, getAnnounceContent },
 		chatStore: { listIdPinned },
 	} = useStores();
 	const { view, messages } = props;
@@ -31,7 +30,6 @@ function ChatItemWrapper(props: Props) {
 							idx < arr.length - 1 &&
 							dayjs(arr[idx].createDate).diff(dayjs(arr[idx + 1].createDate)) < -60000
 						}
-						getUserName={getUserName}
 						pinned={listIdPinned.includes(e.id)}
 						recalled={e.recalled}
 						view={view}
@@ -41,8 +39,10 @@ function ChatItemWrapper(props: Props) {
 		</Row>
 	) : (
 		<Space direction='vertical'>
-			{messages.map((e, idx) => (
-				<AnnounceItem message={e} key={idx} />
+			{messages.map((e) => (
+				<Row key={e.id} justify='center' className='text-secondary'>
+					{getAnnounceContent(e)}
+				</Row>
 			))}
 		</Space>
 	);

@@ -135,6 +135,8 @@ const en = {
 	'groups-in-common': 'Groups in common',
 	'change-alias-name': 'Change alias name',
 	'add-to-group': 'Add to group',
+	'view-this-conversation': 'View this conversation',
+	'chat-w-gr-owner': 'Chat with group owner',
 };
 
 export type ILocale = typeof en;

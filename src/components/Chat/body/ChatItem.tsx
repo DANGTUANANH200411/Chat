@@ -15,14 +15,14 @@ interface Props {
 	showTime: boolean;
 	pinned: boolean;
 	recalled: boolean;
-	getUserName: (id: string) => string;
 	view?: boolean;
 }
 function ChatItem(props: Props) {
 	const {
+		appStore: {getUserName},
 		chatStore: { Selecting, selectMessages, onSelectMessage },
 	} = useStores();
-	const { id, isFirst, isLast, showTime, message, pinned, view, recalled, getUserName } = props;
+	const { id, isFirst, isLast, showTime, message, pinned, view, recalled } = props;
 	const { sender, isNameCard, content, createDate } = message;
 	const [hover, setHover] = useState<boolean>(false);
 	return (

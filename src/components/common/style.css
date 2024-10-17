@@ -1,43 +1,21 @@
 .custom-group-avt {
     display: flex;
     position: relative;
-    color: var(--WA100);
     overflow: hidden;
-    box-sizing: border-box;
     border-radius: 50%;
     flex-wrap: wrap;
+    flex-direction: column;
 }
 .child-avt {
     border-radius: 0 !important;
-    border: 1px solid var(--WA100);
+    border: none;
     width: 55%;
     height: 55%;
-    box-sizing: border-box;
     overflow: hidden;
     font-size: .75rem;
     font-weight: 500;
     line-height: 1.5;
 }
-/* .custom-group-avt .child-avt:first-child{
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-.custom-group-avt .child-avt:nth-child(2){
-    position: absolute;
-    top: 0;
-    right: 0;
-}
-.custom-group-avt .child-avt:nth-child(3){
-    position: absolute;
-    bottom: 0;
-    left: 0;
-}
-.custom-group-avt .child-avt:last-child{
-    position: absolute;
-    bottom: 0;
-    right: 0;
-} */
 
 .member {
     display: flex;
