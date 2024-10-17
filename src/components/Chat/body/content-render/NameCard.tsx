@@ -20,7 +20,7 @@ interface Props {
 }
 function NameCard(props: Props) {
 	const {
-		appStore: { $$, getUserById, getUserName },
+		appStore: { CurrentUserId, $$, getUserById, getUserName },
 		chatStore: {onCall, openPersonalRoom}
 	} = useStores();
 
@@ -48,14 +48,14 @@ function NameCard(props: Props) {
 						/>
 					</Row>
 
-					<Row className='chat-item-namecard-btn'>
+					{CurrentUserId !== id && <Row className='chat-item-namecard-btn'>
 						<div className='chat-item-namecard-btn-call' onClick={() => onCall()}>
 							{$$('call')}
 						</div>
 						<div className='chat-item-namecard-btn-msg' onClick={() => openPersonalRoom(id)}>
 							{$$('message')}
 						</div>
-					</Row>
+					</Row>}
 				</div>
 			</div>
 			{!selecting && (

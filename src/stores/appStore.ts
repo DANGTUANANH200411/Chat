@@ -35,6 +35,9 @@ export default class AppStore {
 		visible: false,
 		id: undefined,
 	}
+
+	mdlPollDetailProps: Message | undefined = undefined;
+
 	get DarkTheme() {
 		return this.setting.darkTheme;
 	}
@@ -92,6 +95,8 @@ export default class AppStore {
 		this.mdlGrpsInComm.id = memberId;
 		this.mdlGrpsInComm.visible = !this.mdlGrpsInComm.visible
 	};
+
+	setMdlPollDetailProps = (poll?: Message) => this.mdlPollDetailProps = poll;
 
 	setLang = (lang: LangType) => {
 		this.lang = lang;

@@ -41,7 +41,7 @@ function Reaction(props: Props) {
 			>
 				<HeartOutlined className='reaction-action' />
 			</Popover>
-			{message && message.logs.length > 0 && <ListReaction logs={message.logs} />}
+			{message && message.logs && message.logs.length > 0 && <ListReaction logs={message.logs} />}
 		</>
 	);
 }

@@ -14,7 +14,7 @@ interface Props {
 	message: Message;
 	showTime: boolean;
 	pinned: boolean;
-	recalled: boolean;
+	recalled?: boolean;
 	view?: boolean;
 }
 function ChatItem(props: Props) {

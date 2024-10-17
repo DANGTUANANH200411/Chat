@@ -1,5 +1,5 @@
 import { CloseOutlined } from '@ant-design/icons';
-import { Row } from 'antd';
+import { Input, Row } from 'antd';
 import { observer } from 'mobx-react';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useStores } from '../../../stores/stores';
@@ -16,23 +16,14 @@ import SelectingBar from '../body/SelectingBar';
 function ChatFooter() {
 	const { chatStore, appStore } = useStores();
 	const [text, setText] = useState<string>('');
-	const { replyMessage, onSendMessage, setReplyMessage} = chatStore;
+	const { replyMessage, onSendMessage, setReplyMessage } = chatStore;
 	const { Users } = appStore;
 	const [uploaded, setUploaded] = useState<Attachment[]>([]);
-	const mentionsList = useMemo(() => {
-		return [
-			{
-				id: "GIF",
-				name: "GIF",
-				image: "",
-			},
-			...Users.map(e=> ({
-				id: e.id,
-				name: e.userName,
-				image: e.imageSrc,
-			}))
-		]
-	}, [Users])
+	const mentionsList = useMemo(() => Users.map((e) => ({
+		id: e.id,
+		name: e.userName,
+		image: e.imageSrc,
+	})), [Users]);
 	const onDrop = useCallback(
 		async (acceptedFiles: any) => {
 			const filePromises = acceptedFiles.map((file: any) => {
@@ -66,7 +57,11 @@ function ChatFooter() {
 		},
 		[uploaded]
 	);
-	const { getRootProps, getInputProps, isDragActive, inputRef } = useDropzone({ noClick: true, noKeyboard: true, onDrop });
+	const { getRootProps, getInputProps, isDragActive, inputRef } = useDropzone({
+		noClick: true,
+		noKeyboard: true,
+		onDrop,
+	});
 
 	return (
 		<Row className='chat-footer' {...getRootProps()}>
@@ -83,19 +78,15 @@ function ChatFooter() {
 			{replyMessage && (
 				<Row className='chat-footer-reply-wrapper' align='middle' justify='space-between'>
 					<ReplyContent replyMessage={replyMessage} />
-					<CloseOutlined
-						className='btn-clear circle btn'
-						onClick={() => setReplyMessage(undefined)}
-					/>
+					<CloseOutlined className='btn-clear circle btn' onClick={() => setReplyMessage(undefined)} />
 				</Row>
 			)}
-			{(text.startsWith("@GIF ") || text.startsWith("@[GIF]") )&& (
-				<PreviewGIF searchText={text.substring(text.indexOf(' '))} setText={setText}/>
+			{(text.startsWith('@GIF ') || text.startsWith('@[GIF]')) && (
+				<PreviewGIF searchText={text.substring(text.indexOf(' '))} setText={setText} />
 			)}
 			<PreviewUploaded uploaded={uploaded} setUploaded={setUploaded} />
 
 			<ChatFooterBar uploadInputRef={inputRef} />
-			
 			<InputEmoji
 				value={text}
 				keepOpened
@@ -103,26 +94,32 @@ function ChatFooter() {
 				onChange={setText}
 				shouldConvertEmojiToImage
 				onEnter={(text) => {
-					if(text.startsWith("@GIF ") || text.startsWith("@[GIF]")) return;
+					if (text.startsWith('@GIF ') || text.startsWith('@[GIF]')) return;
 					onSendMessage(text.trim(), false, uploaded);
 					setText('');
 					setUploaded([]);
 				}}
 				searchMention={(value) => {
 					const searchText = value.replace('@', '');
+					const extendsItems =
+						text === value
+							? [
+									{
+										id: 'GIF',
+										name: 'GIF',
+										image: '',
+									},
+							  ]
+							: [];
 					return new Promise<any>((resolve) => {
 						resolve(
-							mentionsList.filter(
+							[...extendsItems, ...mentionsList].filter(
 								(e) => !searchText || toNormalize(e.name).includes(toNormalize(searchText))
 							)
 						);
 					});
 				}}
 			/>
-			{/* <div className='chat-footer-input-action'>
-				<LikeFilled className='hoverable-icon' style={{ color: 'var(--primary-color)' }} />
-				<SendOutlined className='hoverable-icon' />
-			</div> */}
 		</Row>
 	);
 }

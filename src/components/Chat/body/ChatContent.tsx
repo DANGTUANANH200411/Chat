@@ -10,7 +10,7 @@ interface Props {
 	id: string;
 	isFile?: boolean;
 	content: string;
-	recalled: boolean;
+	recalled?: boolean;
 	fileSize?: number;
 	data?: any;
 	attachment?: Attachment[];

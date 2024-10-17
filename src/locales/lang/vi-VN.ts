@@ -53,7 +53,7 @@ const vi: ILocale = {
 	'pin-msg': 'Ghim tin nhắn',
 	'unpin-msg': 'Bỏ ghim tin nhắn',
 	'select-msg': 'Chọn nhiều',
-	'view-details': 'Chi tiết',
+	'view-details': 'Xem chi tiết',
 	'other-options': 'Lựa chọn khác',
 	'delete-for-me': 'Xóa ở phía tôi',
 	//#region Drawer
@@ -138,5 +138,11 @@ const vi: ILocale = {
 	'add-to-group': 'Thêm vào nhóm',
 	'view-this-conversation': 'Mở cuộc trò chuyện này',
 	'chat-w-gr-owner': 'nhắn với trưởng nhóm',
+	'ends-at-$time': 'Kết thúc vào lúc {{time}}',
+	'$n-member-voted': '{{number}} người đã bình chọn',
+	'poll-detail': 'Chi tiết bình chọn',
+	vote: 'Bình chọn',
+	'add-poll-options': 'Thêm phương án',
+	'choose-multiple-options': 'Chọn được nhiều phương án',
 };
 export { vi };

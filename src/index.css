@@ -201,3 +201,7 @@ code {
 .toggle-wrapper:hover .toggle{
 	display: block;
 }
+
+.chk-round .ant-checkbox-inner{
+	border-radius: 50%;
+}

@@ -137,6 +137,12 @@ const en = {
 	'add-to-group': 'Add to group',
 	'view-this-conversation': 'View this conversation',
 	'chat-w-gr-owner': 'Chat with group owner',
+	'ends-at-$time': 'Ends at {{time}}', 
+	'$n-member-voted': '{{number}} member{{#plural}}s{{/plural}} voted',
+	'poll-detail': 'Poll Detail',
+	vote: 'Vote',
+	'add-poll-options': 'Add Options',
+	'choose-multiple-options': 'Choose multiple options',
 };
 
 export type ILocale = typeof en;

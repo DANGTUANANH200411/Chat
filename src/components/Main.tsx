@@ -11,6 +11,7 @@ import ChatDrawer from './drawer/ChatDrawer';
 import ShareModal from './modal/share/ShareModal';
 import AddToGroupModal from './modal/add-to-group/AddToGroupModal';
 import GroupsInCommonModal from './modal/GroupsInCommonModal';
+import PollDetailModal from './modal/poll/PollDetailModal';
 
 function Main() {
 	return (
@@ -29,6 +30,7 @@ function Main() {
 			<ShareModal/>
 			<AddToGroupModal/>
 			<GroupsInCommonModal/>
+			<PollDetailModal/>
 		</Watermark>
 	);
 }

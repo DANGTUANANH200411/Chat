@@ -1,4 +1,4 @@
-import { FileImageOutlined, FontSizeOutlined, IdcardOutlined, PaperClipOutlined } from "@ant-design/icons";
+import { FileImageOutlined, IdcardOutlined, PaperClipOutlined } from "@ant-design/icons";
 import { Row } from "antd";
 import React from "react";
 import { useStores } from "../../../stores/stores";
@@ -12,11 +12,11 @@ function ChatFooterBar(props: Props) {
 
 	return (
 		<Row className='chat-footer-bar max-width' align='middle'>
-			{/* <FileImageOutlined onClick={()=> {
+			<FileImageOutlined className="hoverable-icon" onClick={()=> {
 				if(!uploadInputRef.current) return;
 				uploadInputRef.current.accept = "image/*";
 				uploadInputRef.current.click()
-			}}/> */}
+			}}/>
 			<PaperClipOutlined className="hoverable-icon" onClick={()=> {
 				if(!uploadInputRef.current) return;
 				uploadInputRef.current.accept = "";

@@ -1,0 +1,21 @@
+.poll-container {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1.2rem;
+}
+.progress-container {
+	background: rgb(211 219 237);
+	border-radius: 4px;
+    position: relative;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+}
+
+.progress {
+    position: absolute;
+	border-radius: inherit;
+    inset: 0;
+	background: rgba(41, 151, 255, 0.3);
+}

@@ -597,6 +597,38 @@ const MESSAGES: Message[] = [
 		logs: [],
 		isNameCard: true,
 	},
+	{
+		id: newGuid(),
+		content: 'Poll Title',
+		groupId: GROUP_ID[0],
+		sender: USERS[0].id,
+		createDate: toSystemDate(dayjs().subtract(21, 'h')),
+		lastUpdateDate: toSystemDate(dayjs().subtract(21, 'h')),
+		poll: {
+			options: [
+				{
+					id: '1',
+					label: 'Option 1',
+				},
+				{
+					id: '2',
+					label: 'Option 2',
+				}
+			],
+			deadline:  toSystemDate(dayjs().subtract(20, 'h')),
+			hideVoters: false,
+			hideResultNotVote: true,
+			multiple: true,
+			canAddOption: false,
+			sender: '',
+			createDate: '',
+			lastUpdate: '',
+			votes: USERS.slice(1).map((e, idx)=> ({
+				id: e.id,
+				values: idx < 10 ? ['1'] : ['2'],
+			})),
+		}
+	}
 ];
 
 const ROOM_MEMBER: RoomMember[] = USERS.map((e) => ({

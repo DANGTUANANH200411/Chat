@@ -6,6 +6,7 @@ import {
 	Message,
 	MessageLog,
 	ModalDetailMsgProps,
+	Poll,
 	ReactLogPopProps,
 	ReplyMessage,
 	RoleType,
@@ -319,7 +320,7 @@ export default class ChatStore {
 			room.previewMsg = message;
 		} else {
 			//Create room
-			this.openPersonalRoom(message.groupId, true);
+			this.openPersonalRoom(message.groupId, true, false);
 			room = this.getRoom(message.groupId);
 			room!.previewMsg = message;
 		}
@@ -327,7 +328,7 @@ export default class ChatStore {
 		document.querySelector('.chat-body-view')?.scrollTo({ top: 0 });
 	};
 
-	openPersonalRoom = (userId: string, create?: boolean) => {
+	openPersonalRoom = (userId: string, create?: boolean, active?: boolean) => {
 		if (!this.chatRooms.find((e) => e.id === userId)) {
 			if (create) {
 				this.chatRooms.push({
@@ -344,9 +345,10 @@ export default class ChatStore {
 					isGroup: false,
 					members: [],
 				};
+				this.setActiveRoom(userId, false);
 			}
 		}
-		this.setActiveRoom(userId, false);
+		active && this.setActiveRoom(userId, false);
 	};
 	//#endregion FUNCTION
 
@@ -518,11 +520,13 @@ export default class ChatStore {
 			}
 			group.members = [
 				{ ...user, invitedBy: CurrentUserId, role: 'Owner' },
-				...Array.from(this.selectedUsers.values()).map((e): RoomMember => ({
-					...e,
-					invitedBy: CurrentUserId,
-					role: 'Member',
-				})),
+				...Array.from(this.selectedUsers.values()).map(
+					(e): RoomMember => ({
+						...e,
+						invitedBy: CurrentUserId,
+						role: 'Member',
+					})
+				),
 			];
 			// Call API
 			//then
@@ -561,18 +565,18 @@ export default class ChatStore {
 		};
 		let message = this.messages.find((e) => e.id === id);
 		if (message) {
-			let oldLog = message.logs.find((e) => e.userId === userId);
+			let oldLog = message.logs?.find((e) => e.userId === userId);
 			if (oldLog) {
 				if (oldLog.reaction === log.reaction) {
 					//Remove
-					message.logs = message.logs.filter((e) => e.userId !== userId);
+					message.logs = message.logs?.filter((e) => e.userId !== userId);
 				} else {
 					//Update
-					message.logs = message.logs.map((e) => (e.userId === userId ? log : e));
+					message.logs = message.logs?.map((e) => (e.userId === userId ? log : e));
 				}
 			} else {
 				// Add
-				message.logs = [...message.logs, log];
+				message.logs = [...(message.logs ?? []), log];
 			}
 		}
 	};
@@ -750,4 +754,28 @@ export default class ChatStore {
 	//#endregion Group Member API
 
 	//#endregion API
+	onCreatePoll = () => {};
+
+	onVotePoll = (msgId: string, value: string) => {
+		const { CurrentUserId } = stores.appStore;
+		const message = this.getMessage(msgId);
+		if (message && message.poll) {
+			const vote = message.poll.votes.find((e) => e.id === CurrentUserId);
+			if (message.poll.multiple) {
+				if (vote!.values.includes(value)) {
+					vote!.values = vote!.values.filter((val) => val !== value);
+				} else {
+					vote!.values.push(value);
+				}
+			} else {
+				vote!.values = [value];
+			}
+		}
+	};
+
+	onVotesPoll = (msgId: string, values: string[]) => {
+		const { CurrentUserId } = stores.appStore;
+		const message = this.getMessage(msgId);
+		message!.poll!.votes.find((e) => e.id === CurrentUserId)!.values = values;
+	};
 }

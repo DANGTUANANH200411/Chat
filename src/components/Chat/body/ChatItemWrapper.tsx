@@ -5,6 +5,7 @@ import React from 'react';
 import { useStores } from '../../../stores/stores';
 import { Message } from '../../../utils/type';
 import ChatItem from './ChatItem';
+import Poll from './content-render/poll/Poll';
 
 interface Props {
 	view?: true;
@@ -16,7 +17,22 @@ function ChatItemWrapper(props: Props) {
 		chatStore: { listIdPinned },
 	} = useStores();
 	const { view, messages } = props;
-	return !messages[0].announce ? (
+
+	if (messages[0].announce)
+		return (
+			<Space direction='vertical'>
+				{messages.map((e) => (
+					<Row key={e.id} justify='center' className='text-secondary'>
+						{getAnnounceContent(e)}
+					</Row>
+				))}
+			</Space>
+		);
+
+	if (messages[0].poll) {
+		return <Poll message={messages[0]}/>
+	}
+	return (
 		<Row className={`chat-item-wrapper ${messages[0].sender === user.id && 'me'}`} wrap={false}>
 			<Row className='flex-grow'>
 				{messages.map((e, idx, arr) => (
@@ -37,14 +53,6 @@ function ChatItemWrapper(props: Props) {
 				))}
 			</Row>
 		</Row>
-	) : (
-		<Space direction='vertical'>
-			{messages.map((e) => (
-				<Row key={e.id} justify='center' className='text-secondary'>
-					{getAnnounceContent(e)}
-				</Row>
-			))}
-		</Space>
 	);
 }
 

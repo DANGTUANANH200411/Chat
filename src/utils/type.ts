@@ -28,13 +28,13 @@ export interface Message {
 	groupId: string;
 	sender: string;
 	content: string;
-	isFile?: boolean;
-	fileSize?: number;
 	createDate: string;
 	lastUpdateDate: string;
-	recalled: boolean;
-	deleted: boolean;
-	logs: MessageLog[];
+	isFile?: boolean;
+	fileSize?: number;
+	recalled?: boolean;
+	deleted?: boolean;
+	logs?: MessageLog[];
 	reply?: ReplyMessage;
 	data?: any; //tmp for display image only FE
 	attachment?: Attachment[];
@@ -44,6 +44,7 @@ export interface Message {
 		type: AnnouceType;
 	};
 	isNameCard?: boolean;
+	poll?: Poll;
 }
 export interface ReplyMessage {
 	id: string;
@@ -158,4 +159,23 @@ export interface ShareSelectItemProps {
 export interface CommonModalProps {
 	visible: boolean;
 	id?: string;
+}
+
+export interface Poll {
+	options: {
+		id: string;
+		label: string;
+	}[],
+	deadline: string;
+	hideVoters?: boolean;
+	hideResultNotVote?: boolean;
+	multiple?: boolean;
+	canAddOption?: boolean;
+	sender: string;
+	createDate: string;
+	lastUpdate: string;
+	votes: {
+		id: string;
+		values: string[];
+	}[];
 }

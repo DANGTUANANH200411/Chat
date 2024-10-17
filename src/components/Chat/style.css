@@ -420,13 +420,12 @@ body:is(.dark-theme) .chat-item-username {
 .drag-background {
 	background: #bce6ff80;
 	position: absolute;
+	inset: 0;
 	z-index: 10;
 	display: flex;
 	border: 2px var(--primary-color) dashed;
 	font-size: 1.4rem;
 	color: black;
-	height: calc(100% - 4px); /*100% - border*/
-	width: calc(100% - 4px);
 }
 
 .chat-content {

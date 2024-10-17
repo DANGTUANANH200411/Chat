@@ -15,7 +15,7 @@ interface Props {
 	message: Message;
 	showTime: boolean;
 	pinned: boolean;
-	recalled: boolean;
+	recalled?: boolean;
 	getUserName: (id: string) => string;
 	view?: boolean;
 	selecting?: boolean;
