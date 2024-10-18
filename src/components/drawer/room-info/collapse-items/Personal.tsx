@@ -16,10 +16,6 @@ function Personal() {
 
 	const [alias, setAlias] = useState<string>(name);
 
-	useEffect(() => {
-		setAlias(name);
-	}, [name]);
-
 	const onCreateGroupWith = useCallback(() => {
 		const user = getUserById(id);
 		if (user) {
@@ -46,6 +42,7 @@ function Personal() {
 				}
 				okText='Change'
 				onOk={onChangeAlias}
+				afterOpenChange={()=> setAlias(name)}
 			>
 				<Typography.Text ellipsis className='div-button'>
 					<EditOutlined /> {$$('change-alias-name')}

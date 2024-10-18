@@ -1,0 +1,22 @@
+.poll-voted-list {
+    display: flex;
+    flex-direction: column;
+    row-gap: 12px;
+    height: 50vh;
+    overflow: auto;
+    position: relative;
+}
+.poll-voted-list .ant-empty {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center; 
+}
+
+.block {
+    padding: 0.8rem;
+    background-color: rgb(235, 237, 243);
+    border-radius: 4px;
+}

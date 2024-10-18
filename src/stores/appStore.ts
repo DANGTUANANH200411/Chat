@@ -5,7 +5,7 @@ import Mustache from 'mustache';
 import * as locale from '../locales';
 import { LABELS, USERS } from '../utils/constants';
 import dayjs from 'dayjs';
-import { stores } from './stores';
+import { isArray } from '../utils/helper';
 interface Setting {
 	darkTheme: boolean;
 }
@@ -29,14 +29,18 @@ export default class AppStore {
 	mdlAddToGroupProps: CommonModalProps = {
 		visible: false,
 		id: undefined,
-	}
+	};
 
 	mdlGrpsInComm: CommonModalProps = {
 		visible: false,
 		id: undefined,
-	}
+	};
 
 	mdlPollDetailProps: Message | undefined = undefined;
+
+	mdlPollVotedProps: Message | undefined = undefined;
+
+	openCreatePoll: boolean = false;
 
 	get DarkTheme() {
 		return this.setting.darkTheme;
@@ -69,7 +73,7 @@ export default class AppStore {
 		if (!id) return 'Unknown';
 		if (you && id === this.user.id) return this.$$('you').toLocaleLowerCase();
 		const user = this.users.get(id);
-		return !!user ? (user.alias ?? user.userName) : 'Unknown';
+		return !!user ? user.alias ?? user.userName : 'Unknown';
 	};
 	getLabel = (id: string | undefined) => {
 		if (!id) return undefined;
@@ -83,20 +87,22 @@ export default class AppStore {
 
 	//#region SET
 	setToggleAddFiend = () => (this.toggleAddFriend = !this.toggleAddFriend);
-	
+
 	setToggleAddFriendToGroup = () => (this.toggleAddFriendToGroup = !this.toggleAddFriendToGroup);
-	
+
 	toggleAddToGroup = (memberId?: string) => {
 		this.mdlAddToGroupProps.id = memberId;
-		this.mdlAddToGroupProps.visible = !this.mdlAddToGroupProps.visible
+		this.mdlAddToGroupProps.visible = !this.mdlAddToGroupProps.visible;
 	};
 
 	toggleGrpsInComm = (memberId?: string) => {
 		this.mdlGrpsInComm.id = memberId;
-		this.mdlGrpsInComm.visible = !this.mdlGrpsInComm.visible
+		this.mdlGrpsInComm.visible = !this.mdlGrpsInComm.visible;
 	};
 
-	setMdlPollDetailProps = (poll?: Message) => this.mdlPollDetailProps = poll;
+	setMdlPollDetailProps = (poll?: Message) => (this.mdlPollDetailProps = poll);
+	setMdlPollVotedProps = (poll?: Message) => (this.mdlPollVotedProps = poll);
+	toggleCreatePollModal = () => (this.openCreatePoll = !this.openCreatePoll);
 
 	setLang = (lang: LangType) => {
 		this.lang = lang;
@@ -131,10 +137,11 @@ export default class AppStore {
 	onChangeAliasName = (id: string, alias: string) => {
 		const user = this.users.get(id);
 		user!.alias = alias;
-	}
+	};
 	//#endregion
 
 	//#region Translate
+
 	getLocale<T extends Record<LangType, Record<string, string>>, D extends keyof T['en']>(
 		name: D,
 		locale: T,
@@ -158,20 +165,29 @@ export default class AppStore {
 	}
 
 	getAnnounceContent = (message: Message) => {
+		const { getUserName, $$ } = this;
 		const { sender, announce } = message;
-		const params = { user1: this.getUserName(sender), user2: this.getUserName(announce?.userId) };
+		const params = { user1: getUserName(sender), user2: getUserName(announce?.userId), pollName: 'pollname' };
 		switch (announce?.type) {
 			case 'Add':
-				return this.$$('ann-add', params);
+				return $$('ann-add', params);
 			case 'Remove':
-				return this.$$('ann-remove', params);
+				return $$('ann-remove', params);
 			case 'AppointAdmin':
-				return this.$$('ann-appointed', params);
+				return $$('ann-appointed', params);
 			case 'RemoveAdmin':
-				return this.$$('ann-remove-admin', params);
+				return $$('ann-remove-admin', params);
+			case 'Leave':
+				return $$('ann-leave', params);
+			case 'Poll Expired':
+				return $$('ann-poll-expired', params);
+			case 'Poll Closed':
+				return $$('ann-poll-close', params);
+			case 'Poll Vote':
+				return $$('ann-poll-vote', params);
 			default:
 				return '';
 		}
-	}
+	};
 	//#endregion Translate
 }

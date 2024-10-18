@@ -11,11 +11,15 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 1rem;
+    cursor: pointer;
 }
-
+.progress-container:hover .progress {
+	background: rgba(0, 110, 212, 0.3);
+}
 .progress {
     position: absolute;
 	border-radius: inherit;
     inset: 0;
-	background: rgba(41, 151, 255, 0.3);
+	background: rgba(88, 159, 224, 0.3);
+    transition: 1s;
 }

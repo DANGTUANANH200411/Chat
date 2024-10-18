@@ -1,4 +1,4 @@
-import { FileImageOutlined, IdcardOutlined, PaperClipOutlined } from "@ant-design/icons";
+import { FileImageOutlined, IdcardOutlined, PaperClipOutlined, ProjectOutlined } from "@ant-design/icons";
 import { Row } from "antd";
 import React from "react";
 import { useStores } from "../../../stores/stores";
@@ -7,7 +7,7 @@ interface Props {
 	uploadInputRef: React.RefObject<HTMLInputElement>
 }
 function ChatFooterBar(props: Props) {
-	const {chatStore: {toggleMdlNmCard}} = useStores();
+	const {appStore: {toggleCreatePollModal}, chatStore: {toggleMdlNmCard}} = useStores();
 	const {uploadInputRef} = props;
 
 	return (
@@ -23,6 +23,7 @@ function ChatFooterBar(props: Props) {
 				uploadInputRef.current.click()
 			}}/>
 			<IdcardOutlined className="hoverable-icon" onClick={toggleMdlNmCard} />
+			<ProjectOutlined className="hoverable-icon" rotate={180} onClick={toggleCreatePollModal}/>
 		</Row>
 	);
 }

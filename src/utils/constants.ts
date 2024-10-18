@@ -615,15 +615,12 @@ const MESSAGES: Message[] = [
 					label: 'Option 2',
 				}
 			],
-			deadline:  toSystemDate(dayjs().subtract(20, 'h')),
+			deadline:  toSystemDate(dayjs().add(1, 'm')),
 			hideVoters: false,
 			hideResultNotVote: true,
 			multiple: true,
-			canAddOption: false,
-			sender: '',
-			createDate: '',
-			lastUpdate: '',
-			votes: USERS.slice(1).map((e, idx)=> ({
+			canAddOption: true,
+			votes: USERS.slice(0, USERS.length - 5).map((e, idx)=> ({
 				id: e.id,
 				values: idx < 10 ? ['1'] : ['2'],
 			})),

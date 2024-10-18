@@ -41,14 +41,14 @@ dayjs.updateLocale('en', {
 // 		yy: '%d years',
 // 	},
 // });
-
+export const DATE_FORMAT = 'YYYYMMDDHHmmss'
 export const NOW = (): Dayjs => dayjs(new Date());
-export const SYSTEM_NOW = () => dayjs(new Date()).format('YYYYMMDDHHmmss');
+export const SYSTEM_NOW = () => dayjs(new Date()).format(DATE_FORMAT);
 export function toSystemDate(date: Date | Dayjs | string): string {
 	if (date instanceof Date || typeof date === 'string') {
-		return dayjs(date).format('YYYYMMDDHHmmss');
+		return dayjs(date).format(DATE_FORMAT);
 	}
-	return date.format('YYYYMMDDHHmmss');
+	return date.format(DATE_FORMAT);
 }
 export function displayChatDate(date: string) {
 	return dayjs(date).format('DD/MM/YYYY');

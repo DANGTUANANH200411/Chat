@@ -1,8 +1,10 @@
 import { makeAutoObservable } from 'mobx';
 import {
 	AnnouceType,
+	Announce,
 	Attachment,
 	ChatRoom,
+	DynamicMessage,
 	Message,
 	MessageLog,
 	ModalDetailMsgProps,
@@ -308,24 +310,43 @@ export default class ChatStore {
 		};
 	};
 
-	pushMessage = (message: Message) => {
+	pushMessage = (params: DynamicMessage, grId?: string) => {
+		const groupId = grId ?? this.activeRoom;
+		if (!groupId) {
+			notify('Group not found');
+			return;
+		}
+		const message: Message = {
+			...params,
+			id: newGuid(),
+			groupId: groupId,
+			sender: stores.appStore.CurrentUserId,
+			createDate: SYSTEM_NOW(),
+			lastUpdateDate: SYSTEM_NOW(),
+			recalled: false,
+			deleted: false,
+			logs: [],
+		};
+
 		this.allMessage.push(message);
 
-		if (message.groupId === this.activeRoom) {
+		if (groupId === this.activeRoom) {
 			this.messages.push(message);
 		}
 
-		let room = this.getRoom(message.groupId);
+		let room = this.getRoom(groupId);
 		if (room) {
 			room.previewMsg = message;
 		} else {
 			//Create room
-			this.openPersonalRoom(message.groupId, true, false);
-			room = this.getRoom(message.groupId);
+			this.openPersonalRoom(groupId, true, false);
+			room = this.getRoom(groupId);
 			room!.previewMsg = message;
 		}
 		if (message.reply) this.replyMessage = undefined;
 		document.querySelector('.chat-body-view')?.scrollTo({ top: 0 });
+
+		return message;
 	};
 
 	openPersonalRoom = (userId: string, create?: boolean, active?: boolean) => {
@@ -367,26 +388,15 @@ export default class ChatStore {
 		return listMsg.splice(skip, Math.min(idx + 20 - skip, listMsg.length));
 	};
 
-	createAnnouncement = (type: AnnouceType, toUser: string, roomId?: string) => {
+	createAnnouncement = (type: AnnouceType, toUser?: string, roomId?: string) => {
 		//this feature should be in backend
 		const room = roomId ?? this.activeRoom;
 		if (!room) return;
-		const announce: Message = {
-			id: newGuid(),
-			groupId: room,
-			sender: stores.appStore.CurrentUserId,
-			content: '',
-			createDate: SYSTEM_NOW(),
-			lastUpdateDate: SYSTEM_NOW(),
-			recalled: false,
-			deleted: false,
-			logs: [],
-			announce: {
-				userId: toUser,
-				type,
-			},
+		const announce: Announce = {
+			userId: toUser,
+			type,
 		};
-		this.pushMessage(announce);
+		this.pushMessage({ content: '', announce });
 	};
 	//#endregion FAKE BACKEND
 
@@ -444,17 +454,9 @@ export default class ChatStore {
 	onSendMessage = (content: string, isFile?: boolean, files?: any[]) => {
 		const activeRoom = this.activeRoom;
 		if (!activeRoom || (isEmpty(content) && (!files || !files.length))) return;
-		const message: Message = {
-			id: newGuid(),
-			groupId: activeRoom,
-			sender: stores.appStore.CurrentUserId,
+		const message: DynamicMessage = {
 			content,
 			isFile: !!isFile,
-			createDate: SYSTEM_NOW(),
-			lastUpdateDate: SYSTEM_NOW(),
-			recalled: false,
-			deleted: false,
-			logs: [],
 			reply: this.replyMessage,
 			attachment: files,
 		};
@@ -464,21 +466,11 @@ export default class ChatStore {
 	onSendFile = (file: Attachment, error?: boolean) => {
 		const activeRoom = this.activeRoom;
 		if (!activeRoom || isEmpty(file.data)) return;
-		const message: Message = {
-			id: newGuid(),
-			groupId: activeRoom,
-			sender: stores.appStore.CurrentUserId,
+		const message: DynamicMessage = {
 			content: file.name,
 			isFile: true,
 			data: file.data,
 			fileSize: file.size,
-			createDate: SYSTEM_NOW(),
-			lastUpdateDate: SYSTEM_NOW(),
-			recalled: false,
-			deleted: false,
-			logs: [],
-			reply: undefined,
-			error,
 		};
 
 		this.pushMessage(message);
@@ -491,16 +483,8 @@ export default class ChatStore {
 			return;
 		}
 		Array.from(this.selectedUsers.keys()).forEach((id) => {
-			const message: Message = {
-				id: newGuid(),
-				groupId: activeRoom,
-				sender: stores.appStore.CurrentUserId,
+			const message: DynamicMessage = {
 				content: id,
-				createDate: SYSTEM_NOW(),
-				lastUpdateDate: SYSTEM_NOW(),
-				recalled: false,
-				deleted: false,
-				logs: [],
 				isNameCard: true,
 			};
 			this.pushMessage(message);
@@ -539,8 +523,8 @@ export default class ChatStore {
 		}
 	};
 
-	onPinMessage = (message: Message) => {
-		const room = this.getActiveRoom();
+	onPinMessage = (message: Message, roomId?: string) => {
+		const room = this.getActiveRoom(roomId);
 		if (!room) return;
 		if (room.pinMessages?.find((e) => e.id === message.id)) {
 			//Unpin
@@ -663,15 +647,7 @@ export default class ChatStore {
 	forwardMessage = (rooms: string[]) => {
 		rooms.forEach((roomId) => {
 			this.mdlShareProps.items.forEach((e) => {
-				this.pushMessage({
-					...e,
-					id: newGuid(),
-					groupId: roomId,
-					sender: stores.appStore.CurrentUserId,
-					createDate: SYSTEM_NOW(),
-					lastUpdateDate: SYSTEM_NOW(),
-					logs: [],
-				});
+				this.pushMessage(e, roomId);
 			});
 		});
 	};
@@ -754,28 +730,79 @@ export default class ChatStore {
 	//#endregion Group Member API
 
 	//#endregion API
-	onCreatePoll = () => {};
+	createPoll = (title: string, poll: Poll, options: string[], pin?: boolean) => {
+		
+		const message = this.pushMessage({
+			content: title,
+			poll: {
+				...poll,
+				options: options.map(e=> ({
+					id: newGuid(),
+					label: e,
+				})),
+			},
+		});
+		pin && message && this.onPinMessage(message);
+	};
 
 	onVotePoll = (msgId: string, value: string) => {
 		const { CurrentUserId } = stores.appStore;
 		const message = this.getMessage(msgId);
 		if (message && message.poll) {
 			const vote = message.poll.votes.find((e) => e.id === CurrentUserId);
-			if (message.poll.multiple) {
-				if (vote!.values.includes(value)) {
-					vote!.values = vote!.values.filter((val) => val !== value);
+			if (!vote) {
+				// Add if not exist
+				message.poll.votes.push({ id: CurrentUserId, values: [value] });
+			} else if (message.poll.multiple) {
+				if (vote.values.includes(value)) {
+					const newVoteValues = vote.values.filter((val) => val !== value);
+					if (!newVoteValues.length) {
+						//Remove vote item if values is empty after remove value
+						message.poll.votes = message.poll.votes.filter(e=> e.id !== CurrentUserId);
+					} else {
+						// Remove if value existed
+						vote.values = vote.values.filter((val) => val !== value);
+					}
 				} else {
+					// Push value if not exist
 					vote!.values.push(value);
 				}
 			} else {
+				// Set new value if not multiple select
 				vote!.values = [value];
 			}
 		}
+		this.createAnnouncement('Poll Vote');
 	};
 
 	onVotesPoll = (msgId: string, values: string[]) => {
 		const { CurrentUserId } = stores.appStore;
 		const message = this.getMessage(msgId);
-		message!.poll!.votes.find((e) => e.id === CurrentUserId)!.values = values;
+		
+		if (!values.length) {
+			message!.poll!.votes =  message!.poll!.votes.filter(e=> e.id !== CurrentUserId);
+		} else {
+			const vote = message!.poll!.votes.find((e) => e.id === CurrentUserId);
+			if (vote) {
+				vote.values = values;
+			} else {
+				message!.poll!.votes.push({ id: CurrentUserId, values });
+			}
+		}
+		this.createAnnouncement('Poll Vote');
+	};
+
+	closePoll = (msgId: string, manual: boolean = false) => {
+		const message = this.getMessage(msgId);
+		message!.poll!.closed = true;
+		this.createAnnouncement(manual ? 'Poll Closed' : 'Poll Expired');
+	};
+
+	addPollOption = (id: string, label: string) => {
+		const message = this.getMessage(id);
+		if (message && message.poll) {
+			message.lastUpdateDate = SYSTEM_NOW();
+			message.poll.options.push({ id: newGuid(), label });
+		}
 	};
 }

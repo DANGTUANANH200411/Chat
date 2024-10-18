@@ -1,5 +1,5 @@
 import { Avatar, Checkbox, Flex, Row, Typography } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import UserAvatar from '../../../../common/UserAvatar';
 import { useStores } from '../../../../../stores/stores';
 
@@ -11,18 +11,23 @@ interface Props {
 	hideVoters?: boolean;
 	hideResultNotVote?: boolean;
 	checked?: boolean;
+	closed?: boolean;
 	onChange: (val: string) => void;
 }
 function CustomProgress(props: Props) {
-	const { id, label, voted, max, checked, hideVoters, hideResultNotVote, onChange } = props;
+	const { id, label, voted, max, checked, hideVoters, hideResultNotVote, closed, onChange } = props;
+	
+	const [width, setWidth] = useState<number | string>(0);
+
+	useEffect(()=> {
+		setWidth(`${(voted.length * 100) / max}%`);
+	}, [voted, max])
 	return (
 		<Flex gap={8} align='center' className='max-width'>
-			<Row className='progress-container ' wrap={false} style={{ height: 32 }} onClick={() => onChange(id)}>
-				{!hideResultNotVote && (
-					<div className='progress' style={{ width: `${(voted.length * 100) / max}%` }}></div>
-				)}
+			<Row className='progress-container ' wrap={false} style={{ height: 32 }} onClick={() => !closed && onChange(id)}>
+				<div className='progress' style={{ width: hideResultNotVote ? 0 : width }}></div>
 				<Flex gap={8}>
-					<Checkbox className='chk-round' checked={checked} />
+					{!closed && <Checkbox className='chk-round' checked={checked} />}
 					<Typography.Text ellipsis>{label}</Typography.Text>
 				</Flex>
 				<Flex>

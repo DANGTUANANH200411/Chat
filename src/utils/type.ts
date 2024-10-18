@@ -23,28 +23,31 @@ export interface User {
 	alias?: string;
 }
 
-export interface Message {
+export interface Message extends DynamicMessage{
 	id: string;
 	groupId: string;
 	sender: string;
-	content: string;
 	createDate: string;
 	lastUpdateDate: string;
-	isFile?: boolean;
-	fileSize?: number;
+}
+
+export interface DynamicMessage extends FileMessageProps {
+	content: string;
 	recalled?: boolean;
 	deleted?: boolean;
 	logs?: MessageLog[];
 	reply?: ReplyMessage;
-	data?: any; //tmp for display image only FE
 	attachment?: Attachment[];
 	error?: boolean;
-	announce?: {
-		userId?: string;
-		type: AnnouceType;
-	};
+	announce?: Announce;
 	isNameCard?: boolean;
 	poll?: Poll;
+}
+export interface FileMessageProps {
+	isFile?: boolean;
+	/** @deprecated Temporary for display image only FE */
+	data?: any;
+	fileSize?: number;
 }
 export interface ReplyMessage {
 	id: string;
@@ -126,7 +129,7 @@ export interface ModalDetailMsgProps {
 	message?: Message;
 }
 
-export type AnnouceType = 'Add' | 'Remove' | 'AppointAdmin' | 'RemoveAdmin' | 'Leave';
+export type AnnouceType = 'Add' | 'Remove' | 'AppointAdmin' | 'RemoveAdmin' | 'Leave' | 'Poll Closed' | 'Poll Expired' | 'Poll Vote';
 
 export type DrawerType = 'Info' | 'Members' | 'Storage' | undefined;
 
@@ -160,20 +163,21 @@ export interface CommonModalProps {
 	visible: boolean;
 	id?: string;
 }
-
+export interface Announce {
+	userId?: string;
+	type: AnnouceType;
+}
 export interface Poll {
 	options: {
 		id: string;
 		label: string;
 	}[],
-	deadline: string;
+	deadline?: string;
 	hideVoters?: boolean;
 	hideResultNotVote?: boolean;
 	multiple?: boolean;
 	canAddOption?: boolean;
-	sender: string;
-	createDate: string;
-	lastUpdate: string;
+	closed?: boolean;
 	votes: {
 		id: string;
 		values: string[];

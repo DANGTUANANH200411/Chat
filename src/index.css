@@ -125,6 +125,7 @@ code {
 	border-style: solid;
 	box-shadow: unset !important;
 	border-radius: 0;
+	background-color: inherit;
 }
 
 .styled-select .ant-select-selector {

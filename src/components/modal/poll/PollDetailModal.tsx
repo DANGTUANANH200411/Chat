@@ -1,24 +1,27 @@
-import { Button, Flex, Modal, Typography } from 'antd';
+import { AlignLeftOutlined, ClockCircleOutlined, PlusOutlined, TeamOutlined } from '@ant-design/icons';
+import { Button, Flex, Input, Modal, Popconfirm, Typography } from 'antd';
+import dayjs from 'dayjs';
 import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { useStores } from '../../../stores/stores';
-import { AlignLeftOutlined, ClockCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import dayjs from 'dayjs';
-import CustomProgress from '../../Chat/body/content-render/poll/CustomProgress';
 import { displayChatTimeFull } from '../../../utils/dateHelper';
+import CustomProgress from '../../Chat/body/content-render/poll/CustomProgress';
+import Confirm from '../../common/Confirm';
+import { notify } from '../../../utils/notify';
 
 function PollDetailModal() {
 	const {
-		appStore: { $$, CurrentUserId, mdlPollDetailProps, setMdlPollDetailProps, getUserName },
-		chatStore: { Room, onVotesPoll },
+		appStore: { $$, CurrentUserId, mdlPollDetailProps, setMdlPollDetailProps, setMdlPollVotedProps, getUserName },
+		chatStore: { Room, onVotesPoll, addPollOption },
 	} = useStores();
 
 	const [listChecked, setListChecked] = useState<Set<string>>(new Set());
+	const [inputLabel, setInputLabel] = useState<string>('');
 
 	useEffect(() => {
 		setListChecked(new Set(mdlPollDetailProps?.poll?.votes.find((e) => e.id === CurrentUserId)?.values));
 	}, [mdlPollDetailProps]);
-	if (!mdlPollDetailProps || !mdlPollDetailProps.poll) return <></>;
+	if (!mdlPollDetailProps || !mdlPollDetailProps.poll || mdlPollDetailProps.poll.closed) return <></>;
 
 	const { id, content, sender, poll, createDate } = mdlPollDetailProps!;
 	const { deadline, votes, options, multiple, canAddOption, hideVoters, hideResultNotVote } = poll!;
@@ -27,6 +30,7 @@ function PollDetailModal() {
 		onVotesPoll(id, [...listChecked]);
 		setMdlPollDetailProps();
 	};
+
 	return (
 		<Modal
 			destroyOnClose
@@ -57,19 +61,24 @@ function PollDetailModal() {
 					</Flex>
 					{multiple && (
 						<Flex gap={8}>
+							<AlignLeftOutlined className='small-text text-secondary' />
 							<Typography.Text ellipsis className='small-text text-secondary'>
 								{$$('choose-multiple-options')}
 							</Typography.Text>
 						</Flex>
 					)}
 					<Flex gap={8}>
-						<AlignLeftOutlined className='small-text' style={{ color: 'var(--primary-color)' }} />
-						<Typography.Link ellipsis className='small-text'>
+						<TeamOutlined className='small-text' style={{ color: 'var(--primary-color)' }} />
+						<Typography.Link
+							ellipsis
+							className='small-text'
+							onClick={() => setMdlPollVotedProps(mdlPollDetailProps)}
+						>
 							{$$('$n-member-voted', { number: votes.length })}
 						</Typography.Link>
 					</Flex>
 				</Flex>
-				<Flex vertical gap={4}>
+				<Flex vertical gap={4} style={{ maxHeight: '32vh', overflow: 'auto' }}>
 					{options.map((opt) => (
 						<CustomProgress
 							key={opt.id}
@@ -77,8 +86,10 @@ function PollDetailModal() {
 							label={opt.label}
 							max={Room?.members.length ?? 0}
 							checked={listChecked.has(opt.id)}
-                            hideVoters={hideVoters}
-                            hideResultNotVote={hideResultNotVote && !votes.some(e=> e.id === CurrentUserId)}
+							hideVoters={hideVoters}
+							hideResultNotVote={
+								hideResultNotVote && !votes.some((e) => e.id === CurrentUserId && e.values.length)
+							}
 							voted={votes.filter((e) => e.values.includes(opt.id)).map((e) => e.id)}
 							onChange={(val) => {
 								if (multiple) {
@@ -93,15 +104,39 @@ function PollDetailModal() {
 					))}
 				</Flex>
 				{canAddOption && (
-					<Button
-						block
-						color='default'
-						variant='text'
-						className='text-secondary'
-						icon={<PlusOutlined style={{ color: 'inherit' }} />}
+					<Popconfirm
+						icon={<></>}
+						title={$$('input-poll-option')}
+						description={
+							<Input
+								placeholder={$$('input-poll-option')}
+								value={inputLabel}
+								onChange={(e) => setInputLabel(e.currentTarget.value)}
+								style={{ width: '20vw' }}
+							/>
+						}
+						okText='Add'
+						okType='primary'
+						onConfirm={() => {
+							const input = inputLabel.trim();
+							if (!input) {
+								notify($$('noti-empty-input-n', { n: $$('poll-option') }));
+								return;
+							}
+							addPollOption(id, inputLabel);
+						}}
+						afterOpenChange={() => setInputLabel('')}
 					>
-						{$$('add-poll-options').toLocaleUpperCase()}
-					</Button>
+						<Button
+							block
+							color='default'
+							variant='text'
+							className='text-secondary'
+							icon={<PlusOutlined style={{ color: 'inherit' }} />}
+						>
+							{$$('add-poll-options').toLocaleUpperCase()}
+						</Button>
+					</Popconfirm>
 				)}
 			</Flex>
 		</Modal>
