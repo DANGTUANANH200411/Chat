@@ -44,6 +44,8 @@ export default class AppStore {
 
 	openCreatePoll: boolean = false;
 
+	openCreateNote: boolean = false;
+
 	get DarkTheme() {
 		return this.setting.darkTheme;
 	}
@@ -106,6 +108,8 @@ export default class AppStore {
 	setMdlPollVotedProps = (poll?: Message) => (this.mdlPollVotedProps = poll);
 	toggleCreatePollModal = () => (this.openCreatePoll = !this.openCreatePoll);
 
+	toggleCreateNote = () => this.openCreateNote = !this.openCreateNote;
+
 	setLang = (lang: LangType) => {
 		this.lang = lang;
 		localStorage.setItem('LANGUAGE', lang);
@@ -165,16 +169,17 @@ export default class AppStore {
 		};
 		return bindGet;
 	}
+	//#endregion Translate
 
 	getAnnounceContent = (message: Message) => {
 		const { getUserName, $$ } = this;
 		const { sender, announce } = message;
 
-		function tmp(id: string, type: AnnouceTargetObj = 'User') {
+		function parse(id: string, type: AnnouceTargetObj = 'User') {
 			return `<strong class='hover-change-color announce-clickable' data-type=${type} data-id=${id}>${type === 'User' ? getUserName(id) : announce?.poll?.title}</strong>`
 		}
 
-		const params = { user1: tmp(sender), user2: tmp(announce?.userId ?? ''), pollName: tmp(announce?.poll?.id ?? '', 'Poll') };
+		const params = { user1: parse(sender), user2: parse(announce?.userId ?? ''), pollName: parse(announce?.poll?.id ?? '', 'Poll') };
 		switch (announce?.type) {
 			case 'Add':
 				return $$('ann-add', params);
@@ -196,5 +201,4 @@ export default class AppStore {
 				return '';
 		}
 	};
-	//#endregion Translate
 }

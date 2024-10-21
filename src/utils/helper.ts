@@ -238,3 +238,10 @@ export function dummyUploadAction ({onSuccess}: any) {
 export function capitalizeFirstLetter(str: string) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+export function decodeHtml(html: string) {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = html;
+	const regx = /<\/?br\s*[\/]?>/gi
+    return txt.value.replace(regx, '\n');
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { isImage, mentionRegex, urlRegx, uuidRegx } from '../../../../utils/helper';
+import { decodeHtml, isImage, mentionRegex, urlRegx, uuidRegx } from '../../../../utils/helper';
 import { Typography, Image } from 'antd';
 import { Attachment } from '../../../../utils/type';
 import FileMessage from './FileMessage';
@@ -34,10 +34,10 @@ function TextMessage(props: Props) {
 			'http://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72',
 			'https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64'
 		);
-		str = str.replace(urlRegx, urlReplacer);
-		return str.replace(mentionRegex, replacer);
-	};
+		str = str.replace(urlRegx, urlReplacer).replace(mentionRegex, replacer);
 
+		return decodeHtml(str)
+	};
 	const contentElement = (
 		<Typography.Text
 			className='text-primary'
@@ -64,7 +64,7 @@ function TextMessage(props: Props) {
 			</div>
 		);
 	}
-	return contentElement
+	return contentElement;
 }
 
 export default React.memo(TextMessage);

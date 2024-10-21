@@ -33,7 +33,7 @@ function ReplyContent(props: Props) {
 	};
 	return (
 		<div className='reply-content' onClick={() => !props.disableClick && scrollToMessage(id)}>
-			{isFile && previewSrc && <img src={previewSrc} alt='file-icon' style={{ width: '3rem', height: '3rem' }} />}
+			{isFile && previewSrc && <img src={previewSrc} alt='file-icon' style={{ width: '2.4rem', height: '2.4rem' }} />}
 			<div>
 				<Row>
 					<Typography.Text strong ellipsis>

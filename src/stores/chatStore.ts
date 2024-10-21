@@ -2,6 +2,7 @@ import { makeAutoObservable } from 'mobx';
 import {
 	Announce,
 	Attachment,
+	BoardType,
 	ChatRoom,
 	CreateAnnounceProps,
 	DynamicMessage,
@@ -76,6 +77,8 @@ export default class ChatStore {
 
 	storageTab: StorageType = 'Photo';
 
+	boardTab: BoardType = 'Pinned';
+
 	storageSelect: StorageSelect = {
 		selecting: false,
 		selected: new Set(),
@@ -130,6 +133,10 @@ export default class ChatStore {
 			}
 		}
 		return dayMessages;
+	}
+
+	get PinnedMessage() {
+		return this.Room?.pinMessages;
 	}
 
 	get listIdPinned() {
@@ -200,6 +207,9 @@ export default class ChatStore {
 		return messages;
 	}
 
+	get Polls() {
+		return this.messages.filter((e) => e.groupId === this.activeRoom && e.poll)
+	}
 	constructor() {
 		makeAutoObservable(this);
 	}
@@ -262,6 +272,8 @@ export default class ChatStore {
 	setStorageSelect = (state: any) => Object.assign(this.storageSelect, state);
 
 	setStorageTab = (tab: StorageType) => (this.storageTab = tab);
+
+	setBoardTab = (tab: BoardType) => (this.boardTab = tab);
 
 	clearStorageSelect = () =>
 		(this.storageSelect = {
@@ -802,7 +814,7 @@ export default class ChatStore {
 			return;
 		}
 		if (message.poll.closed) return;
-		
+
 		if (!values.length) {
 			message.poll.votes = message.poll.votes.filter((e) => e.id !== CurrentUserId);
 		} else {
@@ -842,4 +854,13 @@ export default class ChatStore {
 			message.poll.options.push({ id: newGuid(), label });
 		}
 	};
+
+	createNote = async (content: string, pin?: boolean) => {
+		if (!content) {
+			notify('Content can not be empty', 'warning');
+			return false;
+		}
+		notify('Incomming');
+		return true
+	}
 }

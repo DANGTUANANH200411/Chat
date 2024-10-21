@@ -129,9 +129,12 @@ export interface ModalDetailMsgProps {
 
 export type AnnouceType = 'Add' | 'Remove' | 'AppointAdmin' | 'RemoveAdmin' | 'Leave' | 'Poll Closed' | 'Poll Expired' | 'Poll Vote';
 
-export type DrawerType = 'Info' | 'Members' | 'Storage' | undefined;
+export type DrawerType = 'Info' | 'Members' | 'Storage' | 'Board' | undefined;
 
 export type StorageType = 'Photo' | 'File' | 'Link';
+
+export type BoardType = 'Pinned' | 'Polls' | 'Notes';
+
 export interface StorageFilter {
 	sender?: string;
 	startTime?: string;

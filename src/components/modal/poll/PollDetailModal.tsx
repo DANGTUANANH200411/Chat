@@ -11,7 +11,7 @@ import { notify } from '../../../utils/notify';
 function PollDetailModal() {
 	const {
 		appStore: { $$, CurrentUserId, mdlPollDetailProps, setMdlPollDetailProps, setMdlPollVotedProps, getUserName },
-		chatStore: { Room, onVotesPoll, addPollOption },
+		chatStore: { Room, Role, onVotesPoll, addPollOption, closePoll },
 	} = useStores();
 
 	const [listChecked, setListChecked] = useState<Set<string>>(new Set());
@@ -38,12 +38,21 @@ function PollDetailModal() {
 			footer={
 				closed ? (
 					<Row justify='center'>
-						<Typography.Text ellipsis type='secondary'><LockOutlined style={{color: 'inherit'}}/> {$$('poll-closed')}</Typography.Text>
+						<Typography.Text ellipsis type='secondary'>
+							<LockOutlined style={{ color: 'inherit' }} /> {$$('poll-closed')}
+						</Typography.Text>
 					</Row>
 				) : (
-					<Button block color='primary' variant='filled' onClick={handleVote}>
-						{$$('vote')}
-					</Button>
+					<Flex vertical gap={4}>
+						<Button block color='primary' variant='filled' onClick={handleVote}>
+							{$$('vote').toLocaleUpperCase()}
+						</Button>
+						{Role !== 'Member' && (
+							<Button block color='danger' variant='filled' onClick={()=> closePoll(id, true)}>
+								{$$('close-poll').toLocaleUpperCase()}
+							</Button>
+						)}
+					</Flex>
 				)
 			}
 			onCancel={() => setMdlPollDetailProps()}

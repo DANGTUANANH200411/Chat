@@ -19,7 +19,7 @@ function AnnounceList(props: Props) {
 		[expanded, messages]
 	);
 	return (
-		<Space direction='vertical'>
+		<Space direction='vertical' style={{marginBottom: 8}}>
 			{!expanded && messages.length > 2 && <Row justify='center' className='text-secondary'>
                 <Typography.Link style={{background: 'white', padding: '2px 8px', borderRadius: 16, fontSize: 'smaller'}} onClick={()=> setExpanded(true)}>{$$('view-all')}</Typography.Link>
                 </Row>}

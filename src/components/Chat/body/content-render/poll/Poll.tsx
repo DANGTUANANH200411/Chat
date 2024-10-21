@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import React, { createRef, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Message } from '../../../../../utils/type';
 import { Button, Flex, Row, Typography } from 'antd';
 import { useStores } from '../../../../../stores/stores';
@@ -9,26 +9,30 @@ import CustomProgress from './CustomProgress';
 import './style.css';
 import { AlignLeftOutlined, ClockCircleOutlined } from '@ant-design/icons';
 interface Props {
+	prefix?: React.ReactNode;
 	message: Message;
+	displayClosed?: true | boolean;
+	style?: React.CSSProperties;
 }
 function Poll(props: Props) {
 	const {
 		appStore: { CurrentUserId, $$, setMdlPollDetailProps, setMdlPollVotedProps },
-		chatStore: { Room, onVotePoll, closePoll },
+		chatStore: { Role, Room, onVotePoll, closePoll },
 	} = useStores();
-	const { id, content, poll } = props.message;
+	const { message, style, displayClosed, prefix } = props;
+	const { id, content, poll } = message;
 
 	const ref = useRef<ReturnType<typeof setInterval> | null>(null);
 
 	useEffect(() => {
 		if (!poll?.deadline || poll?.closed) return;
-		function onExpired () {
-			if(dayjs(poll?.deadline).second(0).diff(dayjs().second(0)) <= 0) {
+		function onExpired() {
+			if (dayjs(poll?.deadline).second(0).diff(dayjs().second(0)) <= 0) {
 				closePoll(id);
 				return;
 			}
 		}
-		onExpired()
+		onExpired();
 		ref.current = setInterval(onExpired, 1000);
 
 		return () => {
@@ -40,21 +44,24 @@ function Poll(props: Props) {
 		poll?.closed && ref.current && clearInterval(ref.current);
 	}, [poll?.closed, ref.current]);
 
-	if (!poll) return <></>;
+	if (!poll || (!displayClosed && poll.closed)) return <></>;
 	const { options, votes, deadline, hideVoters, hideResultNotVote, closed } = poll;
 	return (
 		<Row justify='center'>
-			<Flex vertical gap={8} style={{ width: '30%' }} className='poll-container'>
+			<Flex vertical gap={8} className='poll-container' style={{ width: '30%', ...style }}>
+				{prefix}
 				<Typography.Text ellipsis strong style={{ fontSize: 'large' }}>
 					{content}
 				</Typography.Text>
 				<Flex vertical gap={4}>
-					{deadline && <Flex gap={8}>
-						<ClockCircleOutlined className='small-text text-secondary' />
-						<Typography.Text className='small-text text-secondary'>
-							{$$('ends-at-$time', { time: dayjs(deadline).format('HH:mm DD-MM-YYYY') })}
-						</Typography.Text>
-					</Flex>}
+					{deadline && (
+						<Flex gap={8}>
+							<ClockCircleOutlined className='small-text text-secondary' />
+							<Typography.Text className='small-text text-secondary'>
+								{$$('ends-at-$time', { time: dayjs(deadline).format('HH:mm DD-MM-YYYY') })}
+							</Typography.Text>
+						</Flex>
+					)}
 					<Flex gap={8}>
 						<AlignLeftOutlined className='small-text' style={{ color: 'var(--primary-color)' }} />
 						<Typography.Link className='small-text' onClick={() => setMdlPollVotedProps(props.message)}>
@@ -88,15 +95,29 @@ function Poll(props: Props) {
 						</Typography.Text>
 					)}
 				</Flex>
-				{!closed && (
+
+				{(displayClosed || !closed) && (
 					<Button
 						block
-						color='primary'
+						color='default'
 						variant='filled'
-						style={{ fontWeight: 600 }}
+						size='small'
+						style={{ fontWeight: 600, borderRadius: 30 }}
 						onClick={() => setMdlPollDetailProps(props.message)}
 					>
-						CHANGE VOTE
+						{$$(closed ? 'view-poll' : 'change-vote').toLocaleUpperCase()}
+					</Button>
+				)}
+				{!closed && Role !== 'Member' && (
+					<Button
+						block
+						color='danger'
+						variant='filled'
+						size='small'
+						style={{ fontWeight: 600, borderRadius: 30 }}
+						onClick={()=> closePoll(id, true)}
+					>
+						{$$('close-poll').toLocaleUpperCase()}
 					</Button>
 				)}
 			</Flex>

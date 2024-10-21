@@ -28,7 +28,7 @@ function RoomStorage() {
 	}, []);
 
 	return (
-		<div className='drawer max-height'>
+		<>
 			<Row className='header' justify='center' align='middle'>
 				<CaretLeftOutlined
 					className='header-button-left hoverable-icon'
@@ -65,7 +65,7 @@ function RoomStorage() {
 				</Tabs>
 				{selecting && <SelectingBar type={storageTab} />}
 			</div>
-		</div>
+		</>
 	);
 }
 

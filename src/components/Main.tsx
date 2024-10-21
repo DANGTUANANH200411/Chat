@@ -10,19 +10,20 @@ import AddFriendToGroupModal from './modal/add-friend-to-group/AddFriendToGroupM
 import ChatDrawer from './drawer/ChatDrawer';
 import ShareModal from './modal/share/ShareModal';
 import AddToGroupModal from './modal/add-to-group/AddToGroupModal';
-import GroupsInCommonModal from './modal/GroupsInCommonModal';
+import GroupsInCommonModal from './modal/groups-in-common/GroupsInCommonModal';
 import PollDetailModal from './modal/poll/PollDetailModal';
 import PollVotedModal from './modal/poll/PollVotedModal';
 import PollRegistModal from './modal/poll/PollRegistModal';
 import { AnnouceTargetObj } from '../utils/type';
 import { useStores } from '../stores/stores';
+import CreateNoteModal from './modal/create-note/CreateNoteModal';
 
 function Main() {
 	const {
 		appStore: { setMdlPollDetailProps },
 		chatStore: { getMessage },
 	} = useStores();
-	
+
 	useEffect(() => {
 		function onClickAnnounceItem(e: MouseEvent) {
 			const target = e.target as HTMLElement;
@@ -62,6 +63,7 @@ function Main() {
 			<PollDetailModal />
 			<PollVotedModal />
 			<PollRegistModal />
+			<CreateNoteModal />
 		</Watermark>
 	);
 }

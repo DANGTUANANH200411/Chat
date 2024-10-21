@@ -64,7 +64,7 @@ function RoomInfo() {
 					<div className='div-button' onClick={() => notify('Incomming')}>
 						<FontAwesomeIcon icon={faClock} /> Reminer board
 					</div>
-					<div className='div-button' onClick={() => notify('Incomming')}>
+					<div className='div-button' onClick={() => setDrawerOpen('Board')}>
 						<FileTextOutlined /> Note, pin, poll
 					</div>
 				</Flex>
@@ -129,7 +129,7 @@ function RoomInfo() {
 	}, [items])
 
 	return (
-		<div className='drawer drawer-group-info max-height'>
+		<>
 			<Row className='header' justify='center' align='middle'>
 				<Typography.Text strong ellipsis>
 					{$$('room-info')}
@@ -159,7 +159,7 @@ function RoomInfo() {
 					expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
 				></Collapse>
 			</div>
-		</div>
+		</>
 	);
 }
 

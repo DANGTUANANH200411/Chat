@@ -1,11 +1,11 @@
-import { Row, Typography } from 'antd';
+import { Avatar, Row, Typography } from 'antd';
 import React, { useMemo } from 'react';
 import { User } from '../../utils/type';
 import UserAvatar from './UserAvatar';
 import { useStores } from '../../stores/stores';
 import { observer } from 'mobx-react';
 interface Props {
-	user: User;
+	user?: User;
 	info?: string;
 	action?: React.ReactNode;
 	size?: 'small' | 'default' | 'large';
@@ -28,12 +28,12 @@ function Member(props: Props) {
 	}, [size]);
 	return (
 		<div className='max-width member'>
-			<UserAvatar id={user.id} className='member-avatar' size={size} />
+			<Avatar src={user?.imageSrc} className='member-avatar' size={size} />
 			<Row wrap={false} justify='space-between' align='middle' className='flex-grow'>
 				<Row>
 					<Row>
 						<Typography.Text strong ellipsis className={primaryClass}>
-							{isMe ? $$('you') : user.userName}
+							{isMe ? $$('you') : user?.userName}
 						</Typography.Text>
 					</Row>
 					{info && (

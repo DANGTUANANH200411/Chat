@@ -1,0 +1,9 @@
+.preview-message {
+    padding: 0 8px;
+    border-left: 4px solid var(--primary-color);
+}
+.pinned-item-wrapper {
+    background-color: white;
+    padding: 12px;
+    border-radius: 8px;
+}

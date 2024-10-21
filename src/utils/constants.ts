@@ -647,7 +647,7 @@ const CHAT_ROOMS: ChatRoom[] = [
 			role: idx === 0 ? 'Owner' : [3, 5].includes(idx) ? 'Admin' : 'Member',
 		})),
 		previewMsg: MESSAGES.findLast((e) => e.groupId === GROUP_ID[0]),
-		pinMessages: [MESSAGES[MESSAGES.length - 4], MESSAGES[100], MESSAGES[299]],
+		pinMessages: [MESSAGES[299], MESSAGES[100], MESSAGES[MESSAGES.length - 8]],
 		creatorId: USERS[0].id,
 		image: 'https://yt3.googleusercontent.com/P_qIGe_-Jt5V4JT_UtIuURsq9RBRDIZ88tvFJx1AzACWzsuRIrrOfb6jDH2OnoukFdS06AN5nQ=s900-c-k-c0x00ffffff-no-rj',
 		pinned: true,

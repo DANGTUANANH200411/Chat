@@ -40,7 +40,7 @@
     background-color: rgb(3, 66, 161);
     flex-direction: column;
     flex-wrap: nowrap;
-    padding: 0.4rem 0.8rem;
+    padding: 0.4rem 0.8rem 0.8rem;
     position: relative;
     width: 240px;
 }

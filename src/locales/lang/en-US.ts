@@ -49,6 +49,7 @@ const en = {
 	more: 'More',
 	'copy-text': 'Copy Text',
 	'pin-msg': 'Pin message',
+	'pinned-msgs': 'Pinned messages',
 	'unpin-msg': 'Unpin message',
 	'start-msg': 'Star this mesage',
 	'select-msg': 'Select this message',
@@ -149,6 +150,7 @@ const en = {
 	'choose-multiple-options': 'Choose multiple options',
 	'input-poll-option': 'Input option',
 	'change-vote': 'Change vote',
+	'view-poll': 'View poll',
 	'not-voted-yet': 'Not voted yet',
 	'n-more-poll-opt': '{{number}} more option{{#plural}}s{{/plural}}',
 	'create-new-poll': 'Create new poll',
@@ -163,6 +165,15 @@ const en = {
 	'pin-to-top-converse': 'Pin to the top of conversation',
 	'noti-empty-input-n': 'Please input {{n}}',
 	'poll-closed': 'This poll was closed',
+	'close-poll': 'Close this poll',
+	'polls': 'Polls',
+	'notes': 'Notes',
+	'message-from-n': 'Message from {{name}}',
+	'send-to-converse': 'Send to conversation',
+	'create-note': 'Create Note',
+	'create': 'Create',
+	'placeholder-create-note': 'Type new note or paste link',
+	content: 'Content',
 };
 
 export type ILocale = typeof en;

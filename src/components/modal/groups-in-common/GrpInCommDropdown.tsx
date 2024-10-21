@@ -2,7 +2,7 @@ import { MoreOutlined } from '@ant-design/icons';
 import { Dropdown, Flex, MenuProps } from 'antd';
 import { observer } from 'mobx-react';
 import React from 'react';
-import { useStores } from '../../stores/stores';
+import { useStores } from '../../../stores/stores';
 
 interface Props {
     groupId: string;

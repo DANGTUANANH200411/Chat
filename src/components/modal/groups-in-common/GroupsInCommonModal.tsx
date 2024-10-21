@@ -2,10 +2,10 @@ import { UserAddOutlined, UsergroupAddOutlined } from '@ant-design/icons';
 import { Button, Flex, Modal, Row, Space, Typography } from 'antd';
 import { observer } from 'mobx-react';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useStores } from '../../stores/stores';
-import { notify } from '../../utils/notify';
-import { ChatRoom, User } from '../../utils/type';
-import GroupAvatar from '../common/GroupAvatar';
+import { useStores } from '../../../stores/stores';
+import { notify } from '../../../utils/notify';
+import { ChatRoom, User } from '../../../utils/type';
+import GroupAvatar from '../../common/GroupAvatar';
 import GrpInCommDropdown from './GrpInCommDropdown';
 
 function GroupsInCommonModal() {

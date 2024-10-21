@@ -14,7 +14,6 @@ function Members() {
 
 	return (
 		<>
-			<div className='drawer drawer-members max-height'>
 				<Row className='header' justify='center' align='middle'>
 					<CaretLeftOutlined
 						className='hoverable-icon'
@@ -98,7 +97,6 @@ function Members() {
 							})}
 					</Space>
 				</Row>
-			</div>
 		</>
 	);
 }

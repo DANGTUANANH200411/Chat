@@ -10,11 +10,11 @@ import ChatTime from '../chat-item/ChatTime';
 import { observer } from 'mobx-react';
 
 interface Props {
-	isFirst: boolean;
-	isLast: boolean;
+	isFirst?: boolean;
+	isLast?: boolean;
 	message: Message;
-	showTime: boolean;
-	pinned: boolean;
+	showTime?: boolean;
+	pinned?: boolean;
 	recalled?: boolean;
 	getUserName: (id: string) => string;
 	view?: boolean;
