@@ -22,7 +22,7 @@ function PreviewChatItem(props: ChatRoom) {
 			return `${getUserName(msg.sender)}: [${$$('namecard')}] ${getUserName(msg.content)}`;
 		}
 		if (msg.announce) {
-			return getAnnounceContent(msg);
+			return <div className='text-ellipsis' dangerouslySetInnerHTML={{__html: getAnnounceContent(msg)}}></div>
 		}
 		return `${getUserName(msg.sender)}: ${msg.content}`;
 	};

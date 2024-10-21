@@ -1,12 +1,11 @@
-import { AlignLeftOutlined, ClockCircleOutlined, PlusOutlined, TeamOutlined } from '@ant-design/icons';
-import { Button, Flex, Input, Modal, Popconfirm, Typography } from 'antd';
+import { AlignLeftOutlined, ClockCircleOutlined, LockOutlined, PlusOutlined, TeamOutlined } from '@ant-design/icons';
+import { Button, Flex, Input, Modal, Popconfirm, Row, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { useStores } from '../../../stores/stores';
 import { displayChatTimeFull } from '../../../utils/dateHelper';
 import CustomProgress from '../../Chat/body/content-render/poll/CustomProgress';
-import Confirm from '../../common/Confirm';
 import { notify } from '../../../utils/notify';
 
 function PollDetailModal() {
@@ -21,10 +20,10 @@ function PollDetailModal() {
 	useEffect(() => {
 		setListChecked(new Set(mdlPollDetailProps?.poll?.votes.find((e) => e.id === CurrentUserId)?.values));
 	}, [mdlPollDetailProps]);
-	if (!mdlPollDetailProps || !mdlPollDetailProps.poll || mdlPollDetailProps.poll.closed) return <></>;
+	if (!mdlPollDetailProps || !mdlPollDetailProps.poll) return <></>;
 
 	const { id, content, sender, poll, createDate } = mdlPollDetailProps!;
-	const { deadline, votes, options, multiple, canAddOption, hideVoters, hideResultNotVote } = poll!;
+	const { deadline, votes, options, multiple, canAddOption, hideVoters, hideResultNotVote, closed } = poll!;
 
 	const handleVote = () => {
 		onVotesPoll(id, [...listChecked]);
@@ -37,9 +36,15 @@ function PollDetailModal() {
 			title={$$('poll-detail')}
 			open={!!mdlPollDetailProps}
 			footer={
-				<Button block color='primary' variant='filled' onClick={handleVote}>
-					{$$('vote')}
-				</Button>
+				closed ? (
+					<Row justify='center'>
+						<Typography.Text ellipsis type='secondary'><LockOutlined style={{color: 'inherit'}}/> {$$('poll-closed')}</Typography.Text>
+					</Row>
+				) : (
+					<Button block color='primary' variant='filled' onClick={handleVote}>
+						{$$('vote')}
+					</Button>
+				)
 			}
 			onCancel={() => setMdlPollDetailProps()}
 		>
@@ -84,6 +89,7 @@ function PollDetailModal() {
 							key={opt.id}
 							id={opt.id}
 							label={opt.label}
+							closed={closed}
 							max={Room?.members.length ?? 0}
 							checked={listChecked.has(opt.id)}
 							hideVoters={hideVoters}
@@ -103,7 +109,7 @@ function PollDetailModal() {
 						/>
 					))}
 				</Flex>
-				{canAddOption && (
+				{!closed && canAddOption && (
 					<Popconfirm
 						icon={<></>}
 						title={$$('input-poll-option')}

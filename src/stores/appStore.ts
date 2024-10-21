@@ -1,11 +1,13 @@
 import { makeAutoObservable, ObservableMap } from 'mobx';
-import { CommonModalProps, DrawerType, I18n, Label, LangType, Message, User } from '../utils/type';
+import { AnnouceTargetObj, CommonModalProps, DrawerType, I18n, Label, LangType, Message, User } from '../utils/type';
 import { initI18n } from '../utils/i18n';
 import Mustache from 'mustache';
 import * as locale from '../locales';
 import { LABELS, USERS } from '../utils/constants';
 import dayjs from 'dayjs';
-import { isArray } from '../utils/helper';
+
+Mustache.escape = function(text) {return text;};
+
 interface Setting {
 	darkTheme: boolean;
 }
@@ -167,7 +169,12 @@ export default class AppStore {
 	getAnnounceContent = (message: Message) => {
 		const { getUserName, $$ } = this;
 		const { sender, announce } = message;
-		const params = { user1: getUserName(sender), user2: getUserName(announce?.userId), pollName: 'pollname' };
+
+		function tmp(id: string, type: AnnouceTargetObj = 'User') {
+			return `<strong class='hover-change-color announce-clickable' data-type=${type} data-id=${id}>${type === 'User' ? getUserName(id) : announce?.poll?.title}</strong>`
+		}
+
+		const params = { user1: tmp(sender), user2: tmp(announce?.userId ?? ''), pollName: tmp(announce?.poll?.id ?? '', 'Poll') };
 		switch (announce?.type) {
 			case 'Add':
 				return $$('ann-add', params);

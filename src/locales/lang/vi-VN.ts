@@ -163,5 +163,6 @@ const vi: ILocale = {
 	'noty-del-poll-opt': 'Poll must have at least 2 options',
 	'pin-to-top-converse': 'Ghim lên đầu cuộc trò chuyện',
 	'noti-empty-input-n': 'Vui lòng nhập {{n}}',
+	'poll-closed': 'Đã khóa bình chọn',
 };
 export { vi };

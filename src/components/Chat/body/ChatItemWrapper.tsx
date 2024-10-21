@@ -6,6 +6,7 @@ import { useStores } from '../../../stores/stores';
 import { Message } from '../../../utils/type';
 import ChatItem from './ChatItem';
 import Poll from './content-render/poll/Poll';
+import AnnounceList from './announce/AnnounceList';
 
 interface Props {
 	view?: true;
@@ -13,24 +14,18 @@ interface Props {
 }
 function ChatItemWrapper(props: Props) {
 	const {
-		appStore: { user, getAnnounceContent },
+		appStore: { user },
 		chatStore: { listIdPinned },
 	} = useStores();
 	const { view, messages } = props;
 
-	if (messages[0].announce)
-		return (
-			<Space direction='vertical'>
-				{messages.map((e) => (
-					<Row key={e.id} justify='center' className='text-secondary'>
-						{getAnnounceContent(e)}
-					</Row>
-				))}
-			</Space>
-		);
+	if (messages[0].announce) return <AnnounceList messages={messages}/>
+		
 
 	if (messages[0].poll) {
-		return <Poll message={messages[0]}/>
+		return <Space direction='vertical'>
+			{messages.map(e => <Poll key={e.id} message={e}/>)}
+		</Space>
 	}
 	return (
 		<Row className={`chat-item-wrapper ${messages[0].sender === user.id && 'me'}`} wrap={false}>

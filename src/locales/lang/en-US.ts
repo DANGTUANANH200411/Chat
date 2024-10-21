@@ -162,6 +162,7 @@ const en = {
 	'noty-del-poll-opt': 'Poll must have at least 2 options',
 	'pin-to-top-converse': 'Pin to the top of conversation',
 	'noti-empty-input-n': 'Please input {{n}}',
+	'poll-closed': 'This poll was closed',
 };
 
 export type ILocale = typeof en;

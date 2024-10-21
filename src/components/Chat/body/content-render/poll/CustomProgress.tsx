@@ -1,7 +1,6 @@
 import { Avatar, Checkbox, Flex, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import UserAvatar from '../../../../common/UserAvatar';
-import { useStores } from '../../../../../stores/stores';
 
 interface Props {
 	id: string;
@@ -27,7 +26,7 @@ function CustomProgress(props: Props) {
 			<Row className='progress-container ' wrap={false} style={{ height: 32 }} onClick={() => !closed && onChange(id)}>
 				<div className='progress' style={{ width: hideResultNotVote ? 0 : width }}></div>
 				<Flex gap={8}>
-					{!closed && <Checkbox className='chk-round' checked={checked} />}
+					{!closed || checked && <Checkbox className='chk-round' checked={checked} />}
 					<Typography.Text ellipsis>{label}</Typography.Text>
 				</Flex>
 				<Flex>

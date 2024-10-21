@@ -1,9 +1,9 @@
 import { makeAutoObservable } from 'mobx';
 import {
-	AnnouceType,
 	Announce,
 	Attachment,
 	ChatRoom,
+	CreateAnnounceProps,
 	DynamicMessage,
 	Message,
 	MessageLog,
@@ -111,7 +111,10 @@ export default class ChatStore {
 				dayMessages = { ...dayMessages, [roomMessages[i - 1].createDate.substring(0, 8)]: group };
 				group = [];
 				messages = [roomMessages[i]];
-			} else if (!roomMessages[i].announce !== !roomMessages[i - 1].announce) {
+			} else if (
+				!roomMessages[i].announce !== !roomMessages[i - 1].announce ||
+				!roomMessages[i].poll !== !roomMessages[i - 1].poll
+			) {
 				group.push(messages.reverse());
 				messages = [roomMessages[i]];
 			} else if (roomMessages[i].sender === roomMessages[i - 1].sender) {
@@ -388,15 +391,16 @@ export default class ChatStore {
 		return listMsg.splice(skip, Math.min(idx + 20 - skip, listMsg.length));
 	};
 
-	createAnnouncement = (type: AnnouceType, toUser?: string, roomId?: string) => {
-		//this feature should be in backend
+	createAnnouncement = (params: CreateAnnounceProps) => {
+		const { type, roomId, toUser, poll } = params;
 		const room = roomId ?? this.activeRoom;
 		if (!room) return;
 		const announce: Announce = {
 			userId: toUser,
 			type,
+			poll,
 		};
-		this.pushMessage({ content: '', announce });
+		this.pushMessage({ content: '', announce }, room);
 	};
 	//#endregion FAKE BACKEND
 
@@ -690,7 +694,7 @@ export default class ChatStore {
 				(e): RoomMember => ({ ...e, invitedBy: stores.appStore.CurrentUserId, role: 'Member' })
 			),
 		];
-		Array.from(this.selectedUsers.keys()).forEach((id) => this.createAnnouncement('Add', id));
+		Array.from(this.selectedUsers.keys()).forEach((id) => this.createAnnouncement({ type: 'Add', toUser: id }));
 	};
 
 	addFriendToGroups = (memberId: string, groupIds: string[]) => {
@@ -701,7 +705,11 @@ export default class ChatStore {
 			const room = this.getRoom(groupId);
 			if (room) {
 				room.members = [...room.members, { ...user, role: 'Member', invitedBy: stores.appStore.CurrentUserId }];
-				this.createAnnouncement('Add', memberId, groupId);
+				this.createAnnouncement({
+					type: 'Add',
+					toUser: memberId,
+					roomId: groupId,
+				});
 			}
 		});
 		this.chatRooms = [...this.chatRooms];
@@ -711,18 +719,18 @@ export default class ChatStore {
 		const room = this.getActiveRoom(roomId);
 		if (!room) return;
 		room.members = room.members.filter((e) => e.id !== userId);
-		this.createAnnouncement('Remove', userId, roomId);
+		this.createAnnouncement({ type: 'Remove', toUser: userId, roomId });
 	};
 
 	appointAdmin = (userId: string) => {
-		this.createAnnouncement('AppointAdmin', userId);
+		this.createAnnouncement({ type: 'AppointAdmin', toUser: userId });
 		const room = this.getActiveRoom();
 		if (!room) return;
 		room.members.find((e) => e.id === userId)!.role = 'Admin';
 	};
 
 	removeAdmin = (userId: string) => {
-		this.createAnnouncement('RemoveAdmin', userId);
+		this.createAnnouncement({ type: 'RemoveAdmin', toUser: userId });
 		const room = this.getActiveRoom();
 		if (!room) return;
 		room.members.find((e) => e.id === userId)!.role = 'Member';
@@ -731,12 +739,11 @@ export default class ChatStore {
 
 	//#endregion API
 	createPoll = (title: string, poll: Poll, options: string[], pin?: boolean) => {
-		
 		const message = this.pushMessage({
 			content: title,
 			poll: {
 				...poll,
-				options: options.map(e=> ({
+				options: options.map((e) => ({
 					id: newGuid(),
 					label: e,
 				})),
@@ -748,54 +755,84 @@ export default class ChatStore {
 	onVotePoll = (msgId: string, value: string) => {
 		const { CurrentUserId } = stores.appStore;
 		const message = this.getMessage(msgId);
-		if (message && message.poll) {
-			const vote = message.poll.votes.find((e) => e.id === CurrentUserId);
-			if (!vote) {
-				// Add if not exist
-				message.poll.votes.push({ id: CurrentUserId, values: [value] });
-			} else if (message.poll.multiple) {
-				if (vote.values.includes(value)) {
-					const newVoteValues = vote.values.filter((val) => val !== value);
-					if (!newVoteValues.length) {
-						//Remove vote item if values is empty after remove value
-						message.poll.votes = message.poll.votes.filter(e=> e.id !== CurrentUserId);
-					} else {
-						// Remove if value existed
-						vote.values = vote.values.filter((val) => val !== value);
-					}
+
+		if (!message || !message.poll) {
+			notify('Not found!');
+			return;
+		}
+		if (message.poll.closed) return;
+
+		const vote = message.poll.votes.find((e) => e.id === CurrentUserId);
+		if (!vote) {
+			// Add if not exist
+			message.poll.votes.push({ id: CurrentUserId, values: [value] });
+		} else if (message.poll.multiple) {
+			if (vote.values.includes(value)) {
+				const newVoteValues = vote.values.filter((val) => val !== value);
+				if (!newVoteValues.length) {
+					//Remove vote item if values is empty after remove value
+					message.poll.votes = message.poll.votes.filter((e) => e.id !== CurrentUserId);
 				} else {
-					// Push value if not exist
-					vote!.values.push(value);
+					// Remove if value existed
+					vote.values = vote.values.filter((val) => val !== value);
 				}
 			} else {
-				// Set new value if not multiple select
-				vote!.values = [value];
+				// Push value if not exist
+				vote.values.push(value);
 			}
+		} else {
+			// Set new value if not multiple select
+			vote.values = [value];
 		}
-		this.createAnnouncement('Poll Vote');
+		message.createDate = SYSTEM_NOW();
+		this.createAnnouncement({
+			type: 'Poll Vote',
+			poll: {
+				id: message.id,
+				title: message.content,
+			},
+		});
 	};
 
 	onVotesPoll = (msgId: string, values: string[]) => {
 		const { CurrentUserId } = stores.appStore;
 		const message = this.getMessage(msgId);
+		if (!message || !message.poll) {
+			notify('Not found!');
+			return;
+		}
+		if (message.poll.closed) return;
 		
 		if (!values.length) {
-			message!.poll!.votes =  message!.poll!.votes.filter(e=> e.id !== CurrentUserId);
+			message.poll.votes = message.poll.votes.filter((e) => e.id !== CurrentUserId);
 		} else {
-			const vote = message!.poll!.votes.find((e) => e.id === CurrentUserId);
+			const vote = message.poll.votes.find((e) => e.id === CurrentUserId);
 			if (vote) {
 				vote.values = values;
 			} else {
-				message!.poll!.votes.push({ id: CurrentUserId, values });
+				message.poll.votes.push({ id: CurrentUserId, values });
 			}
 		}
-		this.createAnnouncement('Poll Vote');
+		message.createDate = SYSTEM_NOW();
+		this.createAnnouncement({
+			type: 'Poll Vote',
+			poll: {
+				id: message.id,
+				title: message.content,
+			},
+		});
 	};
 
 	closePoll = (msgId: string, manual: boolean = false) => {
 		const message = this.getMessage(msgId);
 		message!.poll!.closed = true;
-		this.createAnnouncement(manual ? 'Poll Closed' : 'Poll Expired');
+		this.createAnnouncement({
+			type: manual ? 'Poll Closed' : 'Poll Expired',
+			poll: {
+				id: message?.id ?? '',
+				title: message?.content ?? '',
+			},
+		});
 	};
 
 	addPollOption = (id: string, label: string) => {

@@ -1,5 +1,3 @@
-import { COUNTRIES } from './countries';
-
 export interface I18n {
 	messages: Record<string, Record<string, any>>;
 	lang: (module: string | Record<string, any>, name: string, args?: any[] | Record<string, any>) => string;
@@ -166,6 +164,10 @@ export interface CommonModalProps {
 export interface Announce {
 	userId?: string;
 	type: AnnouceType;
+	poll?: {
+		id: string;
+		title: string;
+	}
 }
 export interface Poll {
 	options: {
@@ -183,3 +185,15 @@ export interface Poll {
 		values: string[];
 	}[];
 }
+
+export interface CreateAnnounceProps {
+	type: AnnouceType,
+	toUser?: string;
+	roomId?: string;
+	poll?: {
+		id: string;
+		title: string;
+	}
+}
+
+export type AnnouceTargetObj = 'User' | 'Poll';
