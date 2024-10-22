@@ -5,6 +5,7 @@ import Mustache from 'mustache';
 import * as locale from '../locales';
 import { LABELS, USERS } from '../utils/constants';
 import dayjs from 'dayjs';
+import { matchSearchUser } from '../utils/helper';
 
 Mustache.escape = function(text) {return text;};
 
@@ -86,6 +87,13 @@ export default class AppStore {
 
 	isFriendFn = (id: string) => {
 		return this.users.get(id)?.isFriend ?? false;
+	};
+
+	searchUser = (text: string, label?: string) => {
+		const ignoreLabel = !label || label === 'all';
+
+		if (ignoreLabel && !text) return this.Friends;
+		return this.Friends.filter((e) => (ignoreLabel || e.label === label) && matchSearchUser(text, e));
 	};
 	//#endregion GET
 

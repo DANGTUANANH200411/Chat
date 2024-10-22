@@ -218,30 +218,32 @@ export function groupBy(arr: any[], key: string) {
 	}, {});
 }
 
-export function matchSearchUser (text: string, user: User) {
+export function matchSearchUser(text: string, user: User) {
 	if (!text) return true;
-	if (!isNaN(Number(text))) {
-		if (text.startsWith('0')) text = text.replace('0', '');
-		return user.phoneNumber.includes(text);
+	if (!isNaN(+text[0])) {
+		return text
+			.split(',')
+			.map((e) => (e.startsWith('0') ? e.replace('0', '') : e))
+			.some((e) => user.phoneNumber.includes(e));
 	} else {
 		return normalizeIncludes(user.userName, text);
 	}
-};
+}
 
-export function normalizeIncludes (str: string, search: string) {
+export function normalizeIncludes(str: string, search: string) {
 	return toNormalize(str).includes(toNormalize(search));
 }
 
-export function dummyUploadAction ({onSuccess}: any) {
-	setTimeout(() => onSuccess && onSuccess('ok'), 0)
+export function dummyUploadAction({ onSuccess }: any) {
+	setTimeout(() => onSuccess && onSuccess('ok'), 0);
 }
 export function capitalizeFirstLetter(str: string) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
+	return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 export function decodeHtml(html: string) {
-    var txt = document.createElement("textarea");
-    txt.innerHTML = html;
-	const regx = /<\/?br\s*[\/]?>/gi
-    return txt.value.replace(regx, '\n');
+	var txt = document.createElement('textarea');
+	txt.innerHTML = html;
+	const regx = /<\/?br\s*[\/]?>/gi;
+	return txt.value.replace(regx, '\n');
 }

@@ -39,7 +39,7 @@ function PollDetailModal() {
 				closed ? (
 					<Row justify='center'>
 						<Typography.Text ellipsis type='secondary'>
-							<LockOutlined style={{ color: 'inherit' }} /> {$$('poll-closed')}
+							<LockOutlined /> {$$('poll-closed')}
 						</Typography.Text>
 					</Row>
 				) : (
@@ -147,7 +147,7 @@ function PollDetailModal() {
 							color='default'
 							variant='text'
 							className='text-secondary'
-							icon={<PlusOutlined style={{ color: 'inherit' }} />}
+							icon={<PlusOutlined />}
 						>
 							{$$('add-poll-options').toLocaleUpperCase()}
 						</Button>

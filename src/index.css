@@ -111,9 +111,6 @@ code {
 	height: -webkit-fill-available;
 }
 
-.anticon {
-	color: var(--text-color);
-}
 .ant-avatar.member-avatar {
 	border: 1px solid var(--primary-color);
 }

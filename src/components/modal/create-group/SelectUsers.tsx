@@ -17,8 +17,8 @@ interface Props {
 
 function SelectUsers(props: Props) {
 	const {
-		appStore: { $$, labels },
-		chatStore: { selectedUsers, setSelectedUsers, searchUser },
+		appStore: { $$, labels, searchUser },
+		chatStore: { selectedUsers, setSelectedUsers },
 	} = useStores();
 	const { joined, disableTag } = props;
 

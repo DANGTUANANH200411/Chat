@@ -28,13 +28,13 @@ function PollRegistModal() {
 	const [options, setOtions] = useState<string[]>(['', '']);
 	const updatePoll = (name: keyof Poll, val: any) => setPoll({ ...poll, [name]: val });
 
-    const onClose = () => {
-        toggleCreatePollModal();
-        setPoll(defaultPoll);
-        setTitle('');
-        setOtions(['', '']);
-        setPin(false);
-    }
+	const onClose = () => {
+		toggleCreatePollModal();
+		setPoll(defaultPoll);
+		setTitle('');
+		setOtions(['', '']);
+		setPin(false);
+	};
 
 	return (
 		<Modal
@@ -42,15 +42,15 @@ function PollRegistModal() {
 			open={openCreatePoll}
 			title={$$('create-new-poll')}
 			onOk={() => {
-                if (!title) {
-                    notify($$('noti-empty-input-n', {n: $$('question')}))
-                    return;
-                }
-                const opts = options.map((e) => e.trim()).filter((e) => e);
-                if (opts.length < 2) {
-                    notify($$('noty-del-poll-opt'), 'warning');
-                    return;
-                }
+				if (!title) {
+					notify($$('noti-empty-input-n', { n: $$('question') }));
+					return;
+				}
+				const opts = options.map((e) => e.trim()).filter((e) => e);
+				if (opts.length < 2) {
+					notify($$('noty-del-poll-opt'), 'warning');
+					return;
+				}
 				createPoll(title, poll, opts, pin);
 				onClose();
 			}}
@@ -95,7 +95,7 @@ function PollRegistModal() {
 						))}
 					</Flex>
 					<Typography.Link ellipsis onClick={() => setOtions(options.concat(''))}>
-						<PlusOutlined style={{ color: 'inherit' }} /> {$$('add-poll-options')}
+						<PlusOutlined /> {$$('add-poll-options')}
 					</Typography.Link>
 				</Flex>
 

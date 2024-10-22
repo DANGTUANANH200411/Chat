@@ -17,6 +17,9 @@ import PollRegistModal from './modal/poll/PollRegistModal';
 import { AnnouceTargetObj } from '../utils/type';
 import { useStores } from '../stores/stores';
 import CreateNoteModal from './modal/create-note/CreateNoteModal';
+import ModalNameCard from './Chat/modal/ModalNameCard';
+import ModalDetailMessage from './Chat/modal/ModalDetailMessage';
+import ModalReactionLog from './Chat/modal/ModalReactionLog';
 
 function Main() {
 	const {
@@ -48,9 +51,7 @@ function Main() {
 			<Row className='main'>
 				<TopBar />
 				<LeftMenu />
-				<Col className='chat-wrapper'>
-					<ChatWrapper />
-				</Col>
+				<ChatWrapper />
 				<ChatDrawer />
 			</Row>
 			{/** MODAL */}
@@ -64,6 +65,9 @@ function Main() {
 			<PollVotedModal />
 			<PollRegistModal />
 			<CreateNoteModal />
+			<ModalReactionLog />
+			<ModalDetailMessage />
+			<ModalNameCard />
 		</Watermark>
 	);
 }

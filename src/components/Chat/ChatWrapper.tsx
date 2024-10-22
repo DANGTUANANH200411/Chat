@@ -1,16 +1,12 @@
-import { Row, Watermark } from 'antd';
+import { Row } from 'antd';
 import { observer } from 'mobx-react';
 import { useStores } from '../../stores/stores';
 import ChatHeader from './header/ChatHeader';
 import './style.css';
 import ChatBody from './body/ChatBody';
 import ChatFooter from './footer/ChatFooter';
-import ModalReactionLog from './modal/ModalReactionLog';
 import { useEffect } from 'react';
 import ViewPinned from './body/ViewPinned';
-import ModalDetailMessage from './modal/ModalDetailMessage';
-import SelectingBar from './body/SelectingBar';
-import ModalNameCard from './modal/ModalNameCard';
 function ChatWrapper() {
 	const { chatStore } = useStores();
 	const { activeRoom } = chatStore;
@@ -26,22 +22,23 @@ function ChatWrapper() {
 			document.removeEventListener('click', onClickMention);
 		};
 	}, []);
-	return activeRoom ? (
-		<>
-			<div className='max-height'>
-				<ChatHeader />
-				<div className='chat-view'>
-					<ViewPinned />
-					<ChatBody />
-					<ChatFooter />
-				</div>
-			</div>
-			<ModalReactionLog />
-			<ModalDetailMessage />
-			<ModalNameCard />
-		</>
-	) : (
-		<Row>WELLCOME TO MY CHAT APP</Row>
+	return (
+		<div className='max-height flex-grow'>
+			{activeRoom ? (
+				<>
+					<ChatHeader />
+					<div className='chat-view'>
+						<ViewPinned />
+						<ChatBody />
+						<ChatFooter />
+					</div>
+				</>
+			) : (
+				<Row className='max-height' justify='center' align='middle'>
+					WELLCOME TO MY CHAT APP
+				</Row>
+			)}
+		</div>
 	);
 }
 

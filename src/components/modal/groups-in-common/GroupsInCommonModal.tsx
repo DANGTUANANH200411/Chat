@@ -52,7 +52,7 @@ function GroupsInCommonModal() {
 				<Button
 					color='primary'
 					variant='filled'
-					icon={<UsergroupAddOutlined style={{ color: 'inherit' }} />}
+					icon={<UsergroupAddOutlined />}
 					onClick={onCreateGroupWith}
 				>
 					<Typography.Text ellipsis style={{ color: 'inherit' }}>
@@ -62,7 +62,7 @@ function GroupsInCommonModal() {
 				<Button
 					color='primary'
 					variant='filled'
-					icon={<UserAddOutlined style={{ color: 'inherit' }} />}
+					icon={<UserAddOutlined />}
 					onClick={() => toggleAddToGroup(id)}
 				>
 					<Typography.Text ellipsis style={{ color: 'inherit' }}>

@@ -176,5 +176,6 @@ const vi: ILocale = {
 	'placeholder-create-note': 'Nhập chú hoặc dán liên kết',
 	content: 'Nội dung',
 	'create-by-n': 'Tạo bởi {{name}}',
+	'leave-and-delete': 'Rời khỏi và xóa cuộc trò chuyện này?',
 };
 export { vi };

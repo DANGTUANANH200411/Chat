@@ -1,4 +1,4 @@
-import { Collapse, CollapseProps, Flex, Row, Typography } from 'antd';
+import { Button, Collapse, CollapseProps, Flex, Row, Typography } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import GroupAvatar from '../../common/GroupAvatar';
 import UserAvatar from '../../common/UserAvatar';
@@ -28,7 +28,7 @@ const panelStyle: React.CSSProperties = {
 	background: 'var(--background-color)',
 	borderRadius: 'none',
 	border: 'none',
-	borderTop: '4px solid var(--border-color)',
+	borderTop: '2px solid var(--border-color)',
 };
 
 function RoomInfo() {
@@ -55,9 +55,16 @@ function RoomInfo() {
 			key: 'members',
 			label: $$('group-member'),
 			children: (
-				<div className='div-button' onClick={() => setDrawerOpen('Members')}>
-					<FontAwesomeIcon icon={faUserGroup} /> {members.length} {$$('members')}
-				</div>
+				<Button
+					block
+					className='collapse-content-item'
+					color='default'
+					variant='text'
+					icon={<FontAwesomeIcon icon={faUserGroup} />}
+					onClick={() => setDrawerOpen('Members')}
+				>
+					{members.length} {$$('members')}
+				</Button>
 			),
 			style: panelStyle,
 		},
@@ -65,74 +72,112 @@ function RoomInfo() {
 			key: 'board',
 			label: 'Group board',
 			children: (
-				<Flex vertical gap='small'>
-					<div className='div-button' onClick={() => notify('Incomming')}>
-						<FontAwesomeIcon icon={faClock} /> Reminer board
-					</div>
-					<div className='div-button' onClick={() => setDrawerOpen('Board')}>
-						<FileTextOutlined /> Note, pin, poll
-					</div>
+				<Flex vertical>
+					<Button
+						block
+						className='collapse-content-item'
+						color='default'
+						variant='text'
+						icon={<FontAwesomeIcon icon={faClock} />}
+						onClick={() => notify('Incomming')}
+					>
+						Reminer board
+					</Button>
+					<Button
+						block
+						className='collapse-content-item'
+						color='default'
+						variant='text'
+						icon={<FileTextOutlined />}
+						onClick={() => setDrawerOpen('Board')}
+					>
+						Note, pin, poll
+					</Button>
 				</Flex>
 			),
 			style: panelStyle,
 		},
 	];
 
-	const items: CollapseProps['items'] = [
-		...(isGroup ? groupItems : personalItems),
-		{
-			key: 'photos',
-			label: 'Photos/Videos',
-			children: <PreviewPhotoStorage />,
-			style: panelStyle,
-		},
-		{
-			key: 'files',
-			label: 'Files',
-			children: <PreviewFileStorage />,
-			style: panelStyle,
-		},
-		{
-			key: 'links',
-			label: 'Links',
-			children: <PreviewLinkStorage />,
-			style: panelStyle,
-		},
-		{
-			key: 'privacy',
-			label: $$('privacy-setting'),
-			children: (
-				<Flex vertical gap='mall'>
-					<div className='div-button' onClick={() => notify('Incomming')}>
-						<EyeInvisibleOutlined /> {$$('disappearing-msg')}
-					</div>
-					<Confirm
-						danger
-						title={$$('delete-chat-history')}
-						okText={$$('delete')}
-						onOk={() => onDeleteChatHistory()}
-					>
-						<div className='div-button danger'>
-							<DeleteOutlined /> {$$('delete-chat-history')}
-						</div>
-					</Confirm>
+	const items: CollapseProps['items'] = useMemo(
+		() => [
+			...(isGroup ? groupItems : personalItems),
+			{
+				key: 'photos',
+				label: 'Photos/Videos',
+				children: <PreviewPhotoStorage />,
+				style: panelStyle,
+			},
+			{
+				key: 'files',
+				label: 'Files',
+				children: <PreviewFileStorage />,
+				style: panelStyle,
+			},
+			{
+				key: 'links',
+				label: 'Links',
+				children: <PreviewLinkStorage />,
+				style: panelStyle,
+			},
+			{
+				key: 'privacy',
+				label: $$('privacy-setting'),
+				children: (
+					<Flex vertical>
+						<Button
+							block
+							className='collapse-content-item'
+							color='default'
+							variant='text'
+							icon={<EyeInvisibleOutlined />}
+							onClick={() => notify('Incomming')}
+						>
+							{$$('disappearing-msg')}
+						</Button>
+						<Confirm
+							danger
+							title={$$('delete-chat-history')}
+							okText={$$('delete')}
+							onOk={() => onDeleteChatHistory()}
+						>
+							<Button
+								block
+								className='collapse-content-item'
+								color='danger'
+								variant='text'
+								icon={<DeleteOutlined />}
+								onClick={() => notify('Incomming')}
+							>
+								{$$('delete-chat-history')}
+							</Button>
+						</Confirm>
 
-					<Confirm
-						danger
-						title='Leave group'
-						body='Leave and delete this conversation?'
-						okText={$$('leave')}
-						onOk={() => onLeaveGroup()}
-					>
-						<div className='div-button danger'>
-							<LogoutOutlined /> {$$('leave')}
-						</div>
-					</Confirm>
-				</Flex>
-			),
-			style: panelStyle,
-		},
-	];
+						<Confirm
+							danger
+							title={$$('leave')}
+							body={$$('leave-and-delete')}
+							okText={$$('leave')}
+							onOk={() => onLeaveGroup()}
+						>
+							<Button
+								block
+								className='collapse-content-item'
+								color='danger'
+								variant='text'
+								icon={<LogoutOutlined />}
+								onClick={() => notify('leave')}
+							>
+								{$$('leave')}
+							</Button>
+						</Confirm>
+					</Flex>
+				),
+				style: panelStyle,
+			},
+		],
+		[Room]
+	);
 
 	useEffect(() => {
 		setActiveKey(items.map((e) => e.key as string));

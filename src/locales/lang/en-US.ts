@@ -175,6 +175,7 @@ const en = {
 	'placeholder-create-note': 'Type new note or paste link',
 	content: 'Content',
 	'create-by-n': 'Create by {{name}}',
+	'leave-and-delete': 'Leave and delete this conversation?',
 };
 
 export type ILocale = typeof en;

@@ -24,7 +24,7 @@ function ChatDrawer() {
 		!Room?.isGroup && drawerOpen === 'Members' && setDrawerOpen('Info')
 	}, [Room, drawerOpen, setDrawerOpen])
 
-	if (!drawerOpen || !Room) return <></>;
+	if (!Room) return <></>;
 
 	return (
 		<div className='drawer max-height'>

@@ -21,22 +21,22 @@ function ActionBar(props: Props) {
 	return (
 		<Flex gap='large' style={{ marginTop: 12, width: '90%' }}>
 			<Flex vertical align='center' className='action-bar-item'>
-				<FontAwesomeIcon icon={true ? faBell : faBellSlash} style={{ fontSize: 20 }} />
-				<span style={{ textAlign: 'center' }}>{$$(true ? 'mute-group' : 'unmute-group')}</span>
+				<FontAwesomeIcon icon={true ? faBell : faBellSlash} />
+				<span>{$$(true ? 'mute-group' : 'unmute-group')}</span>
 			</Flex>
 			<Flex vertical align='center' className='action-bar-item' onClick={() => onPinConversation(id)}>
-				<PushpinOutlined style={{ fontSize: 20 }} />
-				<span style={{ textAlign: 'center' }}>{$$(!pinned ? 'pin' : 'unpin')}</span>
+				<PushpinOutlined />
+				<span>{$$(!pinned ? 'pin' : 'unpin')}</span>
 			</Flex>
 			{isGroup ? (
 				<>
 					<Flex vertical align='center' className='action-bar-item' onClick={setToggleAddFriendToGroup}>
-						<UsergroupAddOutlined style={{ fontSize: 20 }} />
-						<span style={{ textAlign: 'center' }}>{$$('add-friends-to-group')}</span>
+						<UsergroupAddOutlined />
+						<span>{$$('add-friends-to-group')}</span>
 					</Flex>
 					<Flex vertical align='center' className='action-bar-item'>
-						<SettingOutlined style={{ fontSize: 20 }} />
-						<span style={{ textAlign: 'center' }}>{$$('manage-group')}</span>
+						<SettingOutlined />
+						<span>{$$('manage-group')}</span>
 					</Flex>
 				</>
 			) : (

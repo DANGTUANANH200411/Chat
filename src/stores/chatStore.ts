@@ -1,4 +1,9 @@
 import { makeAutoObservable } from 'mobx';
+import { CHAT_ROOMS, MESSAGES } from '../utils/constants';
+import { SYSTEM_NOW } from '../utils/dateHelper';
+import { isEmpty, isImage, isUrl, matchSearchUser, newGuid, normalizeIncludes, toNormalize } from '../utils/helper';
+import { openUndo } from '../utils/notification';
+import { notify } from '../utils/notify';
 import {
 	Announce,
 	Attachment,
@@ -22,12 +27,7 @@ import {
 	TabItemType,
 	User,
 } from '../utils/type';
-import { CHAT_ROOMS, MESSAGES } from '../utils/constants';
-import { isEmpty, isImage, isUrl, matchSearchUser, newGuid, normalizeIncludes, toNormalize } from '../utils/helper';
 import { stores } from './stores';
-import { SYSTEM_NOW } from '../utils/dateHelper';
-import { notify } from '../utils/notify';
-import { openUndo } from '../utils/notification';
 
 type DateMessage = {
 	[key: string]: Message[][];
@@ -650,14 +650,6 @@ export default class ChatStore {
 				image: e.image,
 			}))
 			.sort((a, b) => a.name.localeCompare(b.name));
-	};
-
-	searchUser = (text: string, label?: string) => {
-		const Friends = stores.appStore.Friends;
-		const ignoreLabel = !label || label === 'all';
-
-		if (ignoreLabel && !text) return Friends;
-		return Friends.filter((e) => (ignoreLabel || e.label === label) && matchSearchUser(text, e));
 	};
 
 	forwardMessage = (rooms: string[]) => {
