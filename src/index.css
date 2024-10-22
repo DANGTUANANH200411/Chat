@@ -223,3 +223,7 @@ code {
 	border-radius: 4px;
 	background-color: var(--primary-color);
 }
+
+.ant-typography.ant-typography-secondary {
+    color: var(--text-secondary) !important;
+}

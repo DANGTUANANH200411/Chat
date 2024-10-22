@@ -1,9 +1,20 @@
-body:is(.dark-theme) .side-bar .side-bar-icon,
-body:is(.dark-theme) .ant-typography{
-    color: white
+body:is(.dark-theme) .anticon,
+body:is(.dark-theme) .svg-inline--fa {
+	color: white;
+}
+body:is(.dark-theme) .ant-btn-icon .anticon {
+    color: inherit;
 }
 
-.ant-typography.ant-typography-secondary {
-    color: var(--text-secondary) !important;
+body:is(.dark-theme) .ant-qrcode {
+	background: black !important;
 }
-
+body:is(.dark-theme) .ant-qrcode canvas {
+	background: black;
+}
+.ant-btn-color-default.ant-btn-variant-filled:not(:disabled):not(.ant-btn-disabled) {
+	background-color: #56538880;
+}
+.ant-btn-color-default.ant-btn-variant-filled:not(:disabled):not(.ant-btn-disabled):hover {
+	background-color: #4d4985;
+}

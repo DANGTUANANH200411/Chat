@@ -75,7 +75,7 @@ function ChatHeader() {
 					<UnorderedListOutlined
 						className='hoverable-icon'
 						title={$$('room-info')}
-						style={{ color: drawerOpen ? 'var(--primary-color)' : 'unset' }}
+						style={{ color: drawerOpen && 'var(--primary-color)' }}
 						onClick={() => setDrawerOpen(drawerOpen ? undefined : 'Info')}
 					/>
 				</div>
