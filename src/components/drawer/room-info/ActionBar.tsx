@@ -13,7 +13,7 @@ interface Props {
 }
 function ActionBar(props: Props) {
 	const {
-		appStore: { $$ },
+		appStore: { $$, setToggleAddFriendToGroup },
 		chatStore: { onPinConversation },
 	} = useStores();
 
@@ -30,7 +30,7 @@ function ActionBar(props: Props) {
 			</Flex>
 			{isGroup ? (
 				<>
-					<Flex vertical align='center' className='action-bar-item'>
+					<Flex vertical align='center' className='action-bar-item' onClick={setToggleAddFriendToGroup}>
 						<UsergroupAddOutlined style={{ fontSize: 20 }} />
 						<span style={{ textAlign: 'center' }}>{$$('add-friends-to-group')}</span>
 					</Flex>

@@ -1,9 +1,9 @@
+import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Row, Typography } from 'antd';
-import React, { useMemo } from 'react';
-import { User } from '../../utils/type';
-import UserAvatar from './UserAvatar';
-import { useStores } from '../../stores/stores';
 import { observer } from 'mobx-react';
+import React, { useMemo } from 'react';
+import { useStores } from '../../stores/stores';
+import { User } from '../../utils/type';
 interface Props {
 	user?: User;
 	info?: string;
@@ -28,7 +28,7 @@ function Member(props: Props) {
 	}, [size]);
 	return (
 		<div className='max-width member'>
-			<Avatar src={user?.imageSrc} className='member-avatar' size={size} />
+			<Avatar src={user?.imageSrc} className='member-avatar' size={size} icon={<UserOutlined/>} />
 			<Row wrap={false} justify='space-between' align='middle' className='flex-grow'>
 				<Row>
 					<Row>

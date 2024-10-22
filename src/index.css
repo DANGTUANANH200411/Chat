@@ -14,6 +14,7 @@ html {
 	--left-menu-w: 17vw;
 	--drawer-w: 0vw;
 	--chat-w: calc(100vw - var(--side-bar-w) - var(--left-menu-w) - var(--drawer-w));
+	--bg-hover: rgba(0, 0, 0, 0.04);
 }
 body:is(.dark-theme) {
 	--text-color: #ffffff;
@@ -86,17 +87,28 @@ code {
 .hoverable-icon:is(.icon-danger):hover {
 	color: rgb(255, 73, 73) !important;
 }
+
+.hoverable-icon:is(.disabled),
+.hoverable-icon:is(.disabled):hover {
+	color: #b3b3b3 !important;
+	cursor: not-allowed;
+}
+
 .hover-change-color:hover,
 .hover-change-color:hover * {
 	color: var(--primary-color) !important;
 	cursor: pointer;
 }
 
+.hoverable:hover {
+	background-color: var(--bg-hover);
+}
+
 .max-width {
-	width: 100%;
+	width: -webkit-fill-available;
 }
 .max-height {
-	height: 100%;
+	height: -webkit-fill-available;
 }
 
 .anticon {
@@ -199,10 +211,18 @@ code {
 .toggle {
 	display: none;
 }
-.toggle-wrapper:hover .toggle{
+.toggle-wrapper:hover .toggle {
 	display: block;
 }
 
-.chk-round .ant-checkbox-inner{
+.chk-round .ant-checkbox-inner {
 	border-radius: 50%;
+}
+
+::-webkit-scrollbar {
+	width: 4px;
+}
+::-webkit-scrollbar-thumb {
+	border-radius: 4px;
+	background-color: var(--primary-color);
 }

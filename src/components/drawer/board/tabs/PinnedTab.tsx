@@ -10,7 +10,7 @@ function PinnedTab() {
 	} = useStores();
 	return (
 		<Flex vertical gap={8} className='max-height' style={{padding: 8, overflow: 'auto'}}>
-			{Room?.pinMessages?.map((e) => <PinnedItem message={e} />)}
+			{Room?.pinMessages?.map((e) => <PinnedItem key={e.id} message={e} />)}
 		</Flex>
 	);
 }

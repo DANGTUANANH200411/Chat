@@ -1,5 +1,5 @@
 import { SearchOutlined, UserAddOutlined, UsergroupAddOutlined } from '@ant-design/icons';
-import { Col, Input, Row, Tooltip } from 'antd';
+import { Input, Row, Tooltip } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { useStores } from '../../stores/stores';
 
@@ -9,7 +9,7 @@ function SearchBar() {
 		chatStore: { searchRoom, setSearchRoom, toggleCreateGroup },
 	} = useStores();
 	return (
-		<Row align='middle' justify='space-around' className='search-bar' gutter={12}>
+		<Row align='middle' justify='space-between' className='search-bar'>
 			<Input
 				value={searchRoom}
 				prefix={<SearchOutlined />}

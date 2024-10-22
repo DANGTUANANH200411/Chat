@@ -1,10 +1,10 @@
-import { Button, Empty, Flex, Modal, Tabs, TabsProps } from 'antd';
+import { Button, Empty, Modal, Tabs, TabsProps } from 'antd';
 import { observer } from 'mobx-react';
 import React, { useCallback } from 'react';
 import { useStores } from '../../../stores/stores';
+import { User } from '../../../utils/type';
 import Member from '../../common/Member';
 import './style.css';
-import { User } from '../../../utils/type';
 
 function PollVotedModal() {
 	const {
@@ -15,6 +15,7 @@ function PollVotedModal() {
 	const renderMember = useCallback((user: User) => {
 		return (
 			<Member
+				key={user.id}
 				user={user}
 				suffix={
 					!user.isFriend && (

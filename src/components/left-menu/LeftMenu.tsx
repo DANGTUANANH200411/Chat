@@ -5,6 +5,7 @@ import '../style.css';
 import React, { useEffect } from 'react';
 import { useStores } from '../../stores/stores';
 import { observer } from 'mobx-react';
+import { Flex } from 'antd';
 function LeftMenu() {
 	const {
 		appStore: { menuOpen },
@@ -18,15 +19,13 @@ function LeftMenu() {
 		}
 	}, [menuOpen]);
 	return (
-		<div className={`left-menu ${!menuOpen && 'closed'}`}>
-			<div style={{ height: '10%' }}>
-				<SearchBar />
-				<MenuTab />
-			</div>
-			<div className='preview-chat-wrapper' style={{ height: '90%' }}>
+		<Flex vertical className={`left-menu ${!menuOpen && 'closed'}`}>
+			<SearchBar />
+			<MenuTab />
+			<div className='preview-chat-wrapper flex-grow'>
 				<PreviewChatWrapper />
 			</div>
-		</div>
+		</Flex>
 	);
 }
 

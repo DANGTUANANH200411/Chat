@@ -41,7 +41,7 @@
     height: -webkit-fill-available;
     border-right: 1px solid var(--border-color);
     width: var(--left-menu-w);
-    padding: .8rem .8rem 0 .8rem;
+    padding: .4rem .4rem 0 .4rem;
     transition: width .5s ease-in-out, padding .5s ease-in-out;
 }
 .left-menu:is(.closed) {
@@ -56,8 +56,9 @@
     overflow-y: auto;
 }
 .preview-chat-item {
-    padding: .4rem 0;
+    padding: .4rem;
     column-gap: 8px;
+    border-radius: 4px;
 }
 .preview-chat-item-more {
     display: none;

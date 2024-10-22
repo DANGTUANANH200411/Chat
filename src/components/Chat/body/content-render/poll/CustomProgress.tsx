@@ -26,7 +26,7 @@ function CustomProgress(props: Props) {
 			<Row className='progress-container ' wrap={false} style={{ height: 32 }} onClick={() => !closed && onChange(id)}>
 				<div className='progress' style={{ width: hideResultNotVote ? 0 : width }}></div>
 				<Flex gap={8}>
-					{(!closed || closed && checked)&& <Checkbox className='chk-round' checked={checked} />}
+					{(!closed || (closed && checked))&& <Checkbox className='chk-round' checked={checked} />}
 					<Typography.Text ellipsis>{label}</Typography.Text>
 				</Flex>
 				<Flex>
@@ -37,7 +37,7 @@ function CustomProgress(props: Props) {
 							style: { color: 'rgb(0 131 255)', backgroundColor: 'rgb(232 244 255)', fontSize: 'unset' },
 						}}
 					>
-						{!hideResultNotVote && !hideVoters && voted.map((id) => <UserAvatar id={id} />)}
+						{!hideResultNotVote && !hideVoters && voted.map((id) => <UserAvatar key={id} id={id} />)}
 					</Avatar.Group>
 				</Flex>
 			</Row>

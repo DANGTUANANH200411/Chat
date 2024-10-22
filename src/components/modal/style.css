@@ -11,38 +11,6 @@
 .user-row > .ant-space-item {
 	display: flex;
 }
-.list-label {
-	cursor: pointer;
-	overflow-x: auto;
-}
-.list-label::-webkit-scrollbar {
-	display: block;
-	position: relative;
-}
-.list-label::-webkit-scrollbar-button:horizontal {
-	background-color: #ffffff;
-	background-repeat: no-repeat;
-	background-size: 100%;
-	background-position: center;
-}
-
-.list-label::-webkit-scrollbar-button:horizontal:start:increment,
-.list-label::-webkit-scrollbar-button:horizontal:end:decrement {
-	display: none;
-}
-.list-label::-webkit-scrollbar-button:horizontal:decrement {
-	position: absolute;
-	top: -10;
-	background-image: url('../../resources/left.png');
-}
-.list-label::-webkit-scrollbar-button:horizontal:increment {
-	background-image: url('../../resources/right.png');
-}
-
-/* .list-label::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-    border-radius: 10px;
-} */
 
 .list-selected-wapper {
 	height: 85%;

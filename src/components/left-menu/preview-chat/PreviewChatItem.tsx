@@ -27,7 +27,7 @@ function PreviewChatItem(props: ChatRoom) {
 		return `${getUserName(msg.sender)}: ${msg.content}`;
 	};
 	return (
-		<Row className='preview-chat-item' onClick={() => setActiveRoom(id)} wrap={false}>
+		<Row className='preview-chat-item hoverable' onClick={() => setActiveRoom(id)} wrap={false}>
 			{isGroup ? <GroupAvatar image={image} members={members} /> : <UserAvatar id={id} size={GROUP_AVT_SIZE} />}
 			<Row className='flex-grow' align='middle'>
 				<Row wrap={false}>

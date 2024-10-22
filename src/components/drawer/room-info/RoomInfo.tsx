@@ -2,7 +2,13 @@ import { Collapse, CollapseProps, Flex, Row, Typography } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import GroupAvatar from '../../common/GroupAvatar';
 import UserAvatar from '../../common/UserAvatar';
-import { CaretRightOutlined, DeleteOutlined, EyeInvisibleOutlined, FileTextOutlined, LogoutOutlined } from '@ant-design/icons';
+import {
+	CaretRightOutlined,
+	DeleteOutlined,
+	EyeInvisibleOutlined,
+	FileTextOutlined,
+	LogoutOutlined,
+} from '@ant-design/icons';
 import ActionBar from './ActionBar';
 import { GROUP_AVT_SIZE } from '../../../utils/constants';
 import { useStores } from '../../../stores/stores';
@@ -30,20 +36,19 @@ function RoomInfo() {
 		appStore: { $$, setDrawerOpen },
 		chatStore: { Room, onLeaveGroup, onDeleteChatHistory, addFriendToGroup },
 	} = useStores();
-	
+
 	const { id, name, isGroup, members, image, pinned } = Room!;
 
-	const [activeKey, setActiveKey] = useState<string[]>([])
+	const [activeKey, setActiveKey] = useState<string[]>([]);
 
 	const personalItems: CollapseProps['items'] = [
 		{
 			key: 'personal',
 			label: 'Peronal',
-			children: <Personal/>,
+			children: <Personal />,
 			style: panelStyle,
 		},
-		
-	]
+	];
 
 	const groupItems: CollapseProps['items'] = [
 		{
@@ -71,10 +76,10 @@ function RoomInfo() {
 			),
 			style: panelStyle,
 		},
-	]
+	];
 
-	const items: CollapseProps['items'] = useMemo(()=> [
-		...isGroup ? groupItems : personalItems,
+	const items: CollapseProps['items'] = [
+		...(isGroup ? groupItems : personalItems),
 		{
 			key: 'photos',
 			label: 'Photos/Videos',
@@ -101,7 +106,12 @@ function RoomInfo() {
 					<div className='div-button' onClick={() => notify('Incomming')}>
 						<EyeInvisibleOutlined /> {$$('disappearing-msg')}
 					</div>
-					<Confirm danger title={$$('delete-chat-history')} okText={$$('delete')} onOk={() => onDeleteChatHistory()}>
+					<Confirm
+						danger
+						title={$$('delete-chat-history')}
+						okText={$$('delete')}
+						onOk={() => onDeleteChatHistory()}
+					>
 						<div className='div-button danger'>
 							<DeleteOutlined /> {$$('delete-chat-history')}
 						</div>
@@ -115,18 +125,18 @@ function RoomInfo() {
 						onOk={() => onLeaveGroup()}
 					>
 						<div className='div-button danger'>
-							<LogoutOutlined  /> {$$('leave')}
+							<LogoutOutlined /> {$$('leave')}
 						</div>
 					</Confirm>
 				</Flex>
 			),
 			style: panelStyle,
 		},
-	], [isGroup]);
+	];
 
 	useEffect(() => {
-		setActiveKey(items.map(e=> e.key as string))
-	}, [items])
+		setActiveKey(items.map((e) => e.key as string));
+	}, [items]);
 
 	return (
 		<>
@@ -148,14 +158,14 @@ function RoomInfo() {
 						</Typography.Text>
 						{/* <EditOutlined /> */}
 					</Flex>
-					<ActionBar id={id} isGroup={isGroup} pinned={pinned}/>
+					<ActionBar id={id} isGroup={isGroup} pinned={pinned} />
 				</Flex>
 				<Collapse
 					items={items}
 					bordered={false}
 					expandIconPosition='end'
 					activeKey={activeKey}
-					onChange={(keys)=> setActiveKey(keys)}
+					onChange={(keys) => setActiveKey(keys)}
 					expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
 				></Collapse>
 			</div>

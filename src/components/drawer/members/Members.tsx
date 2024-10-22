@@ -1,5 +1,5 @@
 import { CaretLeftOutlined, MoreOutlined, UserAddOutlined } from '@ant-design/icons';
-import { Button, Dropdown, Row, Space, Typography } from 'antd';
+import { Button, Dropdown, Flex, Row, Space, Typography } from 'antd';
 import { observer } from 'mobx-react';
 import { useStores } from '../../../stores/stores';
 import Member from '../../common/Member';
@@ -52,7 +52,7 @@ function Members() {
 							</Dropdown>
 						</Row>
 					</Space>
-					<Space size={24} className='max-width drawer-members-list' direction='vertical'>
+					<Flex vertical className='max-width drawer-members-list' >
 						{Room &&
 							Room.members.map((user) => {
 								const role = getRole(user.id);
@@ -95,7 +95,7 @@ function Members() {
 									/>
 								);
 							})}
-					</Space>
+					</Flex>
 				</Row>
 		</>
 	);

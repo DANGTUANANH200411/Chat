@@ -1,13 +1,14 @@
 import { SearchOutlined } from '@ant-design/icons';
-import { Checkbox, Input, Row, Space, Spin, Tag, Typography } from 'antd';
+import { Checkbox, Flex, Input, Row, Space, Spin, Tag, Typography } from 'antd';
 import { observer } from 'mobx-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useStores } from '../../../stores/stores';
-import { defaultText, toNormalize } from '../../../utils/helper';
+import { DELAY_INPUT } from '../../../utils/constants';
+import { defaultText } from '../../../utils/helper';
 import { User } from '../../../utils/type';
+import HorizonScroll from '../../common/HorizonScroll';
 import Member from '../../common/Member';
 import ListSelected from './ListSelected';
-import { DELAY_INPUT } from '../../../utils/constants';
 
 interface Props {
 	joined?: string[];
@@ -33,11 +34,12 @@ function SelectUsers(props: Props) {
 					key={e.id}
 					color={e.id === selectedLabel ? e.color : undefined}
 					onClick={() => setSelectedLabel(e.id)}
+					style={{ margin: 0, cursor: 'pointer' }}
 				>
 					{defaultText($$(e.name as any), e.name)}
 				</Tag>
 			)),
-		[labels, selectedLabel]
+		[labels, selectedLabel, $$]
 	);
 
 	const onCheck = (user: User) => {
@@ -52,7 +54,7 @@ function SelectUsers(props: Props) {
 
 	useEffect(() => {
 		setLoading(true);
-		
+
 		const timer = setTimeout(() => {
 			const res = searchUser(searchText, selectedLabel);
 			setSearchedUser(res);
@@ -62,7 +64,7 @@ function SelectUsers(props: Props) {
 		return () => {
 			clearTimeout(timer);
 		};
-	}, [searchText, selectedLabel]);
+	}, [searchText, selectedLabel, setSearchedUser, setLoading, searchUser]);
 
 	return (
 		<>
@@ -77,9 +79,13 @@ function SelectUsers(props: Props) {
 						onChange={(e) => setSearchText(e.target.value)}
 					/>
 				</Row>
-				<Row className='list-label' wrap={false}>
-					{!disableTag && listLabel}
-				</Row>
+
+				{!disableTag && (
+					<HorizonScroll>
+						<Flex gap={8}>{listLabel}</Flex>
+					</HorizonScroll>
+				)}
+
 				<Spin spinning={loading}>
 					<Row style={{ position: 'relative', height: '50vh' }}>
 						<Space

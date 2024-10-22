@@ -174,6 +174,7 @@ const en = {
 	'create': 'Create',
 	'placeholder-create-note': 'Type new note or paste link',
 	content: 'Content',
+	'create-by-n': 'Create by {{name}}',
 };
 
 export type ILocale = typeof en;

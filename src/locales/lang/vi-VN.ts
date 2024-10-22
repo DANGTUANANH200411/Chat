@@ -175,5 +175,6 @@ const vi: ILocale = {
 	'create': 'Tạo',
 	'placeholder-create-note': 'Nhập chú hoặc dán liên kết',
 	content: 'Nội dung',
+	'create-by-n': 'Tạo bởi {{name}}',
 };
 export { vi };

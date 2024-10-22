@@ -2,7 +2,6 @@ import { ExclamationCircleFilled } from '@ant-design/icons';
 import { Flex, Modal, ModalProps } from 'antd';
 import React, { cloneElement, isValidElement, useState } from 'react';
 
-const { confirm } = Modal;
 interface Props extends ModalProps {
 	children: React.ReactNode;
 	body?: React.ReactNode;

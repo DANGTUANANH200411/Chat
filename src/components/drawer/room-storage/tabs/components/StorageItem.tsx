@@ -89,7 +89,7 @@ function StorageItem(props: Props) {
 
 	const items = allItems.filter((e) => !e.tabs || e.tabs.includes(type));
 	return (
-		<Row className='storage-item'>
+		<Row className='storage-item hoverable'>
 			{selecting ? (
 				type === 'Photo' ? (
 					<>
