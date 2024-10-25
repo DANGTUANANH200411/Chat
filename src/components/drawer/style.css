@@ -63,7 +63,7 @@
 	visibility: visible;
 }
 .body .storage-item .storage-item-icon {
-	background-color: white;
+	background-color: var(--bg-second);
 }
 .drawer .header-button-left {
 	position: absolute;
@@ -76,9 +76,10 @@
 	font-size: small;
 	border-radius: 15px;
 	cursor: pointer;
+	color: var(--text-color);
 }
 .drawer .header-button-right:hover {
-	background-color: rgb(198, 196, 196);
+	background-color: var(--bg-gray)
 }
 
 .storage-tabs {
@@ -89,7 +90,6 @@
 }
 
 .selecting-bar {
-	background-color: white;
 	border-top: 1px solid var(--border-color);
 	height: 3rem;
 	padding: 0 12px;

@@ -359,7 +359,11 @@ export default class ChatStore {
 			room!.previewMsg = message;
 		}
 		if (message.reply) this.replyMessage = undefined;
-		document.querySelector('.chat-body-view')?.scrollTo({ top: 0 });
+
+		//Scroll to bottom
+		if (message.sender === stores.appStore.CurrentUserId && !message.announce ) {
+			document.querySelector('.chat-body-view')?.scrollTo({ top: 0 });
+		}
 
 		return message;
 	};

@@ -2,19 +2,50 @@ body:is(.dark-theme) .anticon,
 body:is(.dark-theme) .svg-inline--fa {
 	color: white;
 }
+
 body:is(.dark-theme) .ant-btn-icon .anticon {
-    color: inherit;
+	color: inherit;
 }
 
 body:is(.dark-theme) .ant-qrcode {
 	background: black !important;
 }
+
 body:is(.dark-theme) .ant-qrcode canvas {
 	background: black;
 }
-.ant-btn-color-default.ant-btn-variant-filled:not(:disabled):not(.ant-btn-disabled) {
+
+body:is(.dark-theme) .ant-btn-color-default.ant-btn-variant-filled:not(:disabled):not(.ant-btn-disabled) {
 	background-color: #56538880;
 }
-.ant-btn-color-default.ant-btn-variant-filled:not(:disabled):not(.ant-btn-disabled):hover {
+
+body:is(.dark-theme) .ant-btn-color-default.ant-btn-variant-filled:not(:disabled):not(.ant-btn-disabled):hover {
 	background-color: #4d4985;
+}
+
+body:is(.dark-theme) .circle {
+	background-color: rgb(51, 53, 102);
+	padding: 6px;
+	border-radius: 15px;
+}
+body:is(.dark-theme) .circle.btn {
+	cursor: pointer;
+}
+
+body:is(.dark-theme) .circle:not(.danger).btn:hover {
+	background-color: rgb(71, 75, 138);
+}
+body:is(.dark-theme) .circle.danger,
+body:is(.dark-theme) .circle.danger .anticon {
+	color: red !important;
+}
+body:is(.dark-theme) .circle.danger {
+	background-color: rgb(235, 170, 170);
+}
+
+body:is(.dark-theme) .circle.warning {
+	background-color: rgb(255, 197, 121);
+}
+body:is(.dark-theme) .circle:is(.warning).btn:hover {
+	background-color: rgb(231, 196, 150);
 }

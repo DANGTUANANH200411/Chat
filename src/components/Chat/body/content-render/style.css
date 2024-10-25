@@ -3,7 +3,7 @@
     width: 300px;
     flex-wrap: nowrap;
     column-gap: 8px;
-	background-color: white;
+	background-color: var(--bg-second);
     cursor: pointer;
     border-radius: 8px !important;
     overflow: hidden;
@@ -50,7 +50,7 @@
 }
 .chat-item-namecard-btn {
     padding: 6px 0;
-    background-color: white;
+    background-color: var(--color-white);
 }
 .chat-item-namecard-btn-msg,
 .chat-item-namecard-btn-call {
@@ -63,7 +63,7 @@
 }
 
 .chat-item-namecard-copy {
-    background-color: rgba(194, 194, 194, 0.788);
+    background-color: var(--bg-gray);
     text-align: center;
     padding: 2px 0;
     border-radius: 6px;

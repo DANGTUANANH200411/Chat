@@ -589,7 +589,7 @@ const MESSAGES: Message[] = [
 		id: newGuid(),
 		groupId: GROUP_ID[0],
 		sender: USERS[1].id,
-		content: USERS[0].id,
+		content: USERS[4].id,
 		createDate: toSystemDate(dayjs().subtract(22, 'h')),
 		lastUpdateDate: toSystemDate(dayjs().subtract(22, 'h')),
 		recalled: false,
@@ -642,7 +642,7 @@ const CHAT_ROOMS: ChatRoom[] = [
 		isGroup: true,
 		members: USERS.map((e, idx) => ({
 			...e,
-			lastLogTime: MESSAGES.findLast((msg) => msg.sender === e.id && msg.groupId === GROUP_ID[0])?.lastUpdateDate,
+			lastLogTime: toSystemDate(dayjs().subtract(24, 'h')),
 			invitedBy: USERS[0].id,
 			role: idx === 0 ? 'Owner' : [3, 5].includes(idx) ? 'Admin' : 'Member',
 		})),
@@ -659,14 +659,11 @@ const CHAT_ROOMS: ChatRoom[] = [
 		members: [
 			{
 				...ROOM_MEMBER[0],
-				lastLogTime: MESSAGES.findLast((msg) => msg.sender === ROOM_MEMBER[0].id)?.lastUpdateDate,
 				invitedBy: USERS[15].id,
 				role: 'Admin',
 			},
 			...ROOM_MEMBER.slice(15, 20).map((e, idx) => ({
 				...e,
-				lastLogTime: MESSAGES.findLast((msg) => msg.sender === e.id && msg.groupId === GROUP_ID[1])
-					?.lastUpdateDate,
 				invitedBy: USERS[15].id,
 				role: idx === 15 ? 'Owner' : e.role,
 			})),

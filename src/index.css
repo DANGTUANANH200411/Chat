@@ -7,7 +7,9 @@ html {
 	--shadow-color: #e7e7e7;
 	--color-white: #ffffff;
 	--background-color: #ebf0ff;
-	--bg-second: #b9b9b9;
+	--bg-second: #ffffff;
+	--bg-gray: #ceced1;
+	--bg-3rd: #ffffff;
 	--border-color: rgb(199 199 199);
 	--header-height: 4rem;
 	--side-bar-w: 3vw;
@@ -17,8 +19,14 @@ html {
 	--bg-hover: rgba(0, 0, 0, 0.04);
 }
 body:is(.dark-theme) {
-	--text-color: #ffffff;
+	--text-color: #d6d6d6;
 	--background-color: #0f153b;
+	--bg-second: #2a274d;
+	--bg-gray: #3d396e;
+	--bg-3rd: #4d4985;
+	--bg-hover: rgba(255, 255, 255, 0.04);
+	--border-color: #323257;
+	--color-white: #d6d6d6;
 }
 body {
 	margin: 0;
@@ -185,7 +193,7 @@ code {
 }
 .circle.danger,
 .circle.danger .anticon {
-	color: red;
+	color: red !important;
 }
 .circle.danger {
 	background-color: rgb(255, 226, 226);

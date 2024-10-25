@@ -22,21 +22,21 @@ function ActionBar(props: Props) {
 		<Flex gap='large' style={{ marginTop: 12, width: '90%' }}>
 			<Flex vertical align='center' className='action-bar-item'>
 				<FontAwesomeIcon icon={true ? faBell : faBellSlash} />
-				<span>{$$(true ? 'mute-group' : 'unmute-group')}</span>
+				<Typography.Text>{$$(true ? 'mute-group' : 'unmute-group')}</Typography.Text>
 			</Flex>
 			<Flex vertical align='center' className='action-bar-item' onClick={() => onPinConversation(id)}>
 				<PushpinOutlined />
-				<span>{$$(!pinned ? 'pin' : 'unpin')}</span>
+				<Typography.Text>{$$(!pinned ? 'pin' : 'unpin')}</Typography.Text>
 			</Flex>
 			{isGroup ? (
 				<>
 					<Flex vertical align='center' className='action-bar-item' onClick={setToggleAddFriendToGroup}>
 						<UsergroupAddOutlined />
-						<span>{$$('add-friends-to-group')}</span>
+						<Typography.Text>{$$('add-friends-to-group')}</Typography.Text>
 					</Flex>
 					<Flex vertical align='center' className='action-bar-item'>
 						<SettingOutlined />
-						<span>{$$('manage-group')}</span>
+						<Typography.Text>{$$('manage-group')}</Typography.Text>
 					</Flex>
 				</>
 			) : (

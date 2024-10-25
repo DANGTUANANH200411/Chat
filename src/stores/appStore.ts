@@ -56,6 +56,8 @@ export default class AppStore {
 		USERS.map((e) => this.users.set(e.id, e));
 		const lang = localStorage.getItem('LANGUAGE') as LangType;
 		this.lang = lang ?? 'en';
+		const theme = localStorage.getItem('THEME');
+		this.setting.darkTheme = theme ? JSON.parse(theme) as boolean : false;
 		dayjs.locale(lang);
 	}
 	get Users() {
@@ -126,6 +128,7 @@ export default class AppStore {
 
 	toggleDarkTheme = () => {
 		this.setting.darkTheme = !this.setting.darkTheme;
+		localStorage.setItem('THEME', this.setting.darkTheme.toString());
 	};
 
 	setSetting = (props: any) => (this.setting = { ...this.setting, ...props });

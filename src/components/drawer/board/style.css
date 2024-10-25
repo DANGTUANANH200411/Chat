@@ -3,7 +3,7 @@
     border-left: 4px solid var(--primary-color);
 }
 .pinned-item-wrapper {
-    background-color: white;
+    background-color: var(--bg-second);
     padding: 12px;
     border-radius: 8px;
 }

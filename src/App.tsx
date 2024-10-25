@@ -21,8 +21,8 @@ function App() {
 		if (darkTheme) {
 			document.body.classList.add('dark-theme');
 			setToken({
-				colorText: 'white',
-				colorTextBase: 'white',
+				colorText: '#d6d6d6',
+				colorTextBase: '#c4c4c4',
 				colorBgBase: '#4d4985',
 			})
 		} else {
