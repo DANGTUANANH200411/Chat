@@ -17,7 +17,7 @@ import UserAvatar from '../common/UserAvatar';
 import React from 'react';
 function TopBar() {
 	const {
-		appStore: { $$, user, toggleLeftMenu, menuOpen },
+		appStore: { $$, user, toggleLeftMenu, menuOpen},
 	} = useStores();
 	return (
 		<Row className='side-bar'>

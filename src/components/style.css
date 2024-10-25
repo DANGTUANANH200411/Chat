@@ -16,7 +16,8 @@
 
 .ant-badge .ant-badge-count-sm {
     font-size: 0.6rem !important;
-    width: 1rem;
+    background-color: red;
+    color: var(--text-primary);
 }
 .lang-img {
     display: flex;

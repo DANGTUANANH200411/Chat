@@ -8,6 +8,7 @@ import { COUNTRIES, Country } from '../../../utils/countries';
 import { getMobileCode } from '../../../utils/helper';
 import { User } from '../../../utils/type';
 import Member from '../../common/Member';
+import React from 'react';
 
 function AddFriendModal() {
 	const { appStore } = useStores();
@@ -98,4 +99,4 @@ function AddFriendModal() {
 	);
 }
 
-export default observer(AddFriendModal);
+export default React.memo(observer(AddFriendModal));

@@ -8,6 +8,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { ChatRoom } from '../../../utils/type';
 import { newGuid } from '../../../utils/helper';
 import '../style.css';
+import React from 'react';
 
 function CreateGroup() {
 	const {
@@ -30,6 +31,7 @@ function CreateGroup() {
 			members: [],
 			image: uploadRef.current?.file?.thumbUrl,
 			pinMessages: [],
+			unread: 0,
 		};
 		onCreateGroup(params);
 	};
@@ -64,4 +66,4 @@ function CreateGroup() {
 		</Modal>
 	);
 }
-export default observer(CreateGroup);
+export default React.memo(observer(CreateGroup));

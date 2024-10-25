@@ -1,12 +1,17 @@
 import { MessageFilled } from '@ant-design/icons';
 import { Badge } from 'antd';
 import '../style.css';
+import { observer } from 'mobx-react';
+import React from 'react';
+import { useStores } from '../../stores/stores';
+
 function Notify() {
+    const {chatStore: {TotalUnread}} = useStores();
     return (
-        <Badge count={20} size='small' offset={[-5, 5]} color='red'>
+        <Badge count={TotalUnread} size='small' offset={[-5, 5]}>
             <MessageFilled className='side-bar-icon' onClick={() => {}} />
         </Badge>
     );
 }
 
-export default Notify;
+export default React.memo(observer(Notify));

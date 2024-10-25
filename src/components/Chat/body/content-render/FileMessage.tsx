@@ -7,6 +7,7 @@ import CustomImage from '../../../common/CustomImage';
 interface Props {
 	content: string;
 	fileSize?: number;
+	/** @deprecated Temporary for display image only FE */
 	data?: any;
 	imgStyle?: React.CSSProperties;
 	antd?: boolean; //Preview antd image

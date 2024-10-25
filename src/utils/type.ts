@@ -51,6 +51,7 @@ export interface ReplyMessage {
 	id: string;
 	sender: string;
 	content: string;
+	/** @deprecated Temporary for display image only FE */
 	data?: any;
 	isFile?: boolean;
 	isNameCard?: boolean;
@@ -81,6 +82,7 @@ export interface ChatRoom {
 	pinMessages?: Message[];
 	creatorId?: string;
 	pinned?: boolean;
+	unread: number;
 }
 
 export interface RoomMember extends User {
@@ -93,13 +95,6 @@ export interface Label {
 	id: string;
 	name: string;
 	color?: string;
-}
-
-export interface ReactionPopupProps {
-	visible: boolean;
-	x: number;
-	y: number;
-	id: string | undefined;
 }
 
 export enum Role {
@@ -118,7 +113,8 @@ export interface ReactLogPopProps {
 export interface Attachment {
 	id: string;
 	name: string;
-	data: string; //tmp for display image only FE
+	/** @deprecated Temporary for display image only FE */
+	data: string;
 	size: number;
 }
 

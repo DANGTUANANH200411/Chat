@@ -160,7 +160,7 @@ const vi: ILocale = {
 	'can-add-opt': 'Có thể thêm phương án',
 	'multi-select': 'Chọn nhiều',
 	'set-deadline': 'Đặt thời hạn',
-	question: 'câu hỏi',
+	question: 'Câu hỏi',
 	'input-question': 'Nhập câu hỏi',
 	'noty-del-poll-opt': 'Poll must have at least 2 options',
 	'pin-to-top-converse': 'Ghim lên đầu cuộc trò chuyện',

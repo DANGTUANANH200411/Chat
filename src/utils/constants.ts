@@ -615,7 +615,7 @@ const MESSAGES: Message[] = [
 					label: 'Option 2',
 				}
 			],
-			deadline:  toSystemDate(dayjs().add(1, 'm')),
+			deadline:  toSystemDate(dayjs().add(2, 'm')),
 			hideVoters: false,
 			hideResultNotVote: true,
 			multiple: true,
@@ -642,7 +642,7 @@ const CHAT_ROOMS: ChatRoom[] = [
 		isGroup: true,
 		members: USERS.map((e, idx) => ({
 			...e,
-			lastLogTime: toSystemDate(dayjs().subtract(24, 'h')),
+			lastLogTime: toSystemDate(dayjs().subtract(randomInt(48), 'h')),
 			invitedBy: USERS[0].id,
 			role: idx === 0 ? 'Owner' : [3, 5].includes(idx) ? 'Admin' : 'Member',
 		})),
@@ -651,6 +651,7 @@ const CHAT_ROOMS: ChatRoom[] = [
 		creatorId: USERS[0].id,
 		image: 'https://yt3.googleusercontent.com/P_qIGe_-Jt5V4JT_UtIuURsq9RBRDIZ88tvFJx1AzACWzsuRIrrOfb6jDH2OnoukFdS06AN5nQ=s900-c-k-c0x00ffffff-no-rj',
 		pinned: true,
+		unread: MESSAGES.filter((e) => e.groupId === GROUP_ID[0] && e.lastUpdateDate > toSystemDate(dayjs().subtract(24, 'h'))).length,
 	},
 	{
 		id: GROUP_ID[1],
@@ -671,13 +672,19 @@ const CHAT_ROOMS: ChatRoom[] = [
 		previewMsg: MESSAGES.findLast((e) => e.groupId === GROUP_ID[1]),
 		creatorId: USERS[15].id,
 		label: LABELS[2].id,
+		unread: MESSAGES.filter((e) => e.groupId === GROUP_ID[1]).length,
 	},
 	{
 		id: USERS[1].id,
 		name: USERS[1].userName,
 		isGroup: false,
-		members: [],
+		members: [USERS[0], USERS[1]].map( e=> ({
+			...e,
+			invitedBy: USERS[0].id,
+			role: 'Member',
+		})),
 		label: LABELS[4].id,
+		unread: MESSAGES.filter((e) => e.groupId === USERS[1].id).length,
 	},
 ];
 

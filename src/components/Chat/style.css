@@ -186,15 +186,6 @@ body:is(.dark-theme) .chat-footer > * {
 	color: var(--color-white);
 }
 
-/* .chat-body .date-item::before, 
-.chat-body .date-item::after {
-  border-block-start-color: #d9d9d9;
-}
-.chat-body .date-item .ant-divider-inner-text{
-    background-color: #e7e7e7;
-    border-radius: 15px;
-} */
-
 .small-text {
 	font-size: smaller;
 }
@@ -235,7 +226,7 @@ body:is(.dark-theme) .chat-item-username {
 	direction: rtl;
 	font-size: 14px;
 	border: 1px solid var(--border-color);
-	color: #757575;
+	color: var(--text-color);
 	padding: 2px;
 	border-radius: 15px;
 	background-color: var(--bg-3rd);
@@ -243,11 +234,8 @@ body:is(.dark-theme) .chat-item-username {
 .me .reaction-action {
 	right: unset;
 	left: 0rem;
-	direction: ltr;
 }
-.reaction-action:hover {
-	color: black;
-}
+
 .list-reaction {
 	display: flex;
 	border-radius: 15px;
@@ -257,6 +245,7 @@ body:is(.dark-theme) .chat-item-username {
 	right: 1.2rem;
 	bottom: -0.6rem;
 	padding: 1px;
+	cursor: pointer;
 }
 .me .list-reaction {
 	right: unset;
@@ -396,9 +385,13 @@ body:is(.dark-theme) .chat-item-username {
 	direction: ltr;
 }
 
+.list-reaction .ant-avatar {
+	background-color: var(--bg-second);
+}
+
 .list-reaction .ant-avatar-string {
 	transform: scale(0.5) !important;
-	color: black;
+	color: var(--text-color);
 }
 
 /*override antd group gap*/
@@ -442,4 +435,9 @@ body:is(.dark-theme) .chat-item-username {
 	right: 2rem;
 	bottom: 2rem;
 	transition: opacity 0.5s ease-in-out;
+}
+
+.chat-item-reader {
+	margin-right: 8px;
+	justify-content: end;
 }

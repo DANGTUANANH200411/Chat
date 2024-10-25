@@ -21,7 +21,7 @@ function ListReaction(props: Props) {
 				{distictBy(logs, (e) => e.reaction).slice(0, 3).map((e) => (
 					<Avatar key={e.reaction} src={getEmojiSrc(e.reaction)} />
 				))}
-				{logs.length > 1 && <Avatar key='total' style={{ color: 'black'}}>{logs.length}</Avatar>}
+				{logs.length > 1 && <Avatar key='total' >{logs.length}</Avatar>}
 			</Avatar.Group>
 		</div>
 	);

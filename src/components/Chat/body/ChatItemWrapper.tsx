@@ -7,6 +7,7 @@ import { Message } from '../../../utils/type';
 import ChatItem from './ChatItem';
 import Poll from './content-render/poll/Poll';
 import AnnounceList from './announce/AnnounceList';
+import Readers from './components/Readers';
 
 interface Props {
 	view?: true;
@@ -15,7 +16,7 @@ interface Props {
 function ChatItemWrapper(props: Props) {
 	const {
 		appStore: { user },
-		chatStore: { listIdPinned },
+		chatStore: { listIdPinned, ReadPosition},
 	} = useStores();
 	const { view, messages } = props;
 
@@ -24,7 +25,10 @@ function ChatItemWrapper(props: Props) {
 
 	if (messages[0].poll) {
 		return <Space direction='vertical'>
-			{messages.map(e => <Poll key={e.id} message={e}/>)}
+			{messages.map(e => <div>
+				<Poll key={e.id} message={e}/>
+				<Readers sender={e.sender} readers={ReadPosition.get(e.id)}/>
+			</div>)}
 		</Space>
 	}
 	return (
@@ -44,6 +48,7 @@ function ChatItemWrapper(props: Props) {
 						pinned={listIdPinned.includes(e.id)}
 						recalled={e.recalled}
 						view={view}
+						readers={ReadPosition.get(e.id)}
 					/>
 				))}
 			</Row>

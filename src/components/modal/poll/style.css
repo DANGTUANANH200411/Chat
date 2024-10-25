@@ -17,6 +17,6 @@
 
 .block {
     padding: 0.8rem;
-    background-color: rgb(235, 237, 243);
+    background-color: var(--background-color);
     border-radius: 4px;
 }

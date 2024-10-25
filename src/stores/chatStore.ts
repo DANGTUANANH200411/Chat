@@ -208,8 +208,33 @@ export default class ChatStore {
 	}
 
 	get Polls() {
-		return this.messages.filter((e) => e.groupId === this.activeRoom && e.poll)
+		return this.messages.filter((e) => e.groupId === this.activeRoom && e.poll);
 	}
+
+	get LastLogTimeInRoom() {
+		return this.Room?.members.find((e) => e.id === stores.appStore.CurrentUserId)?.lastLogTime;
+	}
+
+	get TotalUnread() {
+		return this.chatRooms.reduce((pre, cur) => (pre += cur.unread), 0);
+	}
+
+	get ReadPosition() {
+		const res = new Map<string, string[]>();
+		console.log(
+			this.messages.map((e) => ({ a: e.createDate, b: e.content })),
+			this.LastLogTimeInRoom
+		);
+		if (!this.Room) return res;
+		this.Room.members.forEach((mem) => {
+			const { lastLogTime } = mem;
+			if (!lastLogTime) return;
+			const msg = this.messages.find((e) => e.createDate <= lastLogTime && !e.announce);
+			msg && res.set(msg.id, [...(res.get(msg.id) ?? []), mem.id]);
+		});
+		return res;
+	}
+
 	constructor() {
 		makeAutoObservable(this);
 	}
@@ -247,6 +272,7 @@ export default class ChatStore {
 		if (this.activeRoom === room) return;
 		this.activeRoom = room;
 		this.onGetMessage(room);
+		this.readMessage(room);
 		if (removeTmpRoom) this.tmpRoom = undefined;
 	};
 	setActivePin = (id: string | undefined) => (this.activePin = id);
@@ -325,17 +351,19 @@ export default class ChatStore {
 		};
 	};
 
-	pushMessage = (params: DynamicMessage, grId?: string) => {
+	sendMessage = (params: DynamicMessage, grId?: string) => {
 		const groupId = grId ?? this.activeRoom;
 		if (!groupId) {
 			notify('Group not found');
 			return;
 		}
+		const sender = stores.appStore.CurrentUserId;
+		//API send message
 		const message: Message = {
 			...params,
 			id: newGuid(),
 			groupId: groupId,
-			sender: stores.appStore.CurrentUserId,
+			sender,
 			createDate: SYSTEM_NOW(),
 			lastUpdateDate: SYSTEM_NOW(),
 			recalled: false,
@@ -343,10 +371,17 @@ export default class ChatStore {
 			logs: [],
 		};
 
+		this.receiveMessage(message);
+
+		return message;
+	};
+
+	receiveMessage = (message: Message) => {
+		const { groupId, sender } = message;
 		this.allMessage.push(message);
 
 		if (groupId === this.activeRoom) {
-			this.messages.push(message);
+			this.messages.unshift(message);
 		}
 
 		let room = this.getRoom(groupId);
@@ -361,11 +396,12 @@ export default class ChatStore {
 		if (message.reply) this.replyMessage = undefined;
 
 		//Scroll to bottom
-		if (message.sender === stores.appStore.CurrentUserId && !message.announce ) {
+		if (message.sender === sender && !message.announce) {
+			this.readMessage(groupId);
 			document.querySelector('.chat-body-view')?.scrollTo({ top: 0 });
+		} else {
+			room!.unread++;
 		}
-
-		return message;
 	};
 
 	openPersonalRoom = (userId: string, create?: boolean, active?: boolean) => {
@@ -376,6 +412,7 @@ export default class ChatStore {
 					name: stores.appStore.getUserName(userId),
 					isGroup: false,
 					members: [],
+					unread: 0,
 				});
 				this.tmpRoom = undefined;
 			} else {
@@ -384,6 +421,7 @@ export default class ChatStore {
 					name: stores.appStore.getUserName(userId),
 					isGroup: false,
 					members: [],
+					unread: 0,
 				};
 				this.setActiveRoom(userId, false);
 			}
@@ -416,7 +454,7 @@ export default class ChatStore {
 			type,
 			poll,
 		};
-		this.pushMessage({ content: '', announce }, room);
+		this.sendMessage({ content: '', announce }, room);
 	};
 	//#endregion FAKE BACKEND
 
@@ -480,7 +518,7 @@ export default class ChatStore {
 			reply: this.replyMessage,
 			attachment: files,
 		};
-		this.pushMessage(message);
+		this.sendMessage(message);
 	};
 
 	onSendFile = (file: Attachment, error?: boolean) => {
@@ -493,7 +531,7 @@ export default class ChatStore {
 			fileSize: file.size,
 		};
 
-		this.pushMessage(message);
+		this.sendMessage(message);
 	};
 
 	onSendNameCard = () => {
@@ -507,7 +545,7 @@ export default class ChatStore {
 				content: id,
 				isNameCard: true,
 			};
-			this.pushMessage(message);
+			this.sendMessage(message);
 		});
 		this.toggleMdlNmCard();
 	};
@@ -659,7 +697,7 @@ export default class ChatStore {
 	forwardMessage = (rooms: string[]) => {
 		rooms.forEach((roomId) => {
 			this.mdlShareProps.items.forEach((e) => {
-				this.pushMessage(e, roomId);
+				this.sendMessage(e, roomId);
 			});
 		});
 	};
@@ -747,7 +785,7 @@ export default class ChatStore {
 
 	//#endregion API
 	createPoll = (title: string, poll: Poll, options: string[], pin?: boolean) => {
-		const message = this.pushMessage({
+		const message = this.sendMessage({
 			content: title,
 			poll: {
 				...poll,
@@ -857,6 +895,18 @@ export default class ChatStore {
 			return false;
 		}
 		notify('Incomming');
-		return true
-	}
+		return true;
+	};
+
+	readMessage = (roomId?: string) => {
+		//Logic: if there are no unread message then just update FE;
+		const room = this.getActiveRoom(roomId);
+		const member = room!.members.find((e) => e.id === stores.appStore.CurrentUserId);
+
+		if (member) {
+			member.lastLogTime = SYSTEM_NOW();
+		}
+		if (!room || !room.unread) return;
+		room.unread = 0;
+	};
 }

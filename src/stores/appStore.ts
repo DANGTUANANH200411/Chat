@@ -5,7 +5,7 @@ import Mustache from 'mustache';
 import * as locale from '../locales';
 import { LABELS, USERS } from '../utils/constants';
 import dayjs from 'dayjs';
-import { matchSearchUser } from '../utils/helper';
+import { matchSearchUser, randomInt } from '../utils/helper';
 
 Mustache.escape = function(text) {return text;};
 

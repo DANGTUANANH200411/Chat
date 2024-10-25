@@ -47,7 +47,7 @@ function Poll(props: Props) {
 	if (!poll || (!displayClosed && poll.closed)) return <></>;
 	const { options, votes, deadline, hideVoters, hideResultNotVote, closed } = poll;
 	return (
-		<Row justify='center'>
+		<Row justify='center' id={id}>
 			<Flex vertical gap={8} className='poll-container' style={{ width: '30%', ...style }}>
 				{prefix}
 				<Typography.Text ellipsis strong style={{ fontSize: 'large' }}>

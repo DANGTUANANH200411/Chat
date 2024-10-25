@@ -24,7 +24,7 @@ function AnnounceList(props: Props) {
                 <Typography.Link style={{background: 'white', padding: '2px 8px', borderRadius: 16, fontSize: 'smaller'}} onClick={()=> setExpanded(true)}>{$$('view-all')}</Typography.Link>
                 </Row>}
 			{displayMsgs.map((e) => (
-				<Row key={e.id} justify='center' className='text-secondary'>
+				<Row key={e.id} justify='center' className='text-secondary' id={e.id}>
 					<div dangerouslySetInnerHTML={{ __html: getAnnounceContent(e) }}></div>
 				</Row>
 			))}

@@ -9,7 +9,7 @@ import { Message } from '../../../utils/type';
 function ViewPinned() {
 	const {
 		appStore: { $$, getUserName, setMdlPollDetailProps },
-		chatStore: { Room, onPinMessage, scrollToMessage },
+		chatStore: { Room, onPinMessage, scrollToMessage, getMessage },
 	} = useStores();
 	const [expanded, setExpanded] = useState<boolean>(false);
 
@@ -50,7 +50,7 @@ function ViewPinned() {
 								if (!message) return;
 
 								if (message.poll) {
-									setMdlPollDetailProps(message);
+									setMdlPollDetailProps(getMessage(message.id));
 								} else {
 									scrollToMessage(message.id);
 								}

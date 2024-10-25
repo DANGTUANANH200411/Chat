@@ -16,11 +16,12 @@ function ChatBody() {
 		chatStore,
 		appStore: { $$ },
 	} = useStores();
-	const { activeRoom, activePin, RoomMessages, onGetMessage, setActivePin, onSendFile } = chatStore;
+	const { activeRoom, activePin, RoomMessages, Room, onGetMessage, setActivePin, onSendFile, readMessage } =
+		chatStore;
+
 	const [isEnd, setIsEnd] = useState<boolean>(false);
 	const [activeNode, setActiveNode] = useState<HTMLElement | null>(null);
 	const [visible, setVisible] = useState<boolean>(false);
-
 	useEffect(() => {
 		setIsEnd(false);
 	}, [activeRoom]);
@@ -45,6 +46,7 @@ function ChatBody() {
 		view.style.scrollBehavior = 'smooth';
 		view.scrollTo(0, 0);
 		view.style.scrollBehavior = 'unset';
+		readMessage();
 	}, [visible]);
 
 	const handleScroll = useCallback(
@@ -103,6 +105,14 @@ function ChatBody() {
 	}, []);
 
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({ noClick: true, noKeyboard: true, onDrop });
+
+	const onClickView = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+		e.preventDefault();
+		const node = e.currentTarget as HTMLElement;
+		if (node.scrollTop > -1000) {
+			readMessage();
+		}
+	}, []);
 	return (
 		<Row className='chat-body' {...getRootProps()}>
 			<input {...getInputProps()} />
@@ -111,19 +121,18 @@ function ChatBody() {
 					<label style={{ margin: 'auto' }}>Drop over here to send file</label>
 				</div>
 			)}
-			<div className='chat-body-view' onScroll={handleScroll}>
+			<div id="chat-body-view" className='chat-body-view' onScroll={handleScroll} onClick={onClickView}>
 				{Object.entries(RoomMessages)
 					.reverse()
 					.map(([date, groupMsgs]) => (
 						<DateMessageWrapper key={date} date={date} groupMsgs={groupMsgs} />
 					))}
 			</div>
-
 			<Button
 				shape='circle'
 				className='btn-scroll-bottom'
 				icon={
-					<Badge count={0} style={{ background: 'red', color: 'var(--color-white)' }}>
+					<Badge count={Room?.unread} size='small'>
 						<DoubleRightOutlined rotate={90} />
 					</Badge>
 				}

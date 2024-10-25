@@ -63,7 +63,7 @@
 	visibility: visible;
 }
 .body .storage-item .storage-item-icon {
-	background-color: var(--bg-second);
+	background-color: var(--bg-3rd);
 }
 .drawer .header-button-left {
 	position: absolute;

@@ -1,4 +1,4 @@
-import { Row, Typography } from 'antd';
+import { Badge, Row, Typography } from 'antd';
 import { ChatRoom, Message } from '../../../utils/type';
 import React from 'react';
 import { observer } from 'mobx-react';
@@ -15,20 +15,30 @@ function PreviewChatItem(props: ChatRoom) {
 		appStore: { $$, getLabel, getUserName, getAnnounceContent },
 		chatStore: { setActiveRoom },
 	} = useStores();
-	const { id, name, members, isGroup, previewMsg, image, label, pinned } = props;
+	const { id, name, members, isGroup, previewMsg, image, label, pinned, unread } = props;
 
 	const displayContent = (msg: Message) => {
 		if (msg.isNameCard) {
 			return `${getUserName(msg.sender)}: [${$$('namecard')}] ${getUserName(msg.content)}`;
 		}
 		if (msg.announce) {
-			return <div className='text-ellipsis' dangerouslySetInnerHTML={{__html: getAnnounceContent(msg)}}></div>
+			return <div className='text-ellipsis' dangerouslySetInnerHTML={{ __html: getAnnounceContent(msg) }}></div>;
 		}
 		return `${getUserName(msg.sender)}: ${msg.content}`;
 	};
 	return (
 		<Row className='preview-chat-item hoverable' onClick={() => setActiveRoom(id)} wrap={false}>
-			{isGroup ? <GroupAvatar image={image} members={members} /> : <UserAvatar id={id} size={GROUP_AVT_SIZE} />}
+			<Badge
+				count={unread}
+				size='small'
+				offset={[-5, 5]}
+			>
+				{isGroup ? (
+					<GroupAvatar image={image} members={members} />
+				) : (
+					<UserAvatar id={id} size={GROUP_AVT_SIZE} />
+				)}
+			</Badge>
 			<Row className='flex-grow' align='middle'>
 				<Row wrap={false}>
 					<Row className='flex-grow' wrap={false} style={{ columnGap: 4 }}>
