@@ -1,4 +1,4 @@
-import { ChatRoom, Label, Message, RoomMember, User } from '../utils/type';
+import { ChatRoom, GroupManagement, Label, Message, RoomMember, User } from '../utils/type';
 import { generatePhoneNumber, newGuid, randomInt } from '../utils/helper';
 import { addHours, addMinutes, NOW, SYSTEM_NOW, toSystemDate } from './dateHelper';
 import IMG_LIKE from '../resources/like.png';
@@ -247,18 +247,18 @@ const MESSAGES: Message[] = [
 			deleted: false,
 			logs: [],
 		})),
-		{
-			id: newGuid(),
-			groupId: GROUP_ID[0],
-			sender: USERS[14].id,
-			content: 'https://www.youtube.com/watch?v=Ak1lunhhxQM',
-			isFile: false,
-			createDate: toSystemDate(NOW().subtract(49, 'h').subtract(2, 'm')),
-			lastUpdateDate: toSystemDate(NOW().subtract(49, 'h').subtract(2, 'm')),
-			recalled: false,
-			deleted: false,
-			logs: [],
-		},
+	{
+		id: newGuid(),
+		groupId: GROUP_ID[0],
+		sender: USERS[14].id,
+		content: 'https://www.youtube.com/watch?v=Ak1lunhhxQM',
+		isFile: false,
+		createDate: toSystemDate(NOW().subtract(49, 'h').subtract(2, 'm')),
+		lastUpdateDate: toSystemDate(NOW().subtract(49, 'h').subtract(2, 'm')),
+		recalled: false,
+		deleted: false,
+		logs: [],
+	},
 	{
 		id: newGuid(),
 		groupId: GROUP_ID[0],
@@ -613,19 +613,19 @@ const MESSAGES: Message[] = [
 				{
 					id: '2',
 					label: 'Option 2',
-				}
+				},
 			],
-			deadline:  toSystemDate(dayjs().add(2, 'm')),
+			deadline: toSystemDate(dayjs().add(2, 'm')),
 			hideVoters: false,
 			hideResultNotVote: true,
 			multiple: true,
 			canAddOption: true,
-			votes: USERS.slice(0, USERS.length - 5).map((e, idx)=> ({
+			votes: USERS.slice(0, USERS.length - 5).map((e, idx) => ({
 				id: e.id,
 				values: idx < 10 ? ['1'] : ['2'],
 			})),
-		}
-	}
+		},
+	},
 ];
 
 const ROOM_MEMBER: RoomMember[] = USERS.map((e) => ({
@@ -635,6 +635,16 @@ const ROOM_MEMBER: RoomMember[] = USERS.map((e) => ({
 	role: 'Member',
 }));
 
+const DEFAULT_GROUP_SETTING: GroupManagement = {
+	changeNameOrAvt: true,
+	pin: true,
+	createNote: true,
+	createPoll: true,
+	sendMessage: true,
+	approval: false,
+	highlight: true,
+	readRecent: true,
+};
 const CHAT_ROOMS: ChatRoom[] = [
 	{
 		id: GROUP_ID[0],
@@ -651,7 +661,10 @@ const CHAT_ROOMS: ChatRoom[] = [
 		creatorId: USERS[0].id,
 		image: 'https://yt3.googleusercontent.com/P_qIGe_-Jt5V4JT_UtIuURsq9RBRDIZ88tvFJx1AzACWzsuRIrrOfb6jDH2OnoukFdS06AN5nQ=s900-c-k-c0x00ffffff-no-rj',
 		pinned: true,
-		unread: MESSAGES.filter((e) => e.groupId === GROUP_ID[0] && e.lastUpdateDate > toSystemDate(dayjs().subtract(24, 'h'))).length,
+		unread: MESSAGES.filter(
+			(e) => e.groupId === GROUP_ID[0] && e.lastUpdateDate > toSystemDate(dayjs().subtract(24, 'h'))
+		).length,
+		setting: DEFAULT_GROUP_SETTING,
 	},
 	{
 		id: GROUP_ID[1],
@@ -673,18 +686,20 @@ const CHAT_ROOMS: ChatRoom[] = [
 		creatorId: USERS[15].id,
 		label: LABELS[2].id,
 		unread: MESSAGES.filter((e) => e.groupId === GROUP_ID[1]).length,
+		setting: DEFAULT_GROUP_SETTING,
 	},
 	{
 		id: USERS[1].id,
 		name: USERS[1].userName,
 		isGroup: false,
-		members: [USERS[0], USERS[1]].map( e=> ({
+		members: [USERS[0], USERS[1]].map((e) => ({
 			...e,
 			invitedBy: USERS[0].id,
 			role: 'Member',
 		})),
 		label: LABELS[4].id,
 		unread: MESSAGES.filter((e) => e.groupId === USERS[1].id).length,
+		setting: DEFAULT_GROUP_SETTING,
 	},
 ];
 
@@ -725,4 +740,5 @@ export {
 	IS_FIREFOX,
 	GROUP_AVT_SIZE,
 	DELAY_INPUT,
+	DEFAULT_GROUP_SETTING,
 };

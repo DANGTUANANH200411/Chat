@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { CHAT_ROOMS, MESSAGES } from '../utils/constants';
+import { CHAT_ROOMS, DEFAULT_GROUP_SETTING, MESSAGES } from '../utils/constants';
 import { SYSTEM_NOW } from '../utils/dateHelper';
 import { isEmpty, isImage, isUrl, matchSearchUser, newGuid, normalizeIncludes, toNormalize } from '../utils/helper';
 import { openUndo } from '../utils/notification';
@@ -11,6 +11,7 @@ import {
 	ChatRoom,
 	CreateAnnounceProps,
 	DynamicMessage,
+	GroupManagement,
 	Message,
 	MessageLog,
 	ModalDetailMsgProps,
@@ -88,6 +89,8 @@ export default class ChatStore {
 		open: false,
 		items: [],
 	};
+
+	openChangeGroupNameModal: boolean = false;
 
 	get Rooms() {
 		if (!this.searchRoom) return this.chatRooms;
@@ -221,10 +224,6 @@ export default class ChatStore {
 
 	get ReadPosition() {
 		const res = new Map<string, string[]>();
-		console.log(
-			this.messages.map((e) => ({ a: e.createDate, b: e.content })),
-			this.LastLogTimeInRoom
-		);
 		if (!this.Room) return res;
 		this.Room.members.forEach((mem) => {
 			const { lastLogTime } = mem;
@@ -235,6 +234,9 @@ export default class ChatStore {
 		return res;
 	}
 
+	get GroupSetting() {
+		return this.Room?.setting ?? DEFAULT_GROUP_SETTING;
+	}
 	constructor() {
 		makeAutoObservable(this);
 	}
@@ -334,6 +336,8 @@ export default class ChatStore {
 		room!.name = name;
 		console.log('hahaha');
 	};
+
+	toggleChangeGroupNameModal = () => (this.openChangeGroupNameModal = !this.openChangeGroupNameModal);
 	//#endregion SET
 
 	//#region FUNCTION
@@ -407,12 +411,13 @@ export default class ChatStore {
 	openPersonalRoom = (userId: string, create?: boolean, active?: boolean) => {
 		if (!this.chatRooms.find((e) => e.id === userId)) {
 			if (create) {
-				this.chatRooms.push({
+				this.onCreateGroup({
 					id: userId,
 					name: stores.appStore.getUserName(userId),
 					isGroup: false,
 					members: [],
 					unread: 0,
+					setting: DEFAULT_GROUP_SETTING,
 				});
 				this.tmpRoom = undefined;
 			} else {
@@ -422,6 +427,7 @@ export default class ChatStore {
 					isGroup: false,
 					members: [],
 					unread: 0,
+					setting: DEFAULT_GROUP_SETTING,
 				};
 				this.setActiveRoom(userId, false);
 			}
@@ -908,5 +914,18 @@ export default class ChatStore {
 		}
 		if (!room || !room.unread) return;
 		room.unread = 0;
+	};
+
+	changeGroupSetting = (name: keyof GroupManagement) => {
+		const room = this.getActiveRoom();
+		if (!room) return;
+		room.setting[name] = !room.setting[name];
+	};
+
+	changeGroupName = (name: string | undefined) => {
+		if (!name || !name.trim()) return;
+		const room = this.getActiveRoom();
+		if (!room) return;
+		room.name = name;
 	};
 }

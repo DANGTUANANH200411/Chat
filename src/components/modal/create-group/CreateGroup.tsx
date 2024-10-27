@@ -9,6 +9,7 @@ import { ChatRoom } from '../../../utils/type';
 import { newGuid } from '../../../utils/helper';
 import '../style.css';
 import React from 'react';
+import { DEFAULT_GROUP_SETTING } from '../../../utils/constants';
 
 function CreateGroup() {
 	const {
@@ -17,7 +18,7 @@ function CreateGroup() {
 	} = useStores();
 	const [groupName, setGroupName] = useState<string>('');
 	const uploadRef = useRef<UploadRef>(null);
-	
+
 	useEffect(() => {
 		if (!openCreateGroup) {
 			setGroupName('');
@@ -32,6 +33,7 @@ function CreateGroup() {
 			image: uploadRef.current?.file?.thumbUrl,
 			pinMessages: [],
 			unread: 0,
+			setting: DEFAULT_GROUP_SETTING,
 		};
 		onCreateGroup(params);
 	};

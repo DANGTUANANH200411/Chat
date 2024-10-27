@@ -21,7 +21,7 @@ export interface User {
 	alias?: string;
 }
 
-export interface Message extends DynamicMessage{
+export interface Message extends DynamicMessage {
 	id: string;
 	groupId: string;
 	sender: string;
@@ -83,6 +83,7 @@ export interface ChatRoom {
 	creatorId?: string;
 	pinned?: boolean;
 	unread: number;
+	setting: GroupManagement;
 }
 
 export interface RoomMember extends User {
@@ -123,9 +124,17 @@ export interface ModalDetailMsgProps {
 	message?: Message;
 }
 
-export type AnnouceType = 'Add' | 'Remove' | 'AppointAdmin' | 'RemoveAdmin' | 'Leave' | 'Poll Closed' | 'Poll Expired' | 'Poll Vote';
+export type AnnouceType =
+	| 'Add'
+	| 'Remove'
+	| 'AppointAdmin'
+	| 'RemoveAdmin'
+	| 'Leave'
+	| 'Poll Closed'
+	| 'Poll Expired'
+	| 'Poll Vote';
 
-export type DrawerType = 'Info' | 'Members' | 'Storage' | 'Board' | undefined;
+export type DrawerType = 'Info' | 'Members' | 'Storage' | 'Board' | 'Management' | undefined;
 
 export type StorageType = 'Photo' | 'File' | 'Link';
 
@@ -166,13 +175,13 @@ export interface Announce {
 	poll?: {
 		id: string;
 		title: string;
-	}
+	};
 }
 export interface Poll {
 	options: {
 		id: string;
 		label: string;
-	}[],
+	}[];
 	deadline?: string;
 	hideVoters?: boolean;
 	hideResultNotVote?: boolean;
@@ -186,13 +195,27 @@ export interface Poll {
 }
 
 export interface CreateAnnounceProps {
-	type: AnnouceType,
+	type: AnnouceType;
 	toUser?: string;
 	roomId?: string;
 	poll?: {
 		id: string;
 		title: string;
-	}
+	};
 }
 
 export type AnnouceTargetObj = 'User' | 'Poll';
+
+export interface GroupManagement {
+	changeNameOrAvt: boolean;
+	pin: boolean;
+	createNote: boolean;
+	createPoll: boolean;
+	sendMessage: boolean;
+	/** Membership approval */
+	approval: boolean;
+	/** Highlight message from owner/admins*/
+	highlight: boolean;
+	/** Allow new member to read most recent message */
+	readRecent: boolean;
+}

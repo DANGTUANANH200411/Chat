@@ -41,7 +41,7 @@ dayjs.updateLocale('en', {
 // 		yy: '%d years',
 // 	},
 // });
-export const DATE_FORMAT = 'YYYYMMDDHHmmss'
+export const DATE_FORMAT = 'YYYYMMDDHHmmss';
 export const NOW = (): Dayjs => dayjs(new Date());
 export const SYSTEM_NOW = () => dayjs(new Date()).format(DATE_FORMAT);
 export function toSystemDate(date: Date | Dayjs | string): string {
@@ -50,8 +50,19 @@ export function toSystemDate(date: Date | Dayjs | string): string {
 	}
 	return date.format(DATE_FORMAT);
 }
-export function displayChatDate(date: string) {
-	return dayjs(date).format('DD/MM/YYYY');
+export function displayChatDate(date: string, $$: any) {
+	let str = date;
+	if (str.length > 8) {
+		str = date.substring(0, 8);
+	}
+	const day = dayjs(str);
+	if (day.diff(dayjs(), 'day') === 0) {
+		return $$('today');
+	}
+	if (day.diff(dayjs(), 'day') === -1) {
+		return $$('yesterday');
+	}
+	return day.format('ddd DD/MM/YYYY');
 }
 export function displayChatTime(date: string) {
 	return dayjs(date).format('HH:mm');

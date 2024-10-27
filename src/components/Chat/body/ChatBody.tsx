@@ -10,6 +10,7 @@ import { useDropzone } from 'react-dropzone';
 import { DoubleRightOutlined } from '@ant-design/icons';
 import { notify } from '../../../utils/notify';
 import React from 'react';
+import DateMessageWrapper from './DateMessageWrapper';
 
 function ChatBody() {
 	const {
@@ -121,7 +122,7 @@ function ChatBody() {
 					<label style={{ margin: 'auto' }}>Drop over here to send file</label>
 				</div>
 			)}
-			<div id="chat-body-view" className='chat-body-view' onScroll={handleScroll} onClick={onClickView}>
+			<div id='chat-body-view' className='chat-body-view' onScroll={handleScroll} onClick={onClickView}>
 				{Object.entries(RoomMessages)
 					.reverse()
 					.map(([date, groupMsgs]) => (
@@ -142,21 +143,5 @@ function ChatBody() {
 		</Row>
 	);
 }
-interface DateMessageProps {
-	date: string;
-	groupMsgs: Message[][];
-}
-function DateMessageWrapper(props: DateMessageProps) {
-	const { date, groupMsgs } = props;
-	return (
-		<>
-			{groupMsgs.map((messages, idx) => (
-				<ChatItemWrapper key={idx} messages={messages} />
-			))}
-			<Row justify='center' style={{ marginBottom: '8px' }}>
-				<div className='date-item'>{displayChatDate(date)}</div>
-			</Row>
-		</>
-	);
-}
+
 export default React.memo(observer(ChatBody));

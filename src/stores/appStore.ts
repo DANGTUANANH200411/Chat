@@ -7,16 +7,18 @@ import { LABELS, USERS } from '../utils/constants';
 import dayjs from 'dayjs';
 import { matchSearchUser, randomInt } from '../utils/helper';
 
-Mustache.escape = function(text) {return text;};
+Mustache.escape = function (text) {
+	return text;
+};
 
 interface Setting {
 	darkTheme: boolean;
 }
 export default class AppStore {
 	$$ = this.bindLocale(locale);
-	lang: LangType = 'en';
+	lang: LangType = (localStorage.getItem('LANGUAGE') as LangType) ?? 'en';
 	setting: Setting = {
-		darkTheme: false,
+		darkTheme: JSON.parse(localStorage.getItem('THEME') ?? 'false'),
 	};
 	i18n!: I18n;
 
@@ -53,12 +55,10 @@ export default class AppStore {
 	constructor() {
 		makeAutoObservable(this);
 		initI18n(this);
+
 		USERS.map((e) => this.users.set(e.id, e));
-		const lang = localStorage.getItem('LANGUAGE') as LangType;
-		this.lang = lang ?? 'en';
-		const theme = localStorage.getItem('THEME');
-		this.setting.darkTheme = theme ? JSON.parse(theme) as boolean : false;
-		dayjs.locale(lang);
+
+		dayjs.locale(this.lang);
 	}
 	get Users() {
 		return Array.from(this.users.values()).filter((e) => e.id !== this.user.id);
@@ -118,7 +118,7 @@ export default class AppStore {
 	setMdlPollVotedProps = (poll?: Message) => (this.mdlPollVotedProps = poll);
 	toggleCreatePollModal = () => (this.openCreatePoll = !this.openCreatePoll);
 
-	toggleCreateNote = () => this.openCreateNote = !this.openCreateNote;
+	toggleCreateNote = () => (this.openCreateNote = !this.openCreateNote);
 
 	setLang = (lang: LangType) => {
 		this.lang = lang;
@@ -187,10 +187,16 @@ export default class AppStore {
 		const { sender, announce } = message;
 
 		function parse(id: string, type: AnnouceTargetObj = 'User') {
-			return `<strong class='hover-change-color announce-clickable' data-type=${type} data-id=${id}>${type === 'User' ? getUserName(id) : announce?.poll?.title}</strong>`
+			return `<strong class='hover-change-color announce-clickable' data-type=${type} data-id=${id}>${
+				type === 'User' ? getUserName(id) : announce?.poll?.title
+			}</strong>`;
 		}
 
-		const params = { user1: parse(sender), user2: parse(announce?.userId ?? ''), pollName: parse(announce?.poll?.id ?? '', 'Poll') };
+		const params = {
+			user1: parse(sender),
+			user2: parse(announce?.userId ?? ''),
+			pollName: parse(announce?.poll?.id ?? '', 'Poll'),
+		};
 		switch (announce?.type) {
 			case 'Add':
 				return $$('ann-add', params);

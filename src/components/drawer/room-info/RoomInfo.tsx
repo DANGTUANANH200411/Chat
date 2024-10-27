@@ -1,10 +1,11 @@
-import { Button, Collapse, CollapseProps, Flex, Row, Typography } from 'antd';
+import { Button, Collapse, CollapseProps, Flex, Modal, Row, Typography } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import GroupAvatar from '../../common/GroupAvatar';
 import UserAvatar from '../../common/UserAvatar';
 import {
 	CaretRightOutlined,
 	DeleteOutlined,
+	EditFilled,
 	EyeInvisibleOutlined,
 	FileTextOutlined,
 	LogoutOutlined,
@@ -22,6 +23,7 @@ import PreviewLinkStorage from '../room-storage/preview/PreviewLinkStorage';
 import { observer } from 'mobx-react';
 import Confirm from '../../common/Confirm';
 import Personal from './collapse-items/Personal';
+import ChangeGroupNameModal from '../../modal/change-group-name/ChangeGroupNameModal';
 
 const panelStyle: React.CSSProperties = {
 	marginTop: 4,
@@ -34,7 +36,7 @@ const panelStyle: React.CSSProperties = {
 function RoomInfo() {
 	const {
 		appStore: { $$, setDrawerOpen },
-		chatStore: { Room, onLeaveGroup, onDeleteChatHistory, addFriendToGroup },
+		chatStore: { Room, onLeaveGroup, onDeleteChatHistory, toggleChangeGroupNameModal },
 	} = useStores();
 
 	const { id, name, isGroup, members, image, pinned } = Room!;
@@ -60,6 +62,7 @@ function RoomInfo() {
 					className='collapse-content-item'
 					color='default'
 					variant='text'
+					size='large'
 					icon={<FontAwesomeIcon icon={faUserGroup} />}
 					onClick={() => setDrawerOpen('Members')}
 				>
@@ -78,6 +81,7 @@ function RoomInfo() {
 						className='collapse-content-item'
 						color='default'
 						variant='text'
+						size='large'
 						icon={<FontAwesomeIcon icon={faClock} />}
 						onClick={() => notify('Incomming')}
 					>
@@ -88,6 +92,7 @@ function RoomInfo() {
 						className='collapse-content-item'
 						color='default'
 						variant='text'
+						size='large'
 						icon={<FileTextOutlined />}
 						onClick={() => setDrawerOpen('Board')}
 					>
@@ -130,6 +135,7 @@ function RoomInfo() {
 							className='collapse-content-item'
 							color='default'
 							variant='text'
+							size='large'
 							icon={<EyeInvisibleOutlined />}
 							onClick={() => notify('Incomming')}
 						>
@@ -146,6 +152,7 @@ function RoomInfo() {
 								className='collapse-content-item'
 								color='danger'
 								variant='text'
+								size='large'
 								icon={<DeleteOutlined />}
 								onClick={() => notify('Incomming')}
 							>
@@ -165,6 +172,7 @@ function RoomInfo() {
 								className='collapse-content-item'
 								color='danger'
 								variant='text'
+								size='large'
 								icon={<LogoutOutlined />}
 								onClick={() => notify('leave')}
 							>
@@ -197,11 +205,11 @@ function RoomInfo() {
 					) : (
 						<UserAvatar id={id} size={GROUP_AVT_SIZE} />
 					)}
-					<Flex style={{ width: '80%' }} justify='center'>
+					<Flex gap={8} style={{ width: '80%' }} justify='center'>
 						<Typography.Text strong ellipsis>
 							{name}
 						</Typography.Text>
-						{/* <EditOutlined /> */}
+						<EditFilled className='circle btn' onClick={toggleChangeGroupNameModal} />
 					</Flex>
 					<ActionBar id={id} isGroup={isGroup} pinned={pinned} />
 				</Flex>
@@ -214,6 +222,7 @@ function RoomInfo() {
 					expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
 				></Collapse>
 			</div>
+			<ChangeGroupNameModal />
 		</>
 	);
 }

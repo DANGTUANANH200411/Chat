@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import React from 'react';
 import { useStores } from '../../../../stores/stores';
 import PreviewLink from '../tabs/components/PreviewLink';
+import StorageItem from '../tabs/components/StorageItem';
 
 function PreviewPhotoStorage() {
 	const {
@@ -15,7 +16,9 @@ function PreviewPhotoStorage() {
 		<>
 			<Flex vertical gap={8}>
 				{Links.slice(0, 4).map((e) => (
-                    <PreviewLink key={e.id} id={e.id} url={e.content} sendDate={e.createDate} />
+					<StorageItem key={e.id} id={e.id} type='Link'>
+						<PreviewLink key={e.id} id={e.id} url={e.content} sendDate={e.createDate} />
+					</StorageItem>
 				))}
 			</Flex>
 			<Button
