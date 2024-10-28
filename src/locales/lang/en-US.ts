@@ -196,6 +196,7 @@ const en = {
 	'set-group-name-ask':
 		'Are you sure you want to rename this group, a new group name will be visible with all members',
 	confirm: 'Confirm',
+	'detail-msg': 'Detail message',
 };
 
 export type ILocale = typeof en;

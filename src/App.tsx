@@ -1,18 +1,17 @@
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
-import { ConfigProvider, notification, QRCode } from 'antd';
+import { ConfigProvider, notification, ThemeConfig } from 'antd';
 import enUS from 'antd/locale/en_US';
 import viVN from 'antd/locale/vi_VN';
 import { useStores } from './stores/stores';
 import { observer } from 'mobx-react';
 import Main from './components/Main';
-import { AliasToken } from 'antd/es/theme/internal';
 
 function App() {
 	const { appStore } = useStores();
 	const { setting, lang } = appStore;
 	const { darkTheme } = setting;
 
-	const [token, setToken] = useState<Partial<AliasToken> | undefined>({})
+	const [themeConfig, setThemeConfig] = useState<ThemeConfig  | undefined>({});
 
 	useLayoutEffect(() => {
 		document.documentElement.style.setProperty('--primary-color', sessionStorage.getItem('--primary-color'));
@@ -20,14 +19,21 @@ function App() {
 	useEffect(() => {
 		if (darkTheme) {
 			document.body.classList.add('dark-theme');
-			setToken({
-				colorText: '#d6d6d6',
-				colorTextBase: '#c4c4c4',
-				colorBgBase: '#4d4985',
-			})
+			setThemeConfig({
+				token: {
+					colorText: '#d6d6d6',
+					colorTextBase: '#c4c4c4',
+					colorBgBase: '#4d4985',
+				},
+				components: {
+					Tooltip: {
+						colorBgSpotlight: '#4d4985',
+					}
+				}
+			});
 		} else {
 			document.body.classList.remove('dark-theme');
-			setToken(undefined)
+			setThemeConfig(undefined);
 		}
 	}, [darkTheme]);
 	const locale = useMemo(() => {
@@ -43,7 +49,7 @@ function App() {
 	return (
 		<ConfigProvider
 			locale={locale}
-			theme={{token}}
+			theme={themeConfig}
 		>
 			{contextHolder}
 			<Main />

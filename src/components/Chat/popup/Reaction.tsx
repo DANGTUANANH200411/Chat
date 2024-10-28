@@ -36,7 +36,7 @@ function Reaction(props: Props) {
 				placement='bottom'
 				arrow={false}
 				destroyTooltipOnHide
-				overlayInnerStyle={{ padding: 4, borderRadius: 30 }}
+				overlayInnerStyle={{ background: 'unset', padding: 0}}
 				onOpenChange={(e) => setOpen(e)}
 			>
 				<HeartOutlined className='reaction-action' />

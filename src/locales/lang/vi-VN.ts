@@ -197,5 +197,6 @@ const vi: ILocale = {
 	'set-group-name-ask':
 		'Bạn có chắc chắn muốn đổi tên nhóm, khi xác nhận tên nhóm mới sẽ hiển thị với tất cả thành viên',
 	confirm: 'Xác nhận',
+	'detail-msg': 'Chi tiết tin nhắn',
 };
 export { vi };

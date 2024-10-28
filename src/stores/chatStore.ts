@@ -101,6 +101,9 @@ export default class ChatStore {
 		return this.tmpRoom ?? this.getActiveRoom();
 	}
 
+	get Members() {
+		return this.getActiveRoom()?.members ?? []
+	}
 	get RoomMessages() {
 		if (!this.activeRoom || !this.messages || !this.messages.length) return [];
 		const roomMessages = this.messages
