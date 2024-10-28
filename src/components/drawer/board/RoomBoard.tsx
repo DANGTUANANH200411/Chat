@@ -12,21 +12,33 @@ import { ItemType } from 'antd/es/menu/interface';
 function RoomBoard() {
 	const {
 		appStore: { $$, setDrawerOpen, toggleCreatePollModal, toggleCreateNote },
-		chatStore: { boardTab, setBoardTab },
+		chatStore: {
+			Permission: { createNote, createPoll },
+			boardTab,
+			setBoardTab,
+		},
 	} = useStores();
 
 	const items: ItemType[] = [
-		{
-			key: 'poll',
-			label: $$('create-new-poll'),
-			onClick: toggleCreatePollModal
-		},
-		{
-			key: 'note',
-			label: $$('create-note'),
-			onClick: toggleCreateNote
-		}
-	]
+		...(createPoll
+			? [
+					{
+						key: 'poll',
+						label: $$('create-new-poll'),
+						onClick: toggleCreatePollModal,
+					},
+			  ]
+			: []),
+		...(createNote
+			? [
+					{
+						key: 'note',
+						label: $$('create-note'),
+						onClick: toggleCreateNote,
+					},
+			  ]
+			: []),
+	];
 	return (
 		<>
 			<Row className='header' justify='center' align='middle'>
@@ -37,15 +49,17 @@ function RoomBoard() {
 				<Typography.Text strong ellipsis>
 					{$$('group-board')}
 				</Typography.Text>
-				<Dropdown arrow destroyPopupOnHide trigger={['click']} menu={{items}}>
-				<PlusOutlined
-					className='hoverable-icon'
-					style={{
-						position: 'absolute',
-						right: '1rem',
-					}}
-				/>
-				</Dropdown>
+				{(createPoll || createNote) && (
+					<Dropdown arrow destroyPopupOnHide trigger={['click']} menu={{ items }}>
+						<PlusOutlined
+							className='hoverable-icon'
+							style={{
+								position: 'absolute',
+								right: '1rem',
+							}}
+						/>
+					</Dropdown>
+				)}
 			</Row>
 			<div className='body'>
 				<Tabs className='storage-tabs' activeKey={boardTab} onChange={(key) => setBoardTab(key as BoardType)}>

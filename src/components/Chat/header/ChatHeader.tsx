@@ -36,7 +36,7 @@ function ChatHeader() {
 					<Flex gap={4}>
 						{isGroup && (
 							<Flex gap='inherit' className='hover-change-color' onClick={() => setDrawerOpen('Members')}>
-								<UserOutlined className='text-secondary ' />
+								<UserOutlined className='text-secondary text-small'/>
 								<Typography.Text ellipsis className='text-small text-secondary'>
 									{`${Room.members.length} ${$$('members')}`}
 								</Typography.Text>
@@ -45,7 +45,7 @@ function ChatHeader() {
 						<Dropdown trigger={['click']} menu={{ items: LabelMenu(id) }} destroyPopupOnHide>
 							<TagFilled
 								rotate={45}
-								className='hover-change-color'
+								className='hover-change-color text-medium'
 								style={{ color: getLabel(label)?.color ?? 'var(--text-secondary)' }}
 							/>
 						</Dropdown>

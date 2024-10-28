@@ -1,9 +1,9 @@
-import { UserOutlined } from '@ant-design/icons';
-import { Avatar, Row, Typography } from 'antd';
+import { Row, Skeleton, Typography } from 'antd';
 import { observer } from 'mobx-react';
 import React, { useMemo } from 'react';
 import { useStores } from '../../stores/stores';
 import { User } from '../../utils/type';
+import UserAvatar from './UserAvatar';
 interface Props {
 	user?: User;
 	info?: string;
@@ -11,10 +11,13 @@ interface Props {
 	size?: 'small' | 'default' | 'large';
 	isMe?: boolean;
 	suffix?: React.ReactNode;
+	showSymbol?: true | boolean;
 }
 function Member(props: Props) {
-	const {appStore: {$$}} = useStores();
-	const { user, info, action, size, isMe, suffix } = props;
+	const {
+		appStore: { $$ },
+	} = useStores();
+	const { user, info, action, size, isMe, suffix, showSymbol } = props;
 
 	const [primaryClass, secondaryClass] = useMemo(() => {
 		switch (size) {
@@ -26,14 +29,24 @@ function Member(props: Props) {
 				return ['text-medium', 'text-small'];
 		}
 	}, [size]);
+	if (!user) {
+		return (
+			<div className='max-width member'>
+				<Skeleton.Avatar active />
+				<Row wrap={false} justify='space-between' align='middle' className='flex-grow'>
+					<Skeleton.Input active className='skeleton-input' />
+				</Row>
+			</div>
+		);
+	}
 	return (
 		<div className='max-width member'>
-			<Avatar src={user?.imageSrc} className='member-avatar' size={size} icon={<UserOutlined/>} />
+			<UserAvatar showSymbol={showSymbol} id={user.id} user={user} className='member-avatar' size={size} />
 			<Row wrap={false} justify='space-between' align='middle' className='flex-grow'>
 				<Row>
 					<Row>
 						<Typography.Text strong ellipsis className={primaryClass}>
-							{isMe ? $$('you') : user?.userName}
+							{isMe ? $$('you') : user.userName}
 						</Typography.Text>
 					</Row>
 					{info && (

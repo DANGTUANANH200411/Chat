@@ -197,6 +197,7 @@ const en = {
 		'Are you sure you want to rename this group, a new group name will be visible with all members',
 	confirm: 'Confirm',
 	'detail-msg': 'Detail message',
+	'only-admin-send-msg': 'Only owner and admin can send messages to this group',
 };
 
 export type ILocale = typeof en;

@@ -22,7 +22,7 @@ export default class AppStore {
 	};
 	i18n!: I18n;
 
-	user: User = USERS[0];
+	user: User = USERS[1];
 	menuOpen: boolean = true;
 	drawerOpen: DrawerType = undefined;
 	labels: Label[] = LABELS;
@@ -218,4 +218,8 @@ export default class AppStore {
 				return '';
 		}
 	};
+
+	changeUser = () => {
+		
+	}
 }

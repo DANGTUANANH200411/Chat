@@ -628,8 +628,9 @@ const MESSAGES: Message[] = [
 	},
 ];
 
-const ROOM_MEMBER: RoomMember[] = USERS.map((e) => ({
+const ROOM_MEMBER: RoomMember[] = USERS.map((e, idx) => ({
 	...e,
+	joinDate: idx === 1 ? toSystemDate(dayjs().subtract(24, 'h')) :'00000000',
 	lastLogTime: MESSAGES.findLast((msg) => msg.sender === e.id)?.lastUpdateDate,
 	invitedBy: USERS[0].id,
 	role: 'Member',
@@ -642,7 +643,7 @@ const DEFAULT_GROUP_SETTING: GroupManagement = {
 	createPoll: true,
 	sendMessage: true,
 	approval: false,
-	highlight: true,
+	showSymbol: true,
 	readRecent: true,
 };
 const CHAT_ROOMS: ChatRoom[] = [
@@ -650,7 +651,7 @@ const CHAT_ROOMS: ChatRoom[] = [
 		id: GROUP_ID[0],
 		name: 'Marvel',
 		isGroup: true,
-		members: USERS.map((e, idx) => ({
+		members: ROOM_MEMBER.map((e, idx) => ({
 			...e,
 			lastLogTime: toSystemDate(dayjs().subtract(randomInt(48), 'h')),
 			invitedBy: USERS[0].id,
@@ -664,7 +665,10 @@ const CHAT_ROOMS: ChatRoom[] = [
 		unread: MESSAGES.filter(
 			(e) => e.groupId === GROUP_ID[0] && e.lastUpdateDate > toSystemDate(dayjs().subtract(24, 'h'))
 		).length,
-		setting: DEFAULT_GROUP_SETTING,
+		setting: {
+			...DEFAULT_GROUP_SETTING,
+			readRecent: false,
+		},
 	},
 	{
 		id: GROUP_ID[1],
@@ -686,17 +690,20 @@ const CHAT_ROOMS: ChatRoom[] = [
 		creatorId: USERS[15].id,
 		label: LABELS[2].id,
 		unread: MESSAGES.filter((e) => e.groupId === GROUP_ID[1]).length,
-		setting: DEFAULT_GROUP_SETTING,
+		setting: {
+			...DEFAULT_GROUP_SETTING,
+			changeNameOrAvt: false,
+			pin: false,
+			createNote: false,
+			createPoll: false,
+			sendMessage: false,
+		},
 	},
 	{
 		id: USERS[1].id,
 		name: USERS[1].userName,
 		isGroup: false,
-		members: [USERS[0], USERS[1]].map((e) => ({
-			...e,
-			invitedBy: USERS[0].id,
-			role: 'Member',
-		})),
+		members: [ROOM_MEMBER[0], ROOM_MEMBER[1]],
 		label: LABELS[4].id,
 		unread: MESSAGES.filter((e) => e.groupId === USERS[1].id).length,
 		setting: DEFAULT_GROUP_SETTING,

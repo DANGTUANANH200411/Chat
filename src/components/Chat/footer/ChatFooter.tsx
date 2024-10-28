@@ -1,29 +1,38 @@
-import { CloseOutlined } from '@ant-design/icons';
-import { Input, Row } from 'antd';
+import { CloseOutlined, LockFilled } from '@ant-design/icons';
+import { Row, Typography } from 'antd';
 import { observer } from 'mobx-react';
 import React, { useCallback, useMemo, useState } from 'react';
-import { useStores } from '../../../stores/stores';
-import ReplyContent from '../body/ReplyContent';
-import ChatFooterBar from './ChatFooterBar';
-import InputEmoji from 'react-input-emoji';
-import { newGuid, toNormalize } from '../../../utils/helper';
 import { useDropzone } from 'react-dropzone';
-import PreviewUploaded from './PreviewUploaded';
+import InputEmoji from 'react-input-emoji';
+import { useStores } from '../../../stores/stores';
+import { newGuid, toNormalize } from '../../../utils/helper';
 import { Attachment } from '../../../utils/type';
-import PreviewGIF from './PreviewGIF';
+import ReplyContent from '../body/ReplyContent';
 import SelectingBar from '../body/SelectingBar';
+import ChatFooterBar from './ChatFooterBar';
+import PreviewGIF from './PreviewGIF';
+import PreviewUploaded from './PreviewUploaded';
 
 function ChatFooter() {
 	const { chatStore, appStore } = useStores();
 	const [text, setText] = useState<string>('');
-	const { replyMessage, onSendMessage, setReplyMessage } = chatStore;
-	const { Users } = appStore;
+	const {
+		Permission: { sendMessage },
+		replyMessage,
+		onSendMessage,
+		setReplyMessage,
+	} = chatStore;
+	const { Users, $$ } = appStore;
 	const [uploaded, setUploaded] = useState<Attachment[]>([]);
-	const mentionsList = useMemo(() => Users.map((e) => ({
-		id: e.id,
-		name: e.userName,
-		image: e.imageSrc,
-	})), [Users]);
+	const mentionsList = useMemo(
+		() =>
+			Users.map((e) => ({
+				id: e.id,
+				name: e.userName,
+				image: e.imageSrc,
+			})),
+		[Users]
+	);
 	const onDrop = useCallback(
 		async (acceptedFiles: any) => {
 			const filePromises = acceptedFiles.map((file: any) => {
@@ -62,7 +71,14 @@ function ChatFooter() {
 		noKeyboard: true,
 		onDrop,
 	});
-
+	if (!sendMessage)
+		return (
+			<Row className='chat-footer' justify='center' align='middle'>
+				<Typography.Text strong ellipsis>
+					<LockFilled /> {$$('only-admin-send-msg')}
+				</Typography.Text>
+			</Row>
+		);
 	return (
 		<Row className='chat-footer' {...getRootProps()}>
 			<input {...getInputProps()} />

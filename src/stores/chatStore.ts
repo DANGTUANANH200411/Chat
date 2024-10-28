@@ -12,6 +12,7 @@ import {
 	CreateAnnounceProps,
 	DynamicMessage,
 	GroupManagement,
+	MemberPermission,
 	Message,
 	MessageLog,
 	ModalDetailMsgProps,
@@ -102,7 +103,7 @@ export default class ChatStore {
 	}
 
 	get Members() {
-		return this.getActiveRoom()?.members ?? []
+		return this.getActiveRoom()?.members ?? [];
 	}
 	get RoomMessages() {
 		if (!this.activeRoom || !this.messages || !this.messages.length) return [];
@@ -155,6 +156,10 @@ export default class ChatStore {
 
 	get Role() {
 		return this.getRole(stores.appStore.CurrentUserId);
+	}
+
+	get IsAdmin() {
+		return this.Role !== 'Member';
 	}
 
 	get Images() {
@@ -237,8 +242,18 @@ export default class ChatStore {
 		return res;
 	}
 
-	get GroupSetting() {
+	get Setting() {
 		return this.Room?.setting ?? DEFAULT_GROUP_SETTING;
+	}
+	get Permission(): MemberPermission {
+		const { changeNameOrAvt, pin, createNote, createPoll, sendMessage } = this.Setting;
+		return {
+			changeNameOrAvt: changeNameOrAvt || this.IsAdmin,
+			pin: pin || this.IsAdmin,
+			createNote: createNote || this.IsAdmin,
+			createPoll: createPoll || this.IsAdmin,
+			sendMessage: sendMessage || this.IsAdmin,
+		};
 	}
 	constructor() {
 		makeAutoObservable(this);
@@ -440,12 +455,18 @@ export default class ChatStore {
 	//#endregion FUNCTION
 
 	//#region FAKE BACKEND
-	fakeFetchMessage = async (roomId: string, skip: number) => {
+	fakeFetchMessage = async (roomId: string, skip: number): Promise<Message[]> => {
+		const { readRecent } = this.Setting;
+		const room = this.getRoom(roomId);
+		if (!room) return [];
+		const member = room.members?.find((e) => e.id === stores.appStore.CurrentUserId);
+		if (!member) return [];
 		return this.allMessage
-			.filter((e) => e.groupId === roomId)
+			.filter((e) => e.groupId === roomId && (readRecent || e.createDate >= member.joinDate))
 			.sort((a, b) => b.createDate.localeCompare(a.createDate))
 			.splice(skip, 20);
 	};
+
 	fakeFetchPinMessage = async (id: string, roomId: string, skip: number) => {
 		const listMsg = MESSAGES.filter((e) => e.groupId === roomId).sort((a, b) =>
 			b.createDate.localeCompare(a.createDate)
@@ -570,12 +591,13 @@ export default class ChatStore {
 				return;
 			}
 			group.members = [
-				{ ...user, invitedBy: CurrentUserId, role: 'Owner' },
+				{ ...user, invitedBy: CurrentUserId, role: 'Owner', joinDate: SYSTEM_NOW() },
 				...Array.from(this.selectedUsers.values()).map(
 					(e): RoomMember => ({
 						...e,
 						invitedBy: CurrentUserId,
 						role: 'Member',
+						joinDate: SYSTEM_NOW(),
 					})
 				),
 			];
@@ -728,6 +750,27 @@ export default class ChatStore {
 		room!.pinned = !room!.pinned;
 	};
 
+	changeGroupSetting = (name: keyof GroupManagement) => {
+		const room = this.getActiveRoom();
+		if (!room) return;
+		room.setting[name] = !room.setting[name];
+	};
+
+	changeGroupName = (name: string | undefined) => {
+		if (!name || !name.trim()) return;
+		const room = this.getActiveRoom();
+		if (!room) return;
+		room.name = name;
+	};
+
+	deleteGroup = (id: string) => {
+		//Remove messages
+		this.allMessage = this.allMessage.filter((e) => e.groupId !== id);
+		//Remove group
+		this.activeRoom = undefined;
+		this.chatRooms = this.chatRooms.filter((e) => e.id !== id);
+	};
+
 	//#endregion GROUP
 	//#region Group Member API
 	onLeaveGroup = () => {
@@ -746,7 +789,12 @@ export default class ChatStore {
 		room.members = [
 			...room.members,
 			...Array.from(this.selectedUsers.values()).map(
-				(e): RoomMember => ({ ...e, invitedBy: stores.appStore.CurrentUserId, role: 'Member' })
+				(e): RoomMember => ({
+					...e,
+					invitedBy: stores.appStore.CurrentUserId,
+					role: 'Member',
+					joinDate: SYSTEM_NOW(),
+				})
 			),
 		];
 		Array.from(this.selectedUsers.keys()).forEach((id) => this.createAnnouncement({ type: 'Add', toUser: id }));
@@ -759,7 +807,10 @@ export default class ChatStore {
 		groupIds.forEach((groupId) => {
 			const room = this.getRoom(groupId);
 			if (room) {
-				room.members = [...room.members, { ...user, role: 'Member', invitedBy: stores.appStore.CurrentUserId }];
+				room.members = [
+					...room.members,
+					{ ...user, role: 'Member', invitedBy: stores.appStore.CurrentUserId, joinDate: SYSTEM_NOW() },
+				];
 				this.createAnnouncement({
 					type: 'Add',
 					toUser: memberId,
@@ -910,25 +961,12 @@ export default class ChatStore {
 	readMessage = (roomId?: string) => {
 		//Logic: if there are no unread message then just update FE;
 		const room = this.getActiveRoom(roomId);
-		const member = room!.members.find((e) => e.id === stores.appStore.CurrentUserId);
+		const member = room?.members.find((e) => e.id === stores.appStore.CurrentUserId);
 
 		if (member) {
 			member.lastLogTime = SYSTEM_NOW();
 		}
 		if (!room || !room.unread) return;
 		room.unread = 0;
-	};
-
-	changeGroupSetting = (name: keyof GroupManagement) => {
-		const room = this.getActiveRoom();
-		if (!room) return;
-		room.setting[name] = !room.setting[name];
-	};
-
-	changeGroupName = (name: string | undefined) => {
-		if (!name || !name.trim()) return;
-		const room = this.getActiveRoom();
-		if (!room) return;
-		room.name = name;
 	};
 }

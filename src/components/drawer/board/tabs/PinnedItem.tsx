@@ -36,7 +36,7 @@ function PinnedItems(props: Props) {
 	return (
 		<div className='pinned-item-wrapper'>
 			<Flex gap={8} align='center'>
-				{user && <Member user={user} suffix={<BoardDropdown message={message} />} />}
+				{user && <Member showSymbol user={user} suffix={<BoardDropdown message={message} />} />}
 			</Flex>
 			<Flex vertical className='preview-message'>
 				<Typography.Text strong ellipsis>

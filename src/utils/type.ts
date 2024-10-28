@@ -91,6 +91,7 @@ export interface RoomMember extends User {
 	isRemoved?: boolean;
 	invitedBy: string;
 	role: RoleType;
+	joinDate: string;
 }
 export interface Label {
 	id: string;
@@ -206,16 +207,19 @@ export interface CreateAnnounceProps {
 
 export type AnnouceTargetObj = 'User' | 'Poll';
 
-export interface GroupManagement {
+export interface GroupManagement extends MemberPermission {
+	/** Membership approval */
+	approval: boolean;
+	/** Highlight message from owner/admins*/
+	showSymbol: boolean;
+	/** Allow new member to read most recent message */
+	readRecent: boolean;
+}
+
+export interface MemberPermission {
 	changeNameOrAvt: boolean;
 	pin: boolean;
 	createNote: boolean;
 	createPoll: boolean;
 	sendMessage: boolean;
-	/** Membership approval */
-	approval: boolean;
-	/** Highlight message from owner/admins*/
-	highlight: boolean;
-	/** Allow new member to read most recent message */
-	readRecent: boolean;
 }

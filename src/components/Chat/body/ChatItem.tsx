@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Message } from '../../../utils/type';
 import { Avatar, Row } from 'antd';
 import ChatAction from './ChatAction';
@@ -22,11 +22,12 @@ interface Props {
 function ChatItem(props: Props) {
 	const {
 		appStore: { getUserName },
-		chatStore: { Selecting, selectMessages, onSelectMessage },
+		chatStore: { Setting: {showSymbol}, Selecting, selectMessages, onSelectMessage},
 	} = useStores();
 	const { id, isFirst, isLast, showTime, message, pinned, view, recalled, readers } = props;
 	const { sender, isNameCard, content, createDate } = message;
 	const [hover, setHover] = useState<boolean>(false);
+
 	return (
 		<>
 			<Row
@@ -40,7 +41,7 @@ function ChatItem(props: Props) {
 			>
 				<Row style={{ width: 'fit-content', margin: '0 8px' }}>
 					<div style={{ width: 40 }}>
-						{isFirst && <UserAvatar className='chat-item-avatar' id={sender} size={40} />}
+						{isFirst && <UserAvatar showSymbol={showSymbol} className='chat-item-avatar' id={sender} size={40}/>}
 					</div>
 				</Row>
 

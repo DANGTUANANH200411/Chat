@@ -66,3 +66,21 @@
     max-width: 100%;
     width: fit-content;
 }
+/* style={{position: 'absolute', bottom: 4, left: 4, fontSize: 'x-small', background: var()}} */
+.admin-key {
+    position: absolute;
+    bottom: 0px;
+    right: 2px;
+    font-size: small;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 2px;
+    border-radius: 15px;
+}
+
+.admin-key:is(.owner) {
+    color: gold !important;
+}
+
+.member .skeleton-input {
+    width: -webkit-fill-available !important;
+}

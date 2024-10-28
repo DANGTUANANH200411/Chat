@@ -1,11 +1,8 @@
 import { Badge, Button, Row } from 'antd';
 import { observer } from 'mobx-react';
 import { useStores } from '../../../stores/stores';
-import ChatItemWrapper from './ChatItemWrapper';
-import { displayChatDate } from '../../../utils/dateHelper';
 import { useCallback, useEffect, useState } from 'react';
 import { IS_FIREFOX } from '../../../utils/constants';
-import { Message } from '../../../utils/type';
 import { useDropzone } from 'react-dropzone';
 import { DoubleRightOutlined } from '@ant-design/icons';
 import { notify } from '../../../utils/notify';
@@ -17,8 +14,17 @@ function ChatBody() {
 		chatStore,
 		appStore: { $$ },
 	} = useStores();
-	const { activeRoom, activePin, RoomMessages, Room, onGetMessage, setActivePin, onSendFile, readMessage } =
-		chatStore;
+	const {
+		activeRoom,
+		activePin,
+		RoomMessages,
+		Room,
+		Permission: { sendMessage },
+		onGetMessage,
+		setActivePin,
+		onSendFile,
+		readMessage,
+	} = chatStore;
 
 	const [isEnd, setIsEnd] = useState<boolean>(false);
 	const [activeNode, setActiveNode] = useState<HTMLElement | null>(null);
@@ -105,7 +111,7 @@ function ChatBody() {
 		});
 	}, []);
 
-	const { getRootProps, getInputProps, isDragActive } = useDropzone({ noClick: true, noKeyboard: true, onDrop });
+	const { getRootProps, isDragActive } = useDropzone({ noClick: true, noKeyboard: true, onDrop });
 
 	const onClickView = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 		e.preventDefault();
@@ -115,8 +121,7 @@ function ChatBody() {
 		}
 	}, []);
 	return (
-		<Row className='chat-body' {...getRootProps()}>
-			<input {...getInputProps()} />
+		<Row className='chat-body' {...sendMessage ? getRootProps() : {}}>
 			{isDragActive && (
 				<div className='drag-background'>
 					<label style={{ margin: 'auto' }}>Drop over here to send file</label>

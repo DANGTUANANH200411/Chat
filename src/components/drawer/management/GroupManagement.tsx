@@ -1,20 +1,22 @@
 import { CaretLeftOutlined, KeyOutlined, LockFilled, UsergroupDeleteOutlined } from '@ant-design/icons';
 import { Button, Flex, Row, Typography } from 'antd';
 import { observer } from 'mobx-react';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useStores } from '../../../stores/stores';
 import '../style.css';
 import MngmtItem from './MngmtItem';
+import { notify } from '../../../utils/notify';
 
 function GroupManagement() {
 	const {
 		appStore: { $$, setDrawerOpen },
-		chatStore: { Role, GroupSetting, changeGroupSetting },
+		chatStore: { IsAdmin, Room, Setting, changeGroupSetting, deleteGroup},
 	} = useStores();
 
-	const disabled = useMemo(() => Role === 'Member', [Role]);
-	const { changeNameOrAvt, pin, createNote, createPoll, sendMessage, approval, highlight, readRecent } = GroupSetting;
-	console.log(GroupSetting);
+	const { changeNameOrAvt, pin, createNote, createPoll, sendMessage, approval, showSymbol, readRecent } = Setting;
+
+	// const disabled = !IsAdmin;
+	const disabled = false;
 	return (
 		<>
 			<Row className='header' justify='center' align='middle'>
@@ -84,8 +86,8 @@ function GroupManagement() {
 						useSwitch
 						title={$$('manage-highlight')}
 						explain={$$('manage-highlight-explain')}
-						checked={highlight}
-						onChange={() => changeGroupSetting('highlight')}
+						checked={showSymbol}
+						onChange={() => changeGroupSetting('showSymbol')}
 					/>
 					<hr></hr>
 					<MngmtItem
@@ -107,6 +109,7 @@ function GroupManagement() {
 								variant='text'
 								size='large'
 								icon={<UsergroupDeleteOutlined />}
+								onClick={()=> notify('Incomming')}
 							>
 								{$$('blocked-members')}
 							</Button>
@@ -117,12 +120,13 @@ function GroupManagement() {
 								variant='text'
 								size='large'
 								icon={<KeyOutlined />}
+								onClick={()=> notify('Incomming')}
 							>
 								{$$('owner-&-admin')}
 							</Button>
 						</div>
 						<div className='drawer-group'>
-							<Button block color='danger' variant='filled'>
+							<Button block color='danger' variant='filled' onClick={()=> Room && deleteGroup(Room.id)}>
 								<Typography.Text strong ellipsis style={{ color: 'inherit' }}>
 									{$$('delete-group')}
 								</Typography.Text>

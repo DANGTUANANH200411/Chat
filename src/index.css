@@ -64,7 +64,7 @@ code {
 }
 .text-smaller,
 .text-smaller strong {
-	font-size: 0.8rem !important;
+	font-size: 0.6rem !important;
 }
 
 .text-small,
@@ -128,7 +128,8 @@ code {
 	border-bottom: 1px solid var(--border-color);
 	position: relative;
 }
-.header * {
+.header .ant-typography,
+.header .anticon {
 	font-size: 1.2rem;
 }
 

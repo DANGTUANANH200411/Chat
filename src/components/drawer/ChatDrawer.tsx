@@ -22,7 +22,7 @@ function ChatDrawer() {
 	}, [drawerOpen]);
 
 	useEffect(() => {
-		!Room?.isGroup && drawerOpen === 'Members' && setDrawerOpen('Info');
+		!Room?.isGroup && drawerOpen && !['Info', 'Storage'].includes(drawerOpen) && setDrawerOpen('Info');
 	}, [Room, drawerOpen, setDrawerOpen]);
 
 	if (!Room) return <></>;

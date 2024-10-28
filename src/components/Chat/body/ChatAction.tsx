@@ -19,7 +19,6 @@ import { observer } from 'mobx-react';
 import React, { useState } from 'react';
 import { notify } from '../../../utils/notify';
 import { downloadUrl } from '../../../utils/helper';
-import Confirm from '../../common/Confirm';
 
 interface Props {
 	message: Message;
@@ -31,6 +30,8 @@ function ChatAction({ message }: Props) {
 	} = useStores();
 	const {
 		Room,
+		IsAdmin,
+		Permission: {pin: canPin},
 		onPinMessage,
 		onDeleteMessages,
 		setReplyMessage,
@@ -59,12 +60,16 @@ function ChatAction({ message }: Props) {
 		{
 			type: 'divider',
 		},
-		{
-			key: 'pin',
-			label: isPinned ? $$('unpin-msg') : $$('pin-msg'),
-			icon: isPinned ? <PushpinFilled /> : <PushpinOutlined />,
-			onClick: () => onPinMessage(message),
-		},
+		...(IsAdmin || canPin
+			? [
+					{
+						key: 'pin',
+						label: isPinned ? $$('unpin-msg') : $$('pin-msg'),
+						icon: isPinned ? <PushpinFilled /> : <PushpinOutlined />,
+						onClick: () => onPinMessage(message),
+					},
+			  ]
+			: []),
 		// {
 		// 	key: 'star',
 		// 	label: $$('start-msg'),
@@ -155,7 +160,7 @@ function ChatAction({ message }: Props) {
 				open={openDelete}
 				title={
 					<Flex gap={12} align='center'>
-						<WarningOutlined style={{background: 'orange', padding: 6, borderRadius: '50%'}}/>
+						<WarningOutlined style={{ background: 'orange', padding: 6, borderRadius: '50%' }} />
 						{$$('delete-n-msg-4me', { number: 1 })}
 					</Flex>
 				}

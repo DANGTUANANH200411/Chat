@@ -19,7 +19,7 @@ function PollTab() {
 					displayClosed
 					message={e}
 					style={{ width: '100%' }}
-					prefix={<Member user={getUserById(e.sender)} suffix={<BoardDropdown message={e}/>} />}
+					prefix={<Member showSymbol user={getUserById(e.sender)} suffix={<BoardDropdown message={e}/>} />}
 				/>
 			))}
 		</Flex>

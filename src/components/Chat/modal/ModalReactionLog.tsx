@@ -18,7 +18,7 @@ function ModalReactionLog() {
 				const user = users.get(log.userId);
 				return user ? (
 					<Row key={log.userId} id={log.userId} justify='space-between'>
-						<Member user={user} suffix={<Avatar src={getEmojiSrc(log.reaction)} />} />
+						<Member showSymbol user={user} suffix={<Avatar src={getEmojiSrc(log.reaction)} />} />
 					</Row>
 				) : (
 					<></>

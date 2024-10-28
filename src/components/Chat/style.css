@@ -27,30 +27,6 @@
 	padding: 0 0.8rem;
 	column-gap: 0.8rem;
 }
-.chat-header * {
-	font-size: 1.2rem;
-}
-
-.chat-header-group-avt :nth-child(1) {
-	position: absolute;
-	top: 0;
-	left: 0;
-}
-.chat-header-group-avt :nth-child(2) {
-	position: absolute;
-	top: 0;
-	left: 20px;
-}
-.chat-header-group-avt :nth-child(3) {
-	position: absolute;
-	top: 20px;
-	left: 0;
-}
-.chat-header-group-avt :last-child(4) {
-	position: absolute;
-	top: 20px;
-	left: 20px;
-}
 
 .chat-footer {
 	min-height: 8vh;

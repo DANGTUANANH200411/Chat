@@ -36,7 +36,14 @@ const panelStyle: React.CSSProperties = {
 function RoomInfo() {
 	const {
 		appStore: { $$, setDrawerOpen },
-		chatStore: { Room, onLeaveGroup, onDeleteChatHistory, toggleChangeGroupNameModal },
+		chatStore: {
+			Room,
+			Role,
+			Permission: { changeNameOrAvt },
+			onLeaveGroup,
+			onDeleteChatHistory,
+			toggleChangeGroupNameModal,
+		},
 	} = useStores();
 
 	const { id, name, isGroup, members, image, pinned } = Room!;
@@ -205,11 +212,11 @@ function RoomInfo() {
 					) : (
 						<UserAvatar id={id} size={GROUP_AVT_SIZE} />
 					)}
-					<Flex gap={8} style={{ width: '80%' }} justify='center'>
-						<Typography.Text strong ellipsis>
+					<Flex gap={8} style={{ width: '80%'}} justify='center'>
+						<Typography.Text strong ellipsis className='text-large'>
 							{name}
 						</Typography.Text>
-						<EditFilled className='circle btn' onClick={toggleChangeGroupNameModal} />
+						{(Role !== 'Member' || changeNameOrAvt) && <EditFilled className='circle btn' onClick={toggleChangeGroupNameModal} />}
 					</Flex>
 					<ActionBar id={id} isGroup={isGroup} pinned={pinned} />
 				</Flex>
