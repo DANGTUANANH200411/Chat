@@ -630,7 +630,7 @@ const MESSAGES: Message[] = [
 
 const ROOM_MEMBER: RoomMember[] = USERS.map((e, idx) => ({
 	...e,
-	joinDate: idx === 1 ? toSystemDate(dayjs().subtract(24, 'h')) :'00000000',
+	joinDate: idx === 1 ? toSystemDate(dayjs().subtract(48, 'h')) :'00000000',
 	lastLogTime: MESSAGES.findLast((msg) => msg.sender === e.id)?.lastUpdateDate,
 	invitedBy: USERS[0].id,
 	role: 'Member',

@@ -94,8 +94,15 @@ export default class ChatStore {
 	openChangeGroupNameModal: boolean = false;
 
 	get Rooms() {
-		if (!this.searchRoom) return this.chatRooms;
-		return this.chatRooms.filter((e) => toNormalize(e.name).includes(toNormalize(this.searchRoom)));
+		return this.chatRooms;
+	}
+
+	get SearchRooms() {
+		return this.chatRooms.filter(
+			(e) =>
+				(!this.searchRoom || toNormalize(e.name).includes(toNormalize(this.searchRoom))) &&
+				(this.tabItem === 'All' || e.unread)
+		);
 	}
 
 	get Room() {
@@ -108,7 +115,7 @@ export default class ChatStore {
 	get RoomMessages() {
 		if (!this.activeRoom || !this.messages || !this.messages.length) return [];
 		const roomMessages = this.messages
-			.filter((e) => !e.deleted)
+			.filter((e) => !e.deleted && !e.poll?.closed)
 			.sort((a, b) => Number(b.createDate) - Number(a.createDate));
 		let dayMessages: DateMessage = {};
 		let group: Message[][] = [];
@@ -409,11 +416,12 @@ export default class ChatStore {
 		let room = this.getRoom(groupId);
 		if (room) {
 			room.previewMsg = message;
-		} else {
-			//Create room
-			this.openPersonalRoom(groupId, true, false);
-			room = this.getRoom(groupId);
-			room!.previewMsg = message;
+		} else if (this.tmpRoom) {
+			room = {
+				...this.tmpRoom,
+				previewMsg: message,
+			};
+			this.chatRooms.push(room);
 		}
 		if (message.reply) this.replyMessage = undefined;
 
@@ -426,31 +434,18 @@ export default class ChatStore {
 		}
 	};
 
-	openPersonalRoom = (userId: string, create?: boolean, active?: boolean) => {
+	openPersonalRoom = (userId: string) => {
 		if (!this.chatRooms.find((e) => e.id === userId)) {
-			if (create) {
-				this.onCreateGroup({
-					id: userId,
-					name: stores.appStore.getUserName(userId),
-					isGroup: false,
-					members: [],
-					unread: 0,
-					setting: DEFAULT_GROUP_SETTING,
-				});
-				this.tmpRoom = undefined;
-			} else {
-				this.tmpRoom = {
-					id: userId,
-					name: stores.appStore.getUserName(userId),
-					isGroup: false,
-					members: [],
-					unread: 0,
-					setting: DEFAULT_GROUP_SETTING,
-				};
-				this.setActiveRoom(userId, false);
-			}
+			this.tmpRoom = {
+				id: userId,
+				name: stores.appStore.getUserName(userId),
+				isGroup: false,
+				members: [],
+				unread: 0,
+				setting: DEFAULT_GROUP_SETTING,
+			};
+			this.setActiveRoom(userId, false);
 		}
-		active && this.setActiveRoom(userId, false);
 	};
 	//#endregion FUNCTION
 
@@ -606,7 +601,6 @@ export default class ChatStore {
 
 			this.chatRooms = [...this.chatRooms, group];
 			this.toggleCreateGroup();
-			notify($$('create-success'), 'success');
 		} catch {
 			notify($$('create-failed'), 'error');
 		}

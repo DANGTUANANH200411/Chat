@@ -18,7 +18,7 @@ export default class AppStore {
 	$$ = this.bindLocale(locale);
 	lang: LangType = (localStorage.getItem('LANGUAGE') as LangType) ?? 'en';
 	setting: Setting = {
-		darkTheme: JSON.parse(localStorage.getItem('THEME') ?? 'false'),
+		darkTheme: JSON.parse(localStorage.getItem('THEME') ?? 'true'),
 	};
 	i18n!: I18n;
 
@@ -218,8 +218,4 @@ export default class AppStore {
 				return '';
 		}
 	};
-
-	changeUser = () => {
-		
-	}
 }

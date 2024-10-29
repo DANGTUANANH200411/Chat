@@ -1,4 +1,4 @@
-import { Col, Input, Modal, Row, Select, Space, Typography } from 'antd';
+import { Button, Col, Input, Modal, Row, Select, Space, Typography } from 'antd';
 import { observer } from 'mobx-react';
 import { useEffect, useMemo, useState } from 'react';
 import ReactCountryFlag from 'react-country-flag';
@@ -12,7 +12,7 @@ import React from 'react';
 
 function AddFriendModal() {
 	const { appStore } = useStores();
-	const { toggleAddFriend, setToggleAddFiend, $$, searchUserByPhoneNumber } = appStore;
+	const { toggleAddFriend, setToggleAddFiend, $$, searchUserByPhoneNumber, isFriendFn, setFriend } = appStore;
 	const [country, setCountry] = useState<Country>('VN');
 	const [searchText, setSearchText] = useState<string>('');
 	const [listUsers, setListUsers] = useState<User[]>([]);
@@ -91,7 +91,17 @@ function AddFriendModal() {
 				</Row>
 				<Space direction='vertical' className='grow-list' style={{ marginTop: 16 }} size={12}>
 					{listUsers.map((user) => (
-						<Member key={user.id} user={user} />
+						<Member
+							key={user.id}
+							user={user}
+							suffix={
+								!isFriendFn(user.id) && (
+									<Button size='small' color='primary' variant='filled' onClick={()=> setFriend(user.id)}>
+										{$$('add-friend')}
+									</Button>
+								)
+							}
+						/>
 					))}
 				</Space>
 			</div>

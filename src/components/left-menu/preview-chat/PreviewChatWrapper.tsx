@@ -5,12 +5,12 @@ import React from 'react';
 
 function PreviewChatWrapper() {
 	const {
-		chatStore: { Rooms },
+		chatStore: { SearchRooms },
 	} = useStores();
 
 	return (
 		<>
-			{Rooms.slice()
+			{SearchRooms.slice()
 				.sort((a, b) =>
 					(a.pinned === b.pinned
 						? 0

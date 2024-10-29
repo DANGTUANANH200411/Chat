@@ -112,7 +112,7 @@ function PollDetailModal() {
 									clonedSet.has(val) ? clonedSet.delete(val) : clonedSet.add(val);
 									setListChecked(clonedSet);
 								} else {
-									setListChecked(new Set(val));
+									setListChecked(new Set([val]));
 								}
 							}}
 						/>
