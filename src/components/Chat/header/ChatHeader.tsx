@@ -21,11 +21,11 @@ function ChatHeader() {
 	} = useStores();
 	const { Room } = chatStore;
 	if (!Room) return <></>;
-	const { id, name, isGroup, members, image, label } = Room;
+	const { id, name, isGroup, members, image, label, personalId } = Room;
 
 	return (
 		<Row className='header chat-header' align='middle'>
-			{isGroup ? <GroupAvatar image={image} members={members} /> : <UserAvatar id={id} size={GROUP_AVT_SIZE} />}
+			{isGroup ? <GroupAvatar image={image} members={members} /> : <UserAvatar id={personalId ?? ''} size={GROUP_AVT_SIZE} />}
 			<Row className='flex-grow' wrap={false}>
 				<Row style={{ overflow: 'hidden' }}>
 					<Row wrap={false}>

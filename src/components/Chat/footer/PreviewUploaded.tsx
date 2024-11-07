@@ -1,10 +1,9 @@
 import { CloseOutlined } from '@ant-design/icons';
-import { Avatar, Col, Image, Row } from 'antd';
+import { Row } from 'antd';
 import React from 'react';
-import { isImage } from '../../../utils/helper';
 import { Attachment } from '../../../utils/type';
-import FileMessage from '../body/content-render/FileMessage';
 import FileWrapper from '../../common/FileWrapper';
+import FileMessage from '../body/content-render/FileMessage';
 
 interface Props {
 	uploaded: Attachment[];

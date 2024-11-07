@@ -15,7 +15,7 @@ function PreviewChatItem(props: ChatRoom) {
 		appStore: { $$, getLabel, getUserName, getAnnounceContent },
 		chatStore: { setActiveRoom },
 	} = useStores();
-	const { id, name, members, isGroup, previewMsg, image, label, pinned, unread } = props;
+	const { id, name, members, isGroup, previewMsg, image, label, pinned, unread, personalId } = props;
 
 	const displayContent = (msg: Message) => {
 		if (msg.isNameCard) {
@@ -36,7 +36,7 @@ function PreviewChatItem(props: ChatRoom) {
 				{isGroup ? (
 					<GroupAvatar image={image} members={members} />
 				) : (
-					<UserAvatar id={id} size={GROUP_AVT_SIZE} />
+					<UserAvatar id={personalId ?? ''} size={GROUP_AVT_SIZE} />
 				)}
 			</Badge>
 			<Row className='flex-grow' align='middle'>

@@ -1,5 +1,5 @@
 import { Flex, Input, Typography } from 'antd';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useStores } from '../../../../stores/stores';
 import { observer } from 'mobx-react';
 import { EditOutlined, TeamOutlined, UserAddOutlined, UsergroupAddOutlined } from '@ant-design/icons';

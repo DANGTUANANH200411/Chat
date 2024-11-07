@@ -1,10 +1,9 @@
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import { DatePicker, Flex, Input, Modal, Row, Switch, Typography } from 'antd';
 import { observer } from 'mobx-react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useStores } from '../../../stores/stores';
 import { Poll } from '../../../utils/type';
-import { newGuid } from '../../../utils/helper';
 import { DATE_FORMAT, NOW } from '../../../utils/dateHelper';
 import dayjs from 'dayjs';
 import { notify } from '../../../utils/notify';

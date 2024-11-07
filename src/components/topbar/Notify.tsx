@@ -9,7 +9,7 @@ function Notify() {
     const {chatStore: {TotalUnread}} = useStores();
     return (
         <Badge count={TotalUnread} size='small' offset={[-5, 5]}>
-            <MessageFilled className='side-bar-icon' onClick={() => {}} />
+            <MessageFilled className='side-bar-icon' />
         </Badge>
     );
 }

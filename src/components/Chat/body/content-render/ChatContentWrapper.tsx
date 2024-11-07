@@ -7,7 +7,6 @@ import { PushpinFilled } from '@ant-design/icons';
 import Reaction from '../../popup/Reaction';
 import { isImage, isUrl } from '../../../../utils/helper';
 import ChatTime from '../chat-item/ChatTime';
-import { observer } from 'mobx-react';
 
 interface Props {
 	isFirst?: boolean;

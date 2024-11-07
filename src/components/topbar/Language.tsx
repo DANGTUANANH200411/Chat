@@ -1,4 +1,4 @@
-import { Dropdown, MenuProps, Space } from 'antd';
+import { Dropdown, MenuProps } from 'antd';
 import EN from '../../resources/EN.svg';
 import VN from '../../resources/VN.svg';
 import { useStores } from '../../stores/stores';
@@ -11,13 +11,13 @@ function Language() {
         {
             key: '1',
             label: 'English',
-            icon: <img className='lang-img' src={EN} />,
+            icon: <img className='lang-img' src={EN} alt='EN'/>,
             onClick: () => setLang('en'),
         },
         {
             key: '2',
             label: 'Tiếng Việt',
-            icon: <img className='lang-img' src={VN} />,
+            icon: <img className='lang-img' src={VN} alt='VN'/>,
             onClick: () => setLang('vi'),
         },
     ];
@@ -32,7 +32,7 @@ function Language() {
     return (
         <Dropdown menu={{ items }} placement='bottom'>
             <a onClick={(e) => e.preventDefault()}>
-                <img className='lang-img' src={renderFlag()} />
+                <img className='lang-img' src={renderFlag()} alt='Language'/>
             </a>
         </Dropdown>
     );

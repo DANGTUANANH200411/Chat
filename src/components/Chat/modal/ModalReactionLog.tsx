@@ -8,7 +8,7 @@ import Member from '../../common/Member';
 
 function ModalReactionLog() {
 	const {
-		appStore: { $$, users },
+		appStore: { users },
 		chatStore: { reactLogPopup, toggleReactLog },
 	} = useStores();
 	const { visible, logs } = reactLogPopup;
@@ -40,7 +40,7 @@ function ModalReactionLog() {
 				children: renderList(logs.filter((e) => e.reaction === log.reaction)),
 			})),
 		],
-		[logs]
+		[logs, renderList]
 	);
 
 	return (

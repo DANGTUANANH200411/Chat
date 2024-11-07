@@ -84,6 +84,7 @@ export interface ChatRoom {
 	pinned?: boolean;
 	unread: number;
 	setting: GroupManagement;
+	personalId?: string;
 }
 
 export interface RoomMember extends User {

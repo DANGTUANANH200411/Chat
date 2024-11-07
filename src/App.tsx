@@ -45,7 +45,7 @@ function App() {
 		}
 	}, [lang]);
 
-	const [api, contextHolder] = notification.useNotification();
+	const [_, contextHolder] = notification.useNotification();
 	return (
 		<ConfigProvider
 			locale={locale}

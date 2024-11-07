@@ -1,5 +1,5 @@
 import { SearchOutlined } from '@ant-design/icons';
-import { Checkbox, Col, Flex, Input, Row, Space, Spin } from 'antd';
+import { Checkbox, Flex, Input, Row, Space, Spin } from 'antd';
 import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { useStores } from '../../../../stores/stores';
@@ -38,7 +38,7 @@ function SelectShare(props: Props) {
 		return () => {
 			clearTimeout(timer);
 		};
-	}, [searchText]);
+	}, [searchText, searchGroupAndUser]);
 	return (
 		<Flex vertical gap={12}>
 			<Row>

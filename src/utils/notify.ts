@@ -1,4 +1,4 @@
-import { message, notification } from 'antd';
+import { message } from 'antd';
 
 type Notify = 'success' | 'info' | 'warning' | 'error';
 export const notify = (content: string, props?: Notify, duration = 2) => {

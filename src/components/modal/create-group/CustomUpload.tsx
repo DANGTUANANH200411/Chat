@@ -1,4 +1,4 @@
-import { CameraOutlined, LoadingOutlined } from '@ant-design/icons';
+import { CameraOutlined } from '@ant-design/icons';
 import { GetProp, message, Upload, UploadFile, UploadProps } from 'antd';
 import { forwardRef, useImperativeHandle, useState } from 'react';
 
@@ -7,7 +7,6 @@ export interface UploadRef {
 }
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 const CustomUpload = forwardRef(function CustomUpload({}, ref: React.ForwardedRef<UploadRef>) {
-	const [loading, setLoading] = useState(false);
 	const [fileList, setFileList] = useState<UploadFile[]>([]);
 
 	useImperativeHandle(ref, () => ({
@@ -27,7 +26,7 @@ const CustomUpload = forwardRef(function CustomUpload({}, ref: React.ForwardedRe
 	};
 	const uploadButton = (
 		<button style={{ border: 0, background: 'none' }} type='button'>
-			{loading ? <LoadingOutlined /> : <CameraOutlined />}
+			<CameraOutlined />
 		</button>
 	);
     const dummyRequest = ({ file, onSuccess }: any) => {

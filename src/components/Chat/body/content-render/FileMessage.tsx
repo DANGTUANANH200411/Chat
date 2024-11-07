@@ -1,7 +1,7 @@
+import { Row, Typography } from 'antd';
+import filesize from 'filesize';
 import React from 'react';
 import { getFileIcon, isImage } from '../../../../utils/helper';
-import { Flex, Row, Typography } from 'antd';
-import filesize from 'filesize';
 import CustomImage from '../../../common/CustomImage';
 
 interface Props {

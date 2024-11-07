@@ -19,7 +19,8 @@ function PollDetailModal() {
 
 	useEffect(() => {
 		setListChecked(new Set(mdlPollDetailProps?.poll?.votes.find((e) => e.id === CurrentUserId)?.values));
-	}, [mdlPollDetailProps]);
+	}, [mdlPollDetailProps, setListChecked]);
+	
 	if (!mdlPollDetailProps || !mdlPollDetailProps.poll) return <></>;
 
 	const { id, content, sender, poll, createDate } = mdlPollDetailProps!;

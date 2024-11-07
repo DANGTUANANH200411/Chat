@@ -16,9 +16,9 @@ function PinnedItems(props: Props) {
 	} = useStores();
 	const { message } = props;
 
-	const { id, sender } = message;
+	const { sender } = message;
 
-	const user = useMemo(() => getUserById(sender), [sender]);
+	const user = useMemo(() => getUserById(sender), [sender, getUserById]);
 
 	const displayContent = useMemo(() => {
 		if (!message) return '';
@@ -32,7 +32,7 @@ function PinnedItems(props: Props) {
 		}
 
 		return decodeHtml(message.content);
-	}, [message]);
+	}, [message, $$]);
 	return (
 		<div className='pinned-item-wrapper'>
 			<Flex gap={8} align='center'>

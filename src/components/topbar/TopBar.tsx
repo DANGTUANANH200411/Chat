@@ -1,24 +1,19 @@
-import { Avatar, Col, Row, Space, Tooltip } from 'antd';
-import Setting from './Setting';
-import SwitchTheme from './SwitchTheme';
-import Notify from './Notify';
-import Language from './Language';
-import '../style.css';
+import { PicLeftOutlined, PicRightOutlined } from '@ant-design/icons';
+import { Flex, Popover, Row, Space, Tooltip } from 'antd';
 import { observer } from 'mobx-react';
-import { useStores } from '../../stores/stores';
-import {
-	CarryOutOutlined,
-	ContactsOutlined,
-	ControlFilled,
-	PicLeftOutlined,
-	PicRightOutlined,
-} from '@ant-design/icons';
-import UserAvatar from '../common/UserAvatar';
 import React from 'react';
+import { useStores } from '../../stores/stores';
+import { USERS } from '../../utils/constants';
+import UserAvatar from '../common/UserAvatar';
+import '../style.css';
+import Language from './Language';
+import Notify from './Notify';
+import SwitchTheme from './SwitchTheme';
 function TopBar() {
 	const {
-		appStore: { $$, user, toggleLeftMenu, menuOpen},
+		appStore: { $$, user, menuOpen, toggleLeftMenu, changeUser },
 	} = useStores();
+
 	return (
 		<Row className='side-bar'>
 			<Space direction='vertical' size='large' align='center' className='max-width'>
@@ -32,16 +27,30 @@ function TopBar() {
 					</Tooltip>
 				)}
 
-				<UserAvatar id={user.id} className='side-bar-avt' />
+				<Popover
+					arrow
+					placement='right'
+					trigger={'click'}
+					destroyTooltipOnHide
+					content={
+						<Flex wrap gap={8} style={{maxWidth: '20vw'}}>
+							{USERS.map((user, idx) => (
+								<UserAvatar id={user.id} user={user} style={{cursor: 'pointer'}} onClick={()=> changeUser(idx)} />
+							))}
+						</Flex>
+					}
+				>
+					<UserAvatar id={user.id} className='side-bar-avt' />
+				</Popover>
 				<Notify />
-				<ContactsOutlined className='side-bar-icon' />
-				<CarryOutOutlined className='side-bar-icon' />
+				{/* <ContactsOutlined className='side-bar-icon' />
+				<CarryOutOutlined className='side-bar-icon' /> */}
 			</Space>
 			<Space direction='vertical' size='large' align='center' className='max-width'>
-				<ControlFilled className='side-bar-icon' />
+				{/* <ControlFilled className='side-bar-icon' /> */}
 				<SwitchTheme />
 				<Language />
-				<Setting />
+				{/* <Setting /> */}
 			</Space>
 		</Row>
 	);

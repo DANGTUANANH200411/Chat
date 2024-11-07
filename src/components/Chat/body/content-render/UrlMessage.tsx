@@ -1,8 +1,8 @@
-import { Row, Skeleton, Typography } from 'antd';
+import { Row, Typography } from 'antd';
 import { getLinkPreview } from 'link-preview-js';
-import React, { useEffect, useMemo, useState } from 'react';
-import './style.css';
+import React, { useEffect, useState } from 'react';
 import CustomImage from '../../../common/CustomImage';
+import './style.css';
 interface Props {
 	id: string;
 	url: string;
@@ -16,7 +16,12 @@ function UrlMessage(props: Props) {
 		if (existData) {
 			setViewData(JSON.parse(existData));
 		} else {
-			getLinkPreview(url).then((result: any) => {
+			getLinkPreview(url, {
+				headers: {
+					'Access-Control-Allow-Origin': '*',
+					'Access-Control-Allow-Credentials': 'true',
+				},
+			}).then((result: any) => {
 				const params = {
 					url: result.url,
 					title: result.title,
@@ -47,7 +52,7 @@ function UrlMessage(props: Props) {
 				window.open(viewData.url ?? url, '_blank');
 			}}
 		>
-			<CustomImage src={viewData.image} style={{ width: '100%'}} />
+			<CustomImage src={viewData.image} style={{ width: '100%' }} />
 			<Row className='flex-grow' style={{ padding: 4, marginBottom: 8 }}>
 				<Typography.Text strong ellipsis className='preview-title'>
 					{viewData.title}

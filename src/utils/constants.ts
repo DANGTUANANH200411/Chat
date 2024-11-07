@@ -1,13 +1,13 @@
-import { ChatRoom, GroupManagement, Label, Message, RoomMember, User } from '../utils/type';
-import { generatePhoneNumber, newGuid, randomInt } from '../utils/helper';
-import { addHours, addMinutes, NOW, SYSTEM_NOW, toSystemDate } from './dateHelper';
-import IMG_LIKE from '../resources/like.png';
+import dayjs from 'dayjs';
+import IMG_ANGRY from '../resources/angry.png';
 import IMG_HAHA from '../resources/haha.png';
 import IMG_HEART from '../resources/heart.png';
-import IMG_WOW from '../resources/wow.png';
+import IMG_LIKE from '../resources/like.png';
 import IMG_SAD from '../resources/sad.png';
-import IMG_ANGRY from '../resources/angry.png';
-import dayjs from 'dayjs';
+import IMG_WOW from '../resources/wow.png';
+import { generatePhoneNumber, newGuid, randomInt } from '../utils/helper';
+import { ChatRoom, GroupManagement, Label, Message, RoomMember, User } from '../utils/type';
+import { NOW, SYSTEM_NOW, toSystemDate } from './dateHelper';
 
 const LABELS: Label[] = [
 	{
@@ -701,6 +701,7 @@ const CHAT_ROOMS: ChatRoom[] = [
 	},
 	{
 		id: USERS[1].id,
+		personalId: USERS[1].id,
 		name: USERS[1].userName,
 		isGroup: false,
 		members: [ROOM_MEMBER[0], ROOM_MEMBER[1]],
@@ -733,19 +734,7 @@ const GROUP_AVT_SIZE = 48;
 
 const DELAY_INPUT = 400;
 export {
-	USERS,
-	CHAT_ROOMS,
-	MESSAGES,
-	IMG_LIKE,
-	IMG_HAHA,
-	IMG_HEART,
-	IMG_WOW,
-	IMG_SAD,
-	IMG_ANGRY,
-	LABELS,
-	BROWSER_VERSION,
-	IS_FIREFOX,
-	GROUP_AVT_SIZE,
-	DELAY_INPUT,
-	DEFAULT_GROUP_SETTING,
+	BROWSER_VERSION, CHAT_ROOMS, DEFAULT_GROUP_SETTING, DELAY_INPUT, GROUP_AVT_SIZE, IMG_ANGRY, IMG_HAHA,
+	IMG_HEART, IMG_LIKE, IMG_SAD, IMG_WOW, IS_FIREFOX, LABELS, MESSAGES, USERS
 };
+

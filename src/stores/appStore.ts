@@ -1,11 +1,11 @@
+import dayjs from 'dayjs';
 import { makeAutoObservable, ObservableMap } from 'mobx';
-import { AnnouceTargetObj, CommonModalProps, DrawerType, I18n, Label, LangType, Message, User } from '../utils/type';
-import { initI18n } from '../utils/i18n';
 import Mustache from 'mustache';
 import * as locale from '../locales';
 import { LABELS, USERS } from '../utils/constants';
-import dayjs from 'dayjs';
-import { matchSearchUser, randomInt } from '../utils/helper';
+import { matchSearchUser } from '../utils/helper';
+import { initI18n } from '../utils/i18n';
+import { AnnouceTargetObj, CommonModalProps, DrawerType, I18n, Label, LangType, Message, User } from '../utils/type';
 
 Mustache.escape = function (text) {
 	return text;
@@ -16,13 +16,13 @@ interface Setting {
 }
 export default class AppStore {
 	$$ = this.bindLocale(locale);
-	lang: LangType = (localStorage.getItem('LANGUAGE') as LangType) ?? 'en';
+	lang: LangType = (sessionStorage.getItem('LANGUAGE') as LangType) ?? 'en';
 	setting: Setting = {
-		darkTheme: JSON.parse(localStorage.getItem('THEME') ?? 'true'),
+		darkTheme: JSON.parse(sessionStorage.getItem('THEME') ?? 'true'),
 	};
 	i18n!: I18n;
 
-	user: User = USERS[1];
+	user: User = USERS[JSON.parse(sessionStorage.getItem('USER') ?? '0')];
 	menuOpen: boolean = true;
 	drawerOpen: DrawerType = undefined;
 	labels: Label[] = LABELS;
@@ -122,13 +122,13 @@ export default class AppStore {
 
 	setLang = (lang: LangType) => {
 		this.lang = lang;
-		localStorage.setItem('LANGUAGE', lang);
+		sessionStorage.setItem('LANGUAGE', lang);
 		dayjs.locale(lang);
 	};
 
 	toggleDarkTheme = () => {
 		this.setting.darkTheme = !this.setting.darkTheme;
-		localStorage.setItem('THEME', this.setting.darkTheme.toString());
+		sessionStorage.setItem('THEME', this.setting.darkTheme.toString());
 	};
 
 	setSetting = (props: any) => (this.setting = { ...this.setting, ...props });
@@ -218,4 +218,9 @@ export default class AppStore {
 				return '';
 		}
 	};
+
+	changeUser = (idx: number) => {
+		sessionStorage.setItem('USER', idx.toString());
+		window.location.reload();
+	}
 }

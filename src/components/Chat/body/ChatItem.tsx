@@ -1,13 +1,13 @@
+import { Row } from 'antd';
 import { observer } from 'mobx-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useState } from 'react';
+import { useStores } from '../../../stores/stores';
 import { Message } from '../../../utils/type';
-import { Avatar, Row } from 'antd';
-import ChatAction from './ChatAction';
 import UserAvatar from '../../common/UserAvatar';
+import ChatAction from './ChatAction';
+import Readers from './components/Readers';
 import ChatContentWrapper from './content-render/ChatContentWrapper';
 import NameCard from './content-render/NameCard';
-import { useStores } from '../../../stores/stores';
-import Readers from './components/Readers';
 interface Props {
 	id: string;
 	isFirst: boolean;

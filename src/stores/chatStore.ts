@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { CHAT_ROOMS, DEFAULT_GROUP_SETTING, MESSAGES } from '../utils/constants';
+import { CHAT_ROOMS, DEFAULT_GROUP_SETTING, MESSAGES, USERS } from '../utils/constants';
 import { SYSTEM_NOW } from '../utils/dateHelper';
 import { isEmpty, isImage, isUrl, matchSearchUser, newGuid, normalizeIncludes, toNormalize } from '../utils/helper';
 import { openUndo } from '../utils/notification';
@@ -37,7 +37,9 @@ type DateMessage = {
 
 export default class ChatStore {
 	tabItem: TabItemType = 'All';
-	chatRooms: ChatRoom[] = CHAT_ROOMS;
+	chatRooms: ChatRoom[] = CHAT_ROOMS.filter((e) =>
+		e.members.some((e) => e.id === USERS[JSON.parse(sessionStorage.getItem('USER') ?? '0')].id)
+	);
 	tmpRoom: ChatRoom | undefined = undefined;
 
 	allMessage: Message[] = MESSAGES;
@@ -94,11 +96,15 @@ export default class ChatStore {
 	openChangeGroupNameModal: boolean = false;
 
 	get Rooms() {
-		return this.chatRooms;
+		return this.chatRooms.map((e: ChatRoom) => {
+			if (e.isGroup) return e;
+			const user = e.members.find((e) => e.id !== stores.appStore.CurrentUserId);
+			return { ...e, name: user ? user.alias ?? user.userName : '', image: user?.imageSrc };
+		});
 	}
 
 	get SearchRooms() {
-		return this.chatRooms.filter(
+		return this.Rooms.filter(
 			(e) =>
 				(!this.searchRoom || toNormalize(e.name).includes(toNormalize(this.searchRoom))) &&
 				(this.tabItem === 'All' || e.unread)
@@ -266,7 +272,7 @@ export default class ChatStore {
 		makeAutoObservable(this);
 	}
 	//#region GET
-	getActiveRoom = (room?: string) => this.chatRooms.find((e) => e.id === (room ?? this.activeRoom));
+	getActiveRoom = (room?: string) => this.Rooms.find((e) => e.id === (room ?? this.activeRoom));
 
 	getRoom = (room: string) => this.chatRooms.find((e) => e.id === room);
 
@@ -359,7 +365,6 @@ export default class ChatStore {
 	setRoomName = (id: string, name: string) => {
 		const room = this.getRoom(id);
 		room!.name = name;
-		console.log('hahaha');
 	};
 
 	toggleChangeGroupNameModal = () => (this.openChangeGroupNameModal = !this.openChangeGroupNameModal);
@@ -380,13 +385,24 @@ export default class ChatStore {
 		};
 	};
 
-	sendMessage = (params: DynamicMessage, grId?: string) => {
-		const groupId = grId ?? this.activeRoom;
+	sendMessage = async (params: DynamicMessage, grId?: string) => {
+		const { CurrentUserId: sender, getUserById } = stores.appStore;
+		let groupId = grId ?? this.activeRoom;
 		if (!groupId) {
 			notify('Group not found');
 			return;
 		}
-		const sender = stores.appStore.CurrentUserId;
+		const room = this.getRoom(groupId);
+		if (!room) {
+			const user = getUserById(groupId);
+			if (user) {
+				await this.createPersonalRoom(user).then((gr) => (groupId = gr.id));
+			} else {
+				notify('Group not found');
+				return;
+			}
+		}
+
 		//API send message
 		const message: Message = {
 			...params,
@@ -405,7 +421,7 @@ export default class ChatStore {
 		return message;
 	};
 
-	receiveMessage = (message: Message) => {
+	receiveMessage = async (message: Message) => {
 		const { groupId, sender } = message;
 		this.allMessage.push(message);
 
@@ -416,12 +432,6 @@ export default class ChatStore {
 		let room = this.getRoom(groupId);
 		if (room) {
 			room.previewMsg = message;
-		} else if (this.tmpRoom) {
-			room = {
-				...this.tmpRoom,
-				previewMsg: message,
-			};
-			this.chatRooms.push(room);
 		}
 		if (message.reply) this.replyMessage = undefined;
 
@@ -434,17 +444,22 @@ export default class ChatStore {
 		}
 	};
 
-	openPersonalRoom = (userId: string) => {
-		if (!this.chatRooms.find((e) => e.id === userId)) {
+	openPersonalRoom = async (userId: string) => {
+		const room = this.chatRooms.find((e) => e.personalId && e.personalId === userId);
+		if (!room) {
+			const user = stores.appStore.getUserById(userId);
 			this.tmpRoom = {
 				id: userId,
-				name: stores.appStore.getUserName(userId),
+				name: user ? user.alias ?? user.userName : '',
+				image: user?.imageSrc,
 				isGroup: false,
 				members: [],
 				unread: 0,
 				setting: DEFAULT_GROUP_SETTING,
 			};
 			this.setActiveRoom(userId, false);
+		} else {
+			this.setActiveRoom(room.id);
 		}
 	};
 	//#endregion FUNCTION
@@ -575,6 +590,24 @@ export default class ChatStore {
 		this.toggleMdlNmCard();
 	};
 
+	createPersonalRoom = async (user: User) => {
+		const { user: currentUser } = stores.appStore;
+		const group: ChatRoom = {
+			id: newGuid(),
+			name: '',
+			personalId: user.id,
+			isGroup: false,
+			members: [
+				{ ...currentUser, invitedBy: currentUser.id, role: 'Owner', joinDate: SYSTEM_NOW() },
+				{ ...user, invitedBy: currentUser.id, role: 'Owner', joinDate: SYSTEM_NOW() },
+			],
+			unread: 0,
+			setting: DEFAULT_GROUP_SETTING,
+		};
+		this.chatRooms = [...this.chatRooms, group];
+		return group;
+	};
+
 	onCreateGroup = (group: ChatRoom) => {
 		const { $$, user, CurrentUserId } = stores.appStore;
 		try {
@@ -682,33 +715,29 @@ export default class ChatStore {
 
 	searchGroupAndUser = (text: string): ShareSelectItemProps[] => {
 		const friends = stores.appStore.Friends;
-		const rooms = this.chatRooms;
-
 		const arr = [
+			...this.Rooms.filter((e) => !text || normalizeIncludes(e.name, text)).map((e) => ({
+				tmpId: e.personalId ?? e.id,
+				id: e.id,
+				name: e.name,
+				isGroup: e.isGroup,
+				members: e.members,
+				image: e.image,
+			})),
 			...friends
 				.filter((e) => !text || matchSearchUser(text, e))
 				.map((e) => ({
+					tmpId: e.id,
 					id: e.id,
 					name: e.userName,
 					image: e.imageSrc,
 				})),
-			...rooms
-				.filter((e) => !text || normalizeIncludes(e.name, text))
-				.map((e) => ({
-					id: e.id,
-					name: e.name,
-					isGroup: e.isGroup,
-					members: e.members,
-					image: e.image,
-				})),
 		];
-		return [...new Map(arr.map((e) => [e.id, e])).values()];
+		return [...new Map(arr.map((e) => [e.tmpId, e])).values()];
 	};
 
 	searchGroup = (text: string): ShareSelectItemProps[] => {
-		const rooms = this.chatRooms;
-		return rooms
-			.filter((e) => e.isGroup && (!text || normalizeIncludes(e.name, text)))
+		return this.Rooms.filter((e) => e.isGroup && (!text || normalizeIncludes(e.name, text)))
 			.map((e) => ({
 				id: e.id,
 				name: e.name,
@@ -838,8 +867,8 @@ export default class ChatStore {
 	//#endregion Group Member API
 
 	//#endregion API
-	createPoll = (title: string, poll: Poll, options: string[], pin?: boolean) => {
-		const message = this.sendMessage({
+	createPoll = async (title: string, poll: Poll, options: string[], pin?: boolean) => {
+		const message = await this.sendMessage({
 			content: title,
 			poll: {
 				...poll,

@@ -12,16 +12,16 @@ interface Props extends AvatarProps {
 function UserAvatar(props: Props) {
 	const {
 		appStore: { users },
-		chatStore: {getRole}
+		chatStore: { getRole },
 	} = useStores();
 	const { id, showSymbol, user: propUser } = props;
-	
-	const user = useMemo(()=> propUser ?? users.get(id), [propUser, users]);
 
-	const role = useMemo(()=> showSymbol ? getRole(id) : 'Member', [id, showSymbol, getRole]);
+	const user = useMemo(() => propUser ?? users.get(id), [propUser, users, id]);
 
-	return (
-		<div style={{ position: 'relative' }}>
+	const role = useMemo(() => (showSymbol ? getRole(id) : 'Member'), [id, showSymbol, getRole]);
+
+	const avatar = useMemo(
+		() => (
 			<Avatar
 				src={user?.imageSrc}
 				{...props}
@@ -30,9 +30,17 @@ function UserAvatar(props: Props) {
 			>
 				{user ? user.userName : 'Unknown'}
 			</Avatar>
-			{showSymbol && role !== 'Member' && <KeyOutlined className={`admin-key${role === 'Owner' ? ' owner' : ''}`}/>}
-		</div>
+		),
+		[user]
 	);
+	if (showSymbol && role !== 'Member')
+		return (
+			<div style={{ position: 'relative', height: 'fit-content' }}>
+				{avatar}
+				<KeyOutlined className={`admin-key${role === 'Owner' ? ' owner' : ''}`} />
+			</div>
+		);
+	return <>{avatar}</>;
 }
 
 export default React.memo(observer(UserAvatar));

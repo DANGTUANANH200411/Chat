@@ -175,6 +175,6 @@ function ChatAction({ message }: Props) {
 	);
 }
 function propsAreEquals(prev: Props, next: Props) {
-	return prev.message.id == next.message.id;
+	return prev.message.id === next.message.id;
 }
 export default React.memo(observer(ChatAction), propsAreEquals);
