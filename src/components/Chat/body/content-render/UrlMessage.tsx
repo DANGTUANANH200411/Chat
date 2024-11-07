@@ -16,12 +16,7 @@ function UrlMessage(props: Props) {
 		if (existData) {
 			setViewData(JSON.parse(existData));
 		} else {
-			getLinkPreview(url, {
-				headers: {
-					'Access-Control-Allow-Origin': '*',
-					'Access-Control-Allow-Credentials': 'true',
-				},
-			}).then((result: any) => {
+			getLinkPreview(url).then((result: any) => {
 				const params = {
 					url: result.url,
 					title: result.title,
