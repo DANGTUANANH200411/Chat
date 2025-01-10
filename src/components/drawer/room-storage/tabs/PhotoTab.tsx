@@ -47,7 +47,7 @@ function PhotoTab() {
 									<Row gutter={[12, 12]}>
 										{values.map((e) => (
 											<Col span={8} key={e.id}>
-												<StorageItem id={e.id} type='Photo'>
+												<StorageItem id={e.id} type='Photo' url={e.data ?? e.content}>
 													<CustomImage antd src={e.data ?? e.content} />
 												</StorageItem>
 											</Col>

@@ -105,7 +105,8 @@ body:is(.dark-theme) .chat-footer > * {
 	border-radius: inherit;
 }
 
-.chat-item-content.forcus {
+.chat-item-content.forcus,
+.chat-item-namecard-wrapper.forcus .chat-item-namecard{
 	border: 1px solid blue !important;
 }
 .chat-item-content:has(.list-reaction) {

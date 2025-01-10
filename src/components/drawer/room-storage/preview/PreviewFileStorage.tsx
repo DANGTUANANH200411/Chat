@@ -17,7 +17,7 @@ function PreviewFileStorage() {
 			<Flex vertical gap={8}>
 				{Files.slice(0, 4).map((e, idx) => (
 					<div className='max-width' key={e.id}>
-						<StorageItem key={e.id} id={e.id} type='Link'>
+						<StorageItem key={e.id} id={e.id} type='Link' url={e.data}>
 							<FileMessage key={e.id} content={e.content} fileSize={e.fileSize} data={e.data} />
 						</StorageItem>
 					</div>

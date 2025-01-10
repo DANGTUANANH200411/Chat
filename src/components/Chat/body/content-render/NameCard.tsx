@@ -27,7 +27,7 @@ function NameCard(props: Props) {
 	const { msgId, id, createDate, isFirst, isLast, showTime, sender, selecting, pinned } = props;
 	const user = getUserById(id);
 	return user ? (
-		<div className='chat-item-namecard-wrapper'>
+		<div className='chat-item-namecard-wrapper' id={msgId}>
 			{isFirst && (
 				<Typography.Link className='chat-item-username small-text text-ellipsis alone' onClick={() => {}}>
 					{getUserName(sender)}
